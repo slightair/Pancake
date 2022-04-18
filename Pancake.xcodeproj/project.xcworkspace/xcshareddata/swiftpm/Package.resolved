@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "SwiftUICharts",
+        "repositoryURL": "https://github.com/AppPear/ChartView",
+        "state": {
+          "branch": null,
+          "revision": "9115a992c91fa19cbb4f2241084240d38654a1fc",
+          "version": "1.5.5"
+        }
+      },
+      {
+        "package": "HorizonCalendar",
+        "repositoryURL": "https://github.com/airbnb/HorizonCalendar",
+        "state": {
+          "branch": null,
+          "revision": "1e98736e42fe4e5bea39ce8b89838641f2261c32",
+          "version": "1.13.3"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

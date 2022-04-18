@@ -4,7 +4,7 @@ import SwiftUI
 struct PancakeApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Dashboard()
         }
     }
 }
