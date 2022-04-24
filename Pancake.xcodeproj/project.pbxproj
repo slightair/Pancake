@@ -7,28 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5728CDF12813DB2900BBC308 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF02813DB2900BBC308 /* Header.swift */; };
+		5728CDF32814306A00BBC308 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF22814306A00BBC308 /* Event.swift */; };
+		5728CDF52815926200BBC308 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF42815926200BBC308 /* Home.swift */; };
+		5728CDF72815926E00BBC308 /* TrainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF62815926E00BBC308 /* TrainService.swift */; };
 		57DD4EB6280156FF00D0F249 /* HorizonCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 57DD4EB5280156FF00D0F249 /* HorizonCalendar */; };
-		57DD4EB82801573800D0F249 /* DashboardCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD4EB72801573800D0F249 /* DashboardCalendar.swift */; };
-		57F5BC65280BCF5C00191F64 /* DashboardEventList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F5BC64280BCF5C00191F64 /* DashboardEventList.swift */; };
-		57F5BC67280BD18800191F64 /* DashboardHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F5BC66280BD18800191F64 /* DashboardHeader.swift */; };
+		57DD4EB82801573800D0F249 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD4EB72801573800D0F249 /* CalendarView.swift */; };
 		57F5BC6A280C3DD800191F64 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 57F5BC69280C3DD800191F64 /* SwiftUICharts */; };
-		57F5BC6C280C3EC400191F64 /* DashboardRoomList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F5BC6B280C3EC400191F64 /* DashboardRoomList.swift */; };
-		57F5BC6E280C45CC00191F64 /* DashboardTrainInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F5BC6D280C45CC00191F64 /* DashboardTrainInfo.swift */; };
+		57F5BC71280D96D100191F64 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 57F5BC70280D96D100191F64 /* ComposableArchitecture */; };
+		57F5BC73280D980D00191F64 /* Pancake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F5BC72280D980D00191F64 /* Pancake.swift */; };
 		57FFECCB27F966CE00B03EE1 /* PancakeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FFECCA27F966CE00B03EE1 /* PancakeApp.swift */; };
-		57FFECCD27F966CE00B03EE1 /* Dashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FFECCC27F966CE00B03EE1 /* Dashboard.swift */; };
 		57FFECCF27F966D000B03EE1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57FFECCE27F966D000B03EE1 /* Assets.xcassets */; };
 		57FFECD227F966D000B03EE1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57FFECD127F966D000B03EE1 /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		57DD4EB72801573800D0F249 /* DashboardCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardCalendar.swift; sourceTree = "<group>"; };
-		57F5BC64280BCF5C00191F64 /* DashboardEventList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardEventList.swift; sourceTree = "<group>"; };
-		57F5BC66280BD18800191F64 /* DashboardHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardHeader.swift; sourceTree = "<group>"; };
-		57F5BC6B280C3EC400191F64 /* DashboardRoomList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardRoomList.swift; sourceTree = "<group>"; };
-		57F5BC6D280C45CC00191F64 /* DashboardTrainInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardTrainInfo.swift; sourceTree = "<group>"; };
+		5728CDF02813DB2900BBC308 /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
+		5728CDF22814306A00BBC308 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		5728CDF42815926200BBC308 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
+		5728CDF62815926E00BBC308 /* TrainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainService.swift; sourceTree = "<group>"; };
+		57DD4EB72801573800D0F249 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		57F5BC72280D980D00191F64 /* Pancake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pancake.swift; sourceTree = "<group>"; };
 		57FFECC727F966CE00B03EE1 /* Pancake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pancake.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57FFECCA27F966CE00B03EE1 /* PancakeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PancakeApp.swift; sourceTree = "<group>"; };
-		57FFECCC27F966CE00B03EE1 /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
 		57FFECCE27F966D000B03EE1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		57FFECD127F966D000B03EE1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		57FFECD827F966F100B03EE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -41,6 +42,7 @@
 			files = (
 				57DD4EB6280156FF00D0F249 /* HorizonCalendar in Frameworks */,
 				57F5BC6A280C3DD800191F64 /* SwiftUICharts in Frameworks */,
+				57F5BC71280D96D100191F64 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +72,11 @@
 				57FFECD927F9686400B03EE1 /* Sensor */,
 				57FFECD827F966F100B03EE1 /* Info.plist */,
 				57FFECCA27F966CE00B03EE1 /* PancakeApp.swift */,
+				57F5BC72280D980D00191F64 /* Pancake.swift */,
+				5728CDF02813DB2900BBC308 /* Header.swift */,
+				5728CDF22814306A00BBC308 /* Event.swift */,
+				5728CDF42815926200BBC308 /* Home.swift */,
+				5728CDF62815926E00BBC308 /* TrainService.swift */,
 				57FFECCE27F966D000B03EE1 /* Assets.xcassets */,
 				57FFECD027F966D000B03EE1 /* Preview Content */,
 			);
@@ -94,12 +101,7 @@
 		57FFECDA27F9699100B03EE1 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				57FFECCC27F966CE00B03EE1 /* Dashboard.swift */,
-				57DD4EB72801573800D0F249 /* DashboardCalendar.swift */,
-				57F5BC64280BCF5C00191F64 /* DashboardEventList.swift */,
-				57F5BC66280BD18800191F64 /* DashboardHeader.swift */,
-				57F5BC6B280C3EC400191F64 /* DashboardRoomList.swift */,
-				57F5BC6D280C45CC00191F64 /* DashboardTrainInfo.swift */,
+				57DD4EB72801573800D0F249 /* CalendarView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -123,6 +125,7 @@
 			packageProductDependencies = (
 				57DD4EB5280156FF00D0F249 /* HorizonCalendar */,
 				57F5BC69280C3DD800191F64 /* SwiftUICharts */,
+				57F5BC70280D96D100191F64 /* ComposableArchitecture */,
 			);
 			productName = Pancake;
 			productReference = 57FFECC727F966CE00B03EE1 /* Pancake.app */;
@@ -155,6 +158,7 @@
 			packageReferences = (
 				57DD4EB4280156FF00D0F249 /* XCRemoteSwiftPackageReference "HorizonCalendar" */,
 				57F5BC68280C3DD800191F64 /* XCRemoteSwiftPackageReference "ChartView" */,
+				57F5BC6F280D96D100191F64 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			productRefGroup = 57FFECC827F966CE00B03EE1 /* Products */;
 			projectDirPath = "";
@@ -182,12 +186,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57FFECCD27F966CE00B03EE1 /* Dashboard.swift in Sources */,
-				57F5BC6C280C3EC400191F64 /* DashboardRoomList.swift in Sources */,
-				57DD4EB82801573800D0F249 /* DashboardCalendar.swift in Sources */,
-				57F5BC6E280C45CC00191F64 /* DashboardTrainInfo.swift in Sources */,
-				57F5BC67280BD18800191F64 /* DashboardHeader.swift in Sources */,
-				57F5BC65280BCF5C00191F64 /* DashboardEventList.swift in Sources */,
+				5728CDF32814306A00BBC308 /* Event.swift in Sources */,
+				5728CDF12813DB2900BBC308 /* Header.swift in Sources */,
+				57DD4EB82801573800D0F249 /* CalendarView.swift in Sources */,
+				57F5BC73280D980D00191F64 /* Pancake.swift in Sources */,
+				5728CDF52815926200BBC308 /* Home.swift in Sources */,
+				5728CDF72815926E00BBC308 /* TrainService.swift in Sources */,
 				57FFECCB27F966CE00B03EE1 /* PancakeApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -409,6 +413,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		57F5BC6F280D96D100191F64 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.34.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -421,6 +433,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 57F5BC68280C3DD800191F64 /* XCRemoteSwiftPackageReference "ChartView" */;
 			productName = SwiftUICharts;
+		};
+		57F5BC70280D96D100191F64 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 57F5BC6F280D96D100191F64 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

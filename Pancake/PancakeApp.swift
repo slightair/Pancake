@@ -1,10 +1,17 @@
+import ComposableArchitecture
 import SwiftUI
 
 @main
 struct PancakeApp: App {
     var body: some Scene {
         WindowGroup {
-            Dashboard()
+            AppView(
+                store: Store(
+                    initialState: AppState(),
+                    reducer: appReducer,
+                    environment: .live
+                )
+            )
         }
     }
 }

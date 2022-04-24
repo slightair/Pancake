@@ -1,7 +1,7 @@
 import SwiftUI
 import HorizonCalendar
 
-struct DashboardCalendar: UIViewRepresentable {
+struct CalendarView: UIViewRepresentable {
     static var calendar = Calendar.current
     static var dayDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -16,12 +16,12 @@ struct DashboardCalendar: UIViewRepresentable {
 
     var selectedDate: Date
 
-    func makeUIView(context: Context) -> CalendarView {
-        CalendarView(initialContent: makeContent())
+    func makeUIView(context: Context) -> HorizonCalendar.CalendarView {
+        HorizonCalendar.CalendarView(initialContent: makeContent())
     }
 
-    func updateUIView(_ uiView: CalendarView, context: Context) {
-
+    func updateUIView(_ uiView: HorizonCalendar.CalendarView, context: Context) {
+        uiView.setContent(makeContent())
     }
 
     private func makeContent() -> CalendarViewContent {
@@ -51,8 +51,8 @@ struct DashboardCalendar: UIViewRepresentable {
     }
 }
 
-struct DashboardCalendar_Previews: PreviewProvider {
+struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        DashboardCalendar(selectedDate: Date())
+        CalendarView(selectedDate: Date())
     }
 }
