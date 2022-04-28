@@ -11,6 +11,8 @@
 		5728CDF32814306A00BBC308 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF22814306A00BBC308 /* Event.swift */; };
 		5728CDF52815926200BBC308 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF42815926200BBC308 /* Home.swift */; };
 		5728CDF72815926E00BBC308 /* TrainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF62815926E00BBC308 /* TrainService.swift */; };
+		5728CDF92816D0C800BBC308 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5728CDF82816D0C800BBC308 /* Settings.plist */; };
+		5728CDFC2816D43A00BBC308 /* DashboardClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDFB2816D43A00BBC308 /* DashboardClient.swift */; };
 		57DD4EB6280156FF00D0F249 /* HorizonCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 57DD4EB5280156FF00D0F249 /* HorizonCalendar */; };
 		57DD4EB82801573800D0F249 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD4EB72801573800D0F249 /* CalendarView.swift */; };
 		57F5BC6A280C3DD800191F64 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 57F5BC69280C3DD800191F64 /* SwiftUICharts */; };
@@ -26,6 +28,8 @@
 		5728CDF22814306A00BBC308 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		5728CDF42815926200BBC308 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		5728CDF62815926E00BBC308 /* TrainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainService.swift; sourceTree = "<group>"; };
+		5728CDF82816D0C800BBC308 /* Settings.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Settings.plist; sourceTree = "<group>"; };
+		5728CDFB2816D43A00BBC308 /* DashboardClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardClient.swift; sourceTree = "<group>"; };
 		57DD4EB72801573800D0F249 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		57F5BC72280D980D00191F64 /* Pancake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pancake.swift; sourceTree = "<group>"; };
 		57FFECC727F966CE00B03EE1 /* Pancake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pancake.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -49,6 +53,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5728CDFA2816D42900BBC308 /* Client */ = {
+			isa = PBXGroup;
+			children = (
+				5728CDFB2816D43A00BBC308 /* DashboardClient.swift */,
+			);
+			path = Client;
+			sourceTree = "<group>";
+		};
 		57FFECBE27F966CE00B03EE1 = {
 			isa = PBXGroup;
 			children = (
@@ -68,6 +80,7 @@
 		57FFECC927F966CE00B03EE1 /* Pancake */ = {
 			isa = PBXGroup;
 			children = (
+				5728CDFA2816D42900BBC308 /* Client */,
 				57FFECDA27F9699100B03EE1 /* View */,
 				57FFECD927F9686400B03EE1 /* Sensor */,
 				57FFECD827F966F100B03EE1 /* Info.plist */,
@@ -78,6 +91,7 @@
 				5728CDF42815926200BBC308 /* Home.swift */,
 				5728CDF62815926E00BBC308 /* TrainService.swift */,
 				57FFECCE27F966D000B03EE1 /* Assets.xcassets */,
+				5728CDF82816D0C800BBC308 /* Settings.plist */,
 				57FFECD027F966D000B03EE1 /* Preview Content */,
 			);
 			path = Pancake;
@@ -176,6 +190,7 @@
 			files = (
 				57FFECD227F966D000B03EE1 /* Preview Assets.xcassets in Resources */,
 				57FFECCF27F966D000B03EE1 /* Assets.xcassets in Resources */,
+				5728CDF92816D0C800BBC308 /* Settings.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -193,6 +208,7 @@
 				5728CDF52815926200BBC308 /* Home.swift in Sources */,
 				5728CDF72815926E00BBC308 /* TrainService.swift in Sources */,
 				57FFECCB27F966CE00B03EE1 /* PancakeApp.swift in Sources */,
+				5728CDFC2816D43A00BBC308 /* DashboardClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

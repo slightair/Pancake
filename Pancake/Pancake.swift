@@ -13,6 +13,7 @@ enum AppAction: Equatable {
     case onDisappear
     case tick
     case historyUpdate
+    case dashboardResponse(Result<Dashboard, DashboardClient.Failure>)
     case header(HeaderAction)
     case event(EventAction)
     case home(HomeAction)
@@ -22,10 +23,12 @@ enum AppAction: Equatable {
 struct AppEnvironment {
     var mainQueue: AnySchedulerOf<DispatchQueue>
     var uuid: () -> UUID
+    var dashboardClient: DashboardClient
 
     static let live = Self(
         mainQueue: .main,
-        uuid: UUID.init
+        uuid: UUID.init,
+        dashboardClient: .live
     )
 }
 
@@ -38,7 +41,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
             Effect.timer(id: TickTimerID(), every: 1, tolerance: 0, on: environment.mainQueue)
                 .map { _ in .tick }
                 .eraseToEffect(),
-            Effect.timer(id: HistoryUpdateTimerID(), every: 3, tolerance: 0, on: environment.mainQueue)
+            Effect.timer(id: HistoryUpdateTimerID(), every: 600, tolerance: 0, on: environment.mainQueue)
                 .map { _ in .historyUpdate }
                 .eraseToEffect(),
         ])
@@ -48,9 +51,18 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
             .cancel(id: HistoryUpdateTimerID()),
         ])
 
+        let startUp: Effect<AppAction, Never> = .merge([
+            startTimers,
+            Effect(value: AppAction.historyUpdate),
+        ])
+
+        let terminate = cancelTimers
+
         switch action {
         case .onAppear:
-            return startTimers
+            return startUp
+        case .onDisappear:
+            return terminate
         case .tick:
             let date = Date()
             return .merge([
@@ -58,9 +70,17 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
                 Effect(value: .event(.eventListUpdate(date))),
             ])
         case .historyUpdate:
+            return environment.dashboardClient.dashboard()
+                .receive(on: environment.mainQueue)
+                .catchToEffect()
+                .map(AppAction.dashboardResponse)
+        case let .dashboardResponse(.success(dashboard)):
+            state.header.weather = dashboard.weather
+            state.trainService.statuses = dashboard.trainStatuses
             return .none
-        case .onDisappear:
-            return cancelTimers
+        case let .dashboardResponse(.failure(error)):
+            print(error)
+            return .none
         default:
             return .none
         }
@@ -97,22 +117,10 @@ struct AppView: View {
     var body: some View {
         WithViewStore(store.stateless) { viewStore in
             VStack {
-                HeaderView(store: store.scope(
-                    state: \.header,
-                    action: AppAction.header)
-                )
-                EventView(store: store.scope(
-                    state: \.event,
-                    action: AppAction.event)
-                )
-                HomeView(store: store.scope(
-                    state: \.home,
-                    action: AppAction.home)
-                )
-                TrainServiceView(store: store.scope(
-                    state: \.trainService,
-                    action: AppAction.trainService)
-                )
+                HeaderView(store: store.scope(state: \.header, action: AppAction.header))
+                EventView(store: store.scope(state: \.event, action: AppAction.event))
+                HomeView(store: store.scope(state: \.home, action: AppAction.home))
+                TrainServiceView(store: store.scope(state: \.trainService, action: AppAction.trainService))
                 Spacer()
             }
             .onAppear { viewStore.send(.onAppear) }
