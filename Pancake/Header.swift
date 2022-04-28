@@ -2,20 +2,45 @@ import ComposableArchitecture
 import Foundation
 import SwiftUI
 
+extension Dashboard {
+    static let mock = Dashboard(
+        trainStatuses: [
+            TrainStatus(route: .sobu, status: "平常運転"),
+            TrainStatus(route: .chuo, status: "平常運転"),
+            TrainStatus(route: .yamanote, status: "平常運転"),
+        ],
+        weather: Weather(
+            tempMin: 3,
+            tempMax: 10,
+            tempMinDiff: 4,
+            tempMaxDiff: -2,
+            chanceOfRain: 20,
+            iconURL: nil
+        )
+    )
+}
+
 struct HeaderState: Equatable, Identifiable {
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm:ss"
+        formatter.dateFormat = "HH:mm"
         return formatter
     }()
 
     let id = UUID()
     var date = Date()
-    var weather: Weather = .unknown
+    var dashboard: Dashboard = .initial
 
     var dateString: String {
         Self.dateFormatter.string(from: date)
     }
+}
+
+extension HeaderState {
+    static let mock = HeaderState(
+        date: Date(),
+        dashboard: .mock
+    )
 }
 
 enum HeaderAction: Equatable {
@@ -32,78 +57,26 @@ let headerReducer = Reducer<HeaderState, HeaderAction, HeaderEnvironment> { stat
     }
 }
 
-struct WeatherView: View {
-    let weather: Weather
-
-    let tempMaxColor = Color(red: 0.93, green: 0.33, blue: 0.27)
-    let tempMinColor = Color(red: 0.50, green: 0.82, blue: 0.98)
-    let miniFont = Font.system(size: 12).bold()
-
-    private let tempDiffNumberFormatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 1
-        formatter.positivePrefix = "▲"
-        formatter.negativePrefix = "▼"
-
-        return formatter
-    }()
-
-    func tempView() -> some View {
-        guard let tempMaxDiff = tempDiffNumberFormatter.string(from: NSNumber(value: weather.tempMaxDiff)),
-              let tempMinDiff = tempDiffNumberFormatter.string(from: NSNumber(value: weather.tempMinDiff)) else {
-            fatalError("Could not format numbers")
-        }
-
-        return [
-            Text("\(weather.tempMax)").foregroundColor(tempMaxColor),
-            Text("[\(tempMaxDiff)]").foregroundColor(tempMaxColor).font(miniFont),
-            Text(" / "),
-            Text("\(weather.tempMin)").foregroundColor(tempMinColor),
-            Text("[\(tempMinDiff)]").foregroundColor(tempMinColor).font(miniFont),
-        ].reduce(Text("")) { $0 + $1 }
-
-    }
-
-    var body: some View {
-        VStack {
-            AsyncImage(url: weather.iconURL) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 94, height: 60)
-            } placeholder: {
-                Image(systemName: "questionmark")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .padding()
-                    .frame(width: 94, height: 60)
-            }
-            tempView()
-            Text("\(weather.chanceOfRain)%")
-        }
-    }
-}
-
 struct HeaderView: View {
     let store: Store<HeaderState, HeaderAction>
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            ZStack(alignment: .topLeading) {
-//                AsyncImage(url: URL(string: "https://via.placeholder.com/834x469"))
-//                AsyncImage(url: URL(string: "https://drscdn.500px.org/photo/1047170708/q%3D80_m%3D2000/v2?sig=9a6cbb90ec8e42f1c34cc870488f44c00c491a687820a81601296bf91454213f"))
-//                    .frame(width: .infinity, height: 400)
-//                    .aspectRatio(3 / 1, contentMode: .fit)
-                Rectangle()
-                    .foregroundColor(Color(white: 0.9))
-                    .aspectRatio(3 / 1, contentMode: .fit)
-                HStack(alignment: .top) {
-                    Text(viewStore.dateString)
-                    Spacer()
-                    WeatherView(weather: viewStore.weather)
-                }
+            HStack(spacing: 16) {
+                Text(viewStore.dateString)
+                    .foregroundColor(AppTheme.textColor)
+                    .font(.system(size: 90))
+                    .monospacedDigit()
+                    .bold()
+                Spacer()
+                WeatherView(weather: viewStore.dashboard.weather)
+                TrainServiceView(statuses: viewStore.dashboard.trainStatuses)
             }
+            .padding()
+            .background {
+                AppTheme.backgroundColor
+            }
+            .cornerRadius(AppTheme.cornerRadius)
         }
     }
 }
@@ -112,17 +85,7 @@ struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
         HeaderView(
             store: Store(
-                initialState: HeaderState(
-                    date: Date(),
-                    weather: Weather(
-                        tempMin: 3,
-                        tempMax: 10,
-                        tempMinDiff: 4,
-                        tempMaxDiff: -2,
-                        chanceOfRain: 20,
-                        iconURL: nil
-                    )
-                ),
+                initialState: .mock,
                 reducer: headerReducer,
                 environment: HeaderEnvironment()
             )

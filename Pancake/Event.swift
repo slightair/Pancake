@@ -25,16 +25,24 @@ struct EventListItemView: View {
     var body: some View {
         VStack {
             Text("4/12 10:00")
+                .foregroundColor(AppTheme.textColor)
+                .bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
             Text("散歩")
+                .foregroundColor(AppTheme.textColor)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .padding(8)
+        .background {
+            AppTheme.backgroundColor
+        }
+        .cornerRadius(AppTheme.cornerRadius)
     }
 }
 
 struct EventListView: View {
     var body: some View {
-        VStack {
+        VStack(spacing: AppTheme.panelPadding) {
             ForEach(0..<5) { _ in
                 EventListItemView()
             }
@@ -48,15 +56,16 @@ struct EventView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             GeometryReader { geometry in
-                let baseWidth = geometry.size.width / 3
-                HStack(alignment: .top) {
+                let baseWidth = (geometry.size.width - AppTheme.panelPadding) / 3
+                HStack(alignment: .top, spacing: AppTheme.panelPadding) {
                     EventListView()
                         .frame(width: baseWidth * 2)
                     CalendarView(selectedDate: viewStore.date)
+                        .cornerRadius(AppTheme.cornerRadius)
                         .frame(width: baseWidth)
                 }
             }
-            .frame(maxHeight: 280)
+            .frame(maxHeight: 301)
         }
     }
 }

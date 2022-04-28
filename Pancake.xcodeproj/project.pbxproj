@@ -10,9 +10,11 @@
 		5728CDF12813DB2900BBC308 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF02813DB2900BBC308 /* Header.swift */; };
 		5728CDF32814306A00BBC308 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF22814306A00BBC308 /* Event.swift */; };
 		5728CDF52815926200BBC308 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF42815926200BBC308 /* Home.swift */; };
-		5728CDF72815926E00BBC308 /* TrainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF62815926E00BBC308 /* TrainService.swift */; };
 		5728CDF92816D0C800BBC308 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5728CDF82816D0C800BBC308 /* Settings.plist */; };
 		5728CDFC2816D43A00BBC308 /* DashboardClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDFB2816D43A00BBC308 /* DashboardClient.swift */; };
+		5728CDFE281A389C00BBC308 /* UnsplashClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDFD281A389B00BBC308 /* UnsplashClient.swift */; };
+		577A4815281A6C48007090BF /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577A4814281A6C48007090BF /* WeatherView.swift */; };
+		577A4817281A6CD0007090BF /* TrainServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577A4816281A6CD0007090BF /* TrainServiceView.swift */; };
 		57DD4EB6280156FF00D0F249 /* HorizonCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 57DD4EB5280156FF00D0F249 /* HorizonCalendar */; };
 		57DD4EB82801573800D0F249 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD4EB72801573800D0F249 /* CalendarView.swift */; };
 		57F5BC6A280C3DD800191F64 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 57F5BC69280C3DD800191F64 /* SwiftUICharts */; };
@@ -27,9 +29,11 @@
 		5728CDF02813DB2900BBC308 /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		5728CDF22814306A00BBC308 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		5728CDF42815926200BBC308 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
-		5728CDF62815926E00BBC308 /* TrainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainService.swift; sourceTree = "<group>"; };
 		5728CDF82816D0C800BBC308 /* Settings.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Settings.plist; sourceTree = "<group>"; };
 		5728CDFB2816D43A00BBC308 /* DashboardClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardClient.swift; sourceTree = "<group>"; };
+		5728CDFD281A389B00BBC308 /* UnsplashClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashClient.swift; sourceTree = "<group>"; };
+		577A4814281A6C48007090BF /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
+		577A4816281A6CD0007090BF /* TrainServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainServiceView.swift; sourceTree = "<group>"; };
 		57DD4EB72801573800D0F249 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		57F5BC72280D980D00191F64 /* Pancake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pancake.swift; sourceTree = "<group>"; };
 		57FFECC727F966CE00B03EE1 /* Pancake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pancake.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -57,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				5728CDFB2816D43A00BBC308 /* DashboardClient.swift */,
+				5728CDFD281A389B00BBC308 /* UnsplashClient.swift */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -89,7 +94,6 @@
 				5728CDF02813DB2900BBC308 /* Header.swift */,
 				5728CDF22814306A00BBC308 /* Event.swift */,
 				5728CDF42815926200BBC308 /* Home.swift */,
-				5728CDF62815926E00BBC308 /* TrainService.swift */,
 				57FFECCE27F966D000B03EE1 /* Assets.xcassets */,
 				5728CDF82816D0C800BBC308 /* Settings.plist */,
 				57FFECD027F966D000B03EE1 /* Preview Content */,
@@ -116,6 +120,8 @@
 			isa = PBXGroup;
 			children = (
 				57DD4EB72801573800D0F249 /* CalendarView.swift */,
+				577A4814281A6C48007090BF /* WeatherView.swift */,
+				577A4816281A6CD0007090BF /* TrainServiceView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -204,10 +210,12 @@
 				5728CDF32814306A00BBC308 /* Event.swift in Sources */,
 				5728CDF12813DB2900BBC308 /* Header.swift in Sources */,
 				57DD4EB82801573800D0F249 /* CalendarView.swift in Sources */,
+				5728CDFE281A389C00BBC308 /* UnsplashClient.swift in Sources */,
 				57F5BC73280D980D00191F64 /* Pancake.swift in Sources */,
+				577A4815281A6C48007090BF /* WeatherView.swift in Sources */,
 				5728CDF52815926200BBC308 /* Home.swift in Sources */,
-				5728CDF72815926E00BBC308 /* TrainService.swift in Sources */,
 				57FFECCB27F966CE00B03EE1 /* PancakeApp.swift in Sources */,
+				577A4817281A6CD0007090BF /* TrainServiceView.swift in Sources */,
 				5728CDFC2816D43A00BBC308 /* DashboardClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

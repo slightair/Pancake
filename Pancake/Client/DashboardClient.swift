@@ -58,6 +58,17 @@ struct Dashboard: Equatable, Decodable {
     let weather: Weather
 }
 
+extension Dashboard {
+    static let initial = Dashboard(
+        trainStatuses: [
+            TrainStatus(route: .sobu, status: "----"),
+            TrainStatus(route: .chuo, status: "----"),
+            TrainStatus(route: .yamanote, status: "----"),
+        ],
+        weather: .unknown
+    )
+}
+
 struct DashboardClient {
     var dashboard: () -> Effect<Dashboard, Failure>
 
