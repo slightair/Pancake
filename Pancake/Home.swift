@@ -1,47 +1,92 @@
 import ComposableArchitecture
-import Foundation
 import SwiftUI
 
-struct RoomSensor: Equatable, Identifiable {
-    let id = UUID()
-    let name: String
+enum Room: String {
+    case living
+    case bedroom
+    case study
+
+    var name: String {
+        switch self {
+        case .living:
+            return "リビング"
+        case .bedroom:
+            return "寝室"
+        case .study:
+            return "書斎"
+        }
+    }
+
+    var hasCO2Sensor: Bool {
+        switch self {
+        case .living:
+            return true
+        case .bedroom:
+            return false
+        case .study:
+            return false
+        }
+    }
 }
 
-struct Room: Equatable, Identifiable {
-    let id = UUID()
-    let name: String
-    let sensors: [RoomSensor]
+enum RoomStatus: Equatable, Identifiable {
+    case summary(RoomMetricsHistory)
+    case temperatureAndHumidity(RoomMetricsHistory)
+    case co2(RoomMetricsHistory)
+
+    var id: String {
+        switch self {
+        case let .summary(history):
+            return "Summary/\(history.id)"
+        case let .temperatureAndHumidity(history):
+            return "TemperatureAndHumidity/\(history.id)"
+        case let .co2(history):
+            return "CO2/\(history.id)"
+        }
+    }
+}
+
+struct HomeSection: Equatable, Identifiable {
+    let room: Room
+    let roomStatuses: [RoomStatus]
+
+    var id: String {
+        room.rawValue
+    }
 }
 
 struct HomeState: Equatable, Identifiable {
     let id = UUID()
-    let rooms: [Room] = [
-        Room(
-            name: "リビング",
-            sensors: [
-                RoomSensor(name: "不快指数"),
-                RoomSensor(name: "温度"),
-                RoomSensor(name: "湿度"),
-                RoomSensor(name: "CO2"),
-            ]
-        ),
-        Room(
-            name: "書斎",
-            sensors: [
-                RoomSensor(name: "不快指数"),
-                RoomSensor(name: "温度"),
-                RoomSensor(name: "湿度"),
-            ]
-        ),
-        Room(
-            name: "寝室",
-            sensors: [
-                RoomSensor(name: "不快指数"),
-                RoomSensor(name: "温度"),
-                RoomSensor(name: "湿度"),
-            ]
-        ),
-    ]
+    var roomMetricsHistories: [RoomMetricsHistory] = []
+
+    var sections: [HomeSection] {
+        roomMetricsHistories.map { history in
+            HomeSection(
+                room: history.room,
+                roomStatuses: [
+                    RoomStatus.summary(history),
+                    RoomStatus.temperatureAndHumidity(history),
+                    RoomStatus.co2(history),
+                ].compactMap { status in
+                    if !history.room.hasCO2Sensor, case .co2 = status {
+                        return nil
+                    } else {
+                        return status
+                    }
+                }
+            )
+        }
+    }
+}
+
+extension HomeState {
+    static let mock = HomeState(
+        roomMetricsHistories: [
+            .mockLiving,
+            .mockBedroom,
+            .mockStudy,
+        ]
+    )
 }
 
 enum HomeAction: Equatable {
@@ -57,13 +102,22 @@ let homeReducer = Reducer<HomeState, HomeAction, HomeEnvironment> { state, actio
     }
 }
 
-struct RoomSensorView: View {
-    let sensor: RoomSensor
+struct RoomSummaryView: View {
+    let history: RoomMetricsHistory
 
     var body: some View {
-        Rectangle()
-            .foregroundColor(Color(white: 0.9))
-            .aspectRatio(1.6, contentMode: .fit)
+        VStack(alignment: .leading, spacing: 0) {
+            Text(history.room.name)
+                .foregroundColor(AppTheme.textColor)
+                .bold()
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Spacer()
+        }
+        .padding(AppTheme.panelPadding)
+        .background {
+            AppTheme.backgroundColor
+        }
+        .cornerRadius(AppTheme.cornerRadius)
     }
 }
 
@@ -73,12 +127,26 @@ struct HomeView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             VStack {
-                LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 4), pinnedViews: .sectionHeaders) {
-                    ForEach(viewStore.rooms) { room in
-                        Section(header: Text(room.name).frame(maxWidth: .infinity, alignment: .leading)) {
-                            ForEach(room.sensors) { sensor in
-                                RoomSensorView(sensor: sensor)
+                LazyVGrid(
+                    columns: Array(
+                        repeating: GridItem(.flexible(),spacing: AppTheme.screenPadding),
+                        count: 3
+                    ),
+                    spacing: AppTheme.screenPadding
+                ) {
+                    ForEach(viewStore.sections) { section in
+                        Section {
+                            ForEach(section.roomStatuses) { status in
+                                switch status {
+                                case let .summary(history):
+                                    RoomSummaryView(history: history)
+                                case let .temperatureAndHumidity(history):
+                                    RoomStatusView(history: history, content: .temperatureAndHumidity)
+                                case let .co2(history):
+                                    RoomStatusView(history: history, content: .co2)
+                                }
                             }
+                            .aspectRatio(1.6, contentMode: .fit)
                         }
                     }
                 }
@@ -92,7 +160,7 @@ struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView(
             store: Store(
-                initialState: HomeState(),
+                initialState: .mock,
                 reducer: homeReducer,
                 environment: HomeEnvironment()
             )

@@ -13,6 +13,19 @@ struct UnsplashPhoto: Equatable, Decodable {
     let urls: URLs
 }
 
+extension UnsplashPhoto {
+    static let mock = UnsplashPhoto(
+        id: "mock",
+        width: 768,
+        height: 1024,
+        urls: .init(
+            raw: URL(string: "https://picsum.photos/id/866/768/1024.jpg?grayscale")!,
+            full: URL(string: "https://picsum.photos/id/866/768/1024.jpg?grayscale")!,
+            regular: URL(string: "https://picsum.photos/id/866/768/1024.jpg?grayscale")!
+        )
+    )
+}
+
 struct UnsplashClient {
     var topicPhotos: (String, Int) -> Effect<[UnsplashPhoto], Failure>
     var wallpaper: () -> Effect<UnsplashPhoto, Failure> {

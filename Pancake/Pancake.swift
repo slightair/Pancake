@@ -15,6 +15,7 @@ enum AppAction: Equatable {
     case historyUpdate
     case dashboardResponse(Result<Dashboard, DashboardClient.Failure>)
     case wallpaperResponse(Result<UnsplashPhoto, UnsplashClient.Failure>)
+    case roomMetricsHistoriesResponse(Result<[RoomMetricsHistory], LocalDBClient.Failure>)
     case header(HeaderAction)
     case event(EventAction)
     case home(HomeAction)
@@ -25,12 +26,14 @@ struct AppEnvironment {
     var uuid: () -> UUID
     var dashboardClient: DashboardClient
     var unsplashClient: UnsplashClient
+    var localDBClient: LocalDBClient
 
     static let live = Self(
         mainQueue: .main,
         uuid: UUID.init,
         dashboardClient: .live,
-        unsplashClient: .live
+        unsplashClient: .live,
+        localDBClient: .mock
     )
 }
 
@@ -81,6 +84,10 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
                     .receive(on: environment.mainQueue)
                     .catchToEffect()
                     .map(AppAction.wallpaperResponse),
+                environment.localDBClient.roomMetricsHistories()
+                    .receive(on: environment.mainQueue)
+                    .catchToEffect()
+                    .map(AppAction.roomMetricsHistoriesResponse),
             ])
         case let .dashboardResponse(.success(dashboard)):
             state.header.dashboard = dashboard
@@ -89,10 +96,15 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
             print(error)
             return .none
         case let .wallpaperResponse(.success(wallpaper)):
-            print(wallpaper)
             state.wallpaper = wallpaper
             return .none
         case let .wallpaperResponse(.failure(error)):
+            print(error)
+            return .none
+        case let .roomMetricsHistoriesResponse(.success(roomMetricsHistories)):
+            state.home.roomMetricsHistories = roomMetricsHistories
+            return .none
+        case let .roomMetricsHistoriesResponse(.failure(error)):
             print(error)
             return .none
         default:
@@ -122,7 +134,8 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
 struct AppTheme {
     static let backgroundColor = Color(uiColor: UIKit.backgroundColor)
     static let textColor = Color(uiColor: UIKit.textColor)
-    static let panelPadding: CGFloat = 4
+    static let screenPadding: CGFloat = 4
+    static let panelPadding: CGFloat = 8
     static let cornerRadius: CGFloat = 8
 
     struct UIKit {
@@ -136,13 +149,13 @@ struct AppView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            VStack(spacing: AppTheme.panelPadding) {
+            VStack(spacing: AppTheme.screenPadding) {
                 HeaderView(store: store.scope(state: \.header, action: AppAction.header))
                 EventView(store: store.scope(state: \.event, action: AppAction.event))
                 HomeView(store: store.scope(state: \.home, action: AppAction.home))
                 Spacer()
             }
-            .padding(4)
+            .padding(AppTheme.screenPadding)
             .background {
                 AsyncImage(url: viewStore.wallpaper?.urls.full) { image in
                     image
@@ -166,24 +179,11 @@ struct AppView_Previews: PreviewProvider {
                     wallpaper: .mock,
                     header: .mock,
                     event: EventState(),
-                    home: HomeState()
+                    home: .mock
                 ),
                 reducer: Reducer<AppState, AppAction, AppEnvironment> { _, _, _ in .none },
                 environment: .live
             )
         )
     }
-}
-
-extension UnsplashPhoto {
-    static let mock = UnsplashPhoto(
-        id: "mock",
-        width: 768,
-        height: 1024,
-        urls: .init(
-            raw: URL(string: "https://picsum.photos/id/866/768/1024.jpg?grayscale")!,
-            full: URL(string: "https://picsum.photos/id/866/768/1024.jpg?grayscale")!,
-            regular: URL(string: "https://picsum.photos/id/866/768/1024.jpg?grayscale")!
-        )
-    )
 }

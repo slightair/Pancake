@@ -72,7 +72,7 @@ struct HeaderView: View {
                 WeatherView(weather: viewStore.dashboard.weather)
                 TrainServiceView(statuses: viewStore.dashboard.trainStatuses)
             }
-            .padding()
+            .padding(AppTheme.panelPadding)
             .background {
                 AppTheme.backgroundColor
             }
