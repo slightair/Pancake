@@ -102,25 +102,6 @@ let homeReducer = Reducer<HomeState, HomeAction, HomeEnvironment> { state, actio
     }
 }
 
-struct RoomSummaryView: View {
-    let history: RoomMetricsHistory
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text(history.room.name)
-                .foregroundColor(AppTheme.textColor)
-                .bold()
-                .frame(maxWidth: .infinity, alignment: .leading)
-            Spacer()
-        }
-        .padding(AppTheme.panelPadding)
-        .background {
-            AppTheme.backgroundColor
-        }
-        .cornerRadius(AppTheme.cornerRadius)
-    }
-}
-
 struct HomeView: View {
     let store: Store<HomeState, HomeAction>
 

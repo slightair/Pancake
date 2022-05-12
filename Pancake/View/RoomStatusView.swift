@@ -55,6 +55,43 @@ struct CO2ChartView: UIViewRepresentable {
     }
 }
 
+struct RoomSummaryView: View {
+    let history: RoomMetricsHistory
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .firstTextBaseline, spacing: 2) {
+                Image(systemName: "house.fill")
+                Text(history.room.name)
+            }
+            .foregroundColor(AppTheme.headerColor)
+            .font(.headline)
+            if let current = history.records.last {
+                VStack(alignment: .center, spacing: 4) {
+                    HStack(alignment: .top) {
+                        HStack(alignment: .firstTextBaseline, spacing: 2) {
+                            Image(systemName: "person.fill.questionmark")
+                            Text("不快指数")
+                        }
+                        .foregroundColor(AppTheme.headerColor)
+                        .font(AppTheme.headerFont)
+                        Spacer()
+                        Text("\(current.discomfortIndex, specifier: "%.f") - \(current.discomfortIndexText)")
+                            .foregroundColor(AppTheme.textColor)
+                            .font(AppTheme.textFont)
+                    }
+                }
+            }
+            Spacer()
+        }
+        .padding(AppTheme.panelPadding)
+        .background {
+            AppTheme.backgroundColor
+        }
+        .cornerRadius(AppTheme.cornerRadius)
+    }
+}
+
 struct RoomStatusView: View {
     enum Content {
         case temperatureAndHumidity
@@ -120,10 +157,36 @@ struct RoomStatusView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(content.title)
+            HStack(alignment: .top) {
+                HStack(alignment: .firstTextBaseline, spacing: 2) {
+                    switch content {
+                    case .temperatureAndHumidity:
+                        Image(systemName: "thermometer")
+                    case .co2:
+                        Image(systemName: "cloud.fill")
+                    }
+                    Text(content.title)
+                }
+                .foregroundColor(AppTheme.headerColor)
+                .font(AppTheme.headerFont)
+                Spacer()
+                Group {
+                    switch content {
+                    case .temperatureAndHumidity:
+                        if let current = history.records.last {
+                            Text("\(current.temperature, specifier: "%.1f")℃") +
+                            Text(" / ") +
+                            Text("\(current.humidity, specifier: "%.f")%")
+                        }
+                    case .co2:
+                        if let current = history.records.last {
+                            Text("\(current.co2, specifier: "%.f")ppm")
+                        }
+                    }
+                }
                 .foregroundColor(AppTheme.textColor)
-                .bold()
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .font(AppTheme.textFont)
+            }
             switch content {
             case .temperatureAndHumidity:
                 TemperatureAndHumidityChartView(chartData: makeTemperatureAndHumidityChartData())
@@ -139,10 +202,13 @@ struct RoomStatusView: View {
     }
 }
 
-struct ChartView_Previews: PreviewProvider {
+struct RoomStatusView_Previews: PreviewProvider {
     static var previews: some View {
         HStack {
             Group {
+                RoomSummaryView(
+                    history: .mockLiving
+                )
                 RoomStatusView(
                     history: .mockLiving,
                     content: .temperatureAndHumidity
