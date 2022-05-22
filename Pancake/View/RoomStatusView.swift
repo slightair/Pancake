@@ -55,6 +55,55 @@ struct CO2ChartView: UIViewRepresentable {
     }
 }
 
+struct DiscomfortIndexGaugeView: View {
+    private let cornerRadius: CGFloat = 24
+    private let height: CGFloat = 4
+
+    let discomfortIndex: Double
+
+    var gaugeValue: Double {
+        if discomfortIndex <= 55 {
+            return 0.0
+        } else if discomfortIndex >= 85 {
+            return 1.0
+        } else {
+            return (discomfortIndex - 55) / 30
+        }
+    }
+
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                LinearGradient(
+                    gradient: Gradient(
+                        stops: [
+                            Gradient.Stop(color: .blue, location: 0.0),
+                            Gradient.Stop(color: .cyan, location: 0.17),
+                            Gradient.Stop(color: .green, location: 0.42),
+                            Gradient.Stop(color: .yellow, location: 0.67),
+                            Gradient.Stop(color: .orange, location: 0.83),
+                            Gradient.Stop(color: .red, location: 1.0),
+                        ]
+                    ),
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+                .frame(height: height)
+                .cornerRadius(cornerRadius)
+                Circle()
+                    .stroke()
+                    .foregroundColor(.gray)
+                    .background(.white)
+                    .frame(width: height, height: height)
+                    .offset(x: (geometry.size.width - height) * gaugeValue, y: 0)
+            }
+            .frame(height: height)
+            .clipped()
+        }
+        .frame(height: height)
+    }
+}
+
 struct RoomSummaryView: View {
     let history: RoomMetricsHistory
 
@@ -66,8 +115,9 @@ struct RoomSummaryView: View {
             }
             .foregroundColor(AppTheme.headerColor)
             .font(.headline)
+            Divider().background(Color.white)
             if let current = history.records.last {
-                VStack(alignment: .center, spacing: 4) {
+                VStack(alignment: .center, spacing: 6) {
                     HStack(alignment: .top) {
                         HStack(alignment: .firstTextBaseline, spacing: 2) {
                             Image(systemName: "person.fill.questionmark")
@@ -76,12 +126,17 @@ struct RoomSummaryView: View {
                         .foregroundColor(AppTheme.headerColor)
                         .font(AppTheme.headerFont)
                         Spacer()
+                    }
+                    HStack(alignment: .top) {
                         Text("\(current.discomfortIndex, specifier: "%.f") - \(current.discomfortIndexText)")
                             .foregroundColor(AppTheme.textColor)
                             .font(AppTheme.textFont)
+                        Spacer()
                     }
+                    DiscomfortIndexGaugeView(discomfortIndex: current.discomfortIndex)
                 }
             }
+            Divider().background(Color.white)
             Spacer()
         }
         .padding(AppTheme.panelPadding)
