@@ -1,10 +1,10 @@
-import SwiftUI
 import Charts
+import SwiftUI
 
 struct TemperatureAndHumidityChartView: UIViewRepresentable {
     var chartData: LineChartData
 
-    func makeUIView(context: Context) -> LineChartView {
+    func makeUIView(context _: Context) -> LineChartView {
         let view = LineChartView()
         let textColor = AppTheme.UIKit.textColor
         view.noDataTextColor = textColor
@@ -24,7 +24,7 @@ struct TemperatureAndHumidityChartView: UIViewRepresentable {
         return view
     }
 
-    func updateUIView(_ uiView: LineChartView, context: Context) {
+    func updateUIView(_ uiView: LineChartView, context _: Context) {
         uiView.data = chartData
     }
 }
@@ -32,7 +32,7 @@ struct TemperatureAndHumidityChartView: UIViewRepresentable {
 struct CO2ChartView: UIViewRepresentable {
     var chartData: LineChartData
 
-    func makeUIView(context: Context) -> LineChartView {
+    func makeUIView(context _: Context) -> LineChartView {
         let view = LineChartView()
         let textColor = AppTheme.UIKit.textColor
         view.noDataTextColor = textColor
@@ -50,7 +50,7 @@ struct CO2ChartView: UIViewRepresentable {
         return view
     }
 
-    func updateUIView(_ uiView: LineChartView, context: Context) {
+    func updateUIView(_ uiView: LineChartView, context _: Context) {
         uiView.data = chartData
     }
 }
@@ -105,7 +105,7 @@ struct DiscomfortIndexGaugeView: View {
 }
 
 struct RoomSummaryView: View {
-    let history: RoomMetricsHistory
+    let history: RoomSensorsHistory
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -162,10 +162,10 @@ struct RoomStatusView: View {
         }
     }
 
-    let history: RoomMetricsHistory
+    let history: RoomSensorsHistory
     let content: Content
 
-    private func makeMetricsHistoryDataSet(_ keyPath: KeyPath<MetricsHistoryRecord, Double>) -> LineChartDataSet {
+    private func makeMetricsHistoryDataSet(_ keyPath: KeyPath<SensorsRecord, Double>) -> LineChartDataSet {
         let records = history.records.sorted(by: { $0.date > $1.date }).map { $0[keyPath: keyPath] }
         let dataSet = LineChartDataSet(entries: records.enumerated().map { index, value in
             ChartDataEntry(x: Double(index), y: value)
@@ -230,8 +230,8 @@ struct RoomStatusView: View {
                     case .temperatureAndHumidity:
                         if let current = history.records.last {
                             Text("\(current.temperature, specifier: "%.1f")℃") +
-                            Text(" / ") +
-                            Text("\(current.humidity, specifier: "%.f")%")
+                                Text(" / ") +
+                                Text("\(current.humidity, specifier: "%.f")%")
                         }
                     case .co2:
                         if let current = history.records.last {

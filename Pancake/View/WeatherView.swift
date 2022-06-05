@@ -19,7 +19,7 @@ struct WeatherView: View {
 
     func tempView() -> some View {
         guard let tempMaxDiff = tempDiffNumberFormatter.string(from: NSNumber(value: weather.tempMaxDiff)),
-              let tempMinDiff = tempDiffNumberFormatter.string(from: NSNumber(value: weather.tempMinDiff)) else {
+            let tempMinDiff = tempDiffNumberFormatter.string(from: NSNumber(value: weather.tempMinDiff)) else {
             fatalError("Could not format numbers")
         }
 

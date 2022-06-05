@@ -15,7 +15,7 @@ enum AppAction: Equatable {
     case historyUpdate
     case dashboardResponse(Result<Dashboard, DashboardClient.Failure>)
     case wallpaperResponse(Result<UnsplashPhoto, UnsplashClient.Failure>)
-    case roomMetricsHistoriesResponse(Result<[RoomMetricsHistory], LocalDBClient.Failure>)
+    case roomMetricsHistoriesResponse(Result<[RoomSensorsHistory], MetricsClient.Failure>)
     case header(HeaderAction)
     case event(EventAction)
     case home(HomeAction)
@@ -26,14 +26,14 @@ struct AppEnvironment {
     var uuid: () -> UUID
     var dashboardClient: DashboardClient
     var unsplashClient: UnsplashClient
-    var localDBClient: LocalDBClient
+    var metricsClient: MetricsClient
 
     static let live = Self(
         mainQueue: .main,
         uuid: UUID.init,
         dashboardClient: .live,
         unsplashClient: .live,
-        localDBClient: .mock
+        metricsClient: .mock
     )
 }
 
@@ -84,7 +84,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
                     .receive(on: environment.mainQueue)
                     .catchToEffect()
                     .map(AppAction.wallpaperResponse),
-                environment.localDBClient.roomMetricsHistories()
+                environment.metricsClient.roomMetricsHistories()
                     .receive(on: environment.mainQueue)
                     .catchToEffect()
                     .map(AppAction.roomMetricsHistoriesResponse),

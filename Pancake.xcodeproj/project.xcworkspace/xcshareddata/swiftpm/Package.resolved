@@ -19,15 +19,6 @@
       }
     },
     {
-      "identity" : "corestore",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/JohnEstropia/CoreStore",
-      "state" : {
-        "revision" : "496145761ab30e8cf1c44220c0882b95e6b41077",
-        "version" : "8.1.0"
-      }
-    },
-    {
       "identity" : "horizoncalendar",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/airbnb/HorizonCalendar",

@@ -30,9 +30,9 @@ enum Room: String {
 }
 
 enum RoomStatus: Equatable, Identifiable {
-    case summary(RoomMetricsHistory)
-    case temperatureAndHumidity(RoomMetricsHistory)
-    case co2(RoomMetricsHistory)
+    case summary(RoomSensorsHistory)
+    case temperatureAndHumidity(RoomSensorsHistory)
+    case co2(RoomSensorsHistory)
 
     var id: String {
         switch self {
@@ -57,7 +57,7 @@ struct HomeSection: Equatable, Identifiable {
 
 struct HomeState: Equatable, Identifiable {
     let id = UUID()
-    var roomMetricsHistories: [RoomMetricsHistory] = []
+    var roomMetricsHistories: [RoomSensorsHistory] = []
 
     var sections: [HomeSection] {
         roomMetricsHistories.map { history in
@@ -95,7 +95,7 @@ enum HomeAction: Equatable {
 
 struct HomeEnvironment {}
 
-let homeReducer = Reducer<HomeState, HomeAction, HomeEnvironment> { state, action, _ in
+let homeReducer = Reducer<HomeState, HomeAction, HomeEnvironment> { _, action, _ in
     switch action {
     case .homeUpdate:
         return .none
@@ -110,7 +110,7 @@ struct HomeView: View {
             VStack {
                 LazyVGrid(
                     columns: Array(
-                        repeating: GridItem(.flexible(),spacing: AppTheme.screenPadding),
+                        repeating: GridItem(.flexible(), spacing: AppTheme.screenPadding),
                         count: 3
                     ),
                     spacing: AppTheme.screenPadding

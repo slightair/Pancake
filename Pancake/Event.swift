@@ -43,7 +43,7 @@ struct EventListItemView: View {
 struct EventListView: View {
     var body: some View {
         VStack(spacing: AppTheme.screenPadding) {
-            ForEach(0..<5) { _ in
+            ForEach(0 ..< 5) { _ in
                 EventListItemView()
             }
         }
