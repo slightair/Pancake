@@ -20,6 +20,10 @@
 		577A482428263A7D007090BF /* RoomStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577A482328263A7D007090BF /* RoomStatusView.swift */; };
 		579F5950284CD2CF003D8F6D /* SensorsRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579F594F284CD2CF003D8F6D /* SensorsRecord.swift */; };
 		579F5952284CD333003D8F6D /* RoomSensorsHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579F5951284CD333003D8F6D /* RoomSensorsHistory.swift */; };
+		579F5954284CE3E5003D8F6D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 579F5953284CE3E5003D8F6D /* GoogleService-Info.plist */; };
+		579F5957284CE4D7003D8F6D /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 579F5956284CE4D7003D8F6D /* FirebaseFirestore */; };
+		579F5959284CE4D7003D8F6D /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 579F5958284CE4D7003D8F6D /* FirebaseFirestoreCombine-Community */; };
+		579F595B284CE4D7003D8F6D /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 579F595A284CE4D7003D8F6D /* FirebaseFirestoreSwift */; };
 		57DD4EB6280156FF00D0F249 /* HorizonCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 57DD4EB5280156FF00D0F249 /* HorizonCalendar */; };
 		57DD4EB82801573800D0F249 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD4EB72801573800D0F249 /* CalendarView.swift */; };
 		57F5BC71280D96D100191F64 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 57F5BC70280D96D100191F64 /* ComposableArchitecture */; };
@@ -42,6 +46,7 @@
 		577A482328263A7D007090BF /* RoomStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomStatusView.swift; sourceTree = "<group>"; };
 		579F594F284CD2CF003D8F6D /* SensorsRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorsRecord.swift; sourceTree = "<group>"; };
 		579F5951284CD333003D8F6D /* RoomSensorsHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSensorsHistory.swift; sourceTree = "<group>"; };
+		579F5953284CE3E5003D8F6D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		57DD4EB72801573800D0F249 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		57F5BC72280D980D00191F64 /* Pancake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pancake.swift; sourceTree = "<group>"; };
 		57FFECC727F966CE00B03EE1 /* Pancake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pancake.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -57,8 +62,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				577A482228263A29007090BF /* Charts in Frameworks */,
+				579F5957284CE4D7003D8F6D /* FirebaseFirestore in Frameworks */,
 				57DD4EB6280156FF00D0F249 /* HorizonCalendar in Frameworks */,
+				579F5959284CE4D7003D8F6D /* FirebaseFirestoreCombine-Community in Frameworks */,
 				57F5BC71280D96D100191F64 /* ComposableArchitecture in Frameworks */,
+				579F595B284CE4D7003D8F6D /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,13 +106,14 @@
 				57FFECDA27F9699100B03EE1 /* View */,
 				57FFECD927F9686400B03EE1 /* Sensor */,
 				57FFECD827F966F100B03EE1 /* Info.plist */,
+				5728CDF82816D0C800BBC308 /* Settings.plist */,
+				579F5953284CE3E5003D8F6D /* GoogleService-Info.plist */,
 				57FFECCA27F966CE00B03EE1 /* PancakeApp.swift */,
 				57F5BC72280D980D00191F64 /* Pancake.swift */,
 				5728CDF02813DB2900BBC308 /* Header.swift */,
 				5728CDF22814306A00BBC308 /* Event.swift */,
 				5728CDF42815926200BBC308 /* Home.swift */,
 				57FFECCE27F966D000B03EE1 /* Assets.xcassets */,
-				5728CDF82816D0C800BBC308 /* Settings.plist */,
 				57FFECD027F966D000B03EE1 /* Preview Content */,
 			);
 			path = Pancake;
@@ -158,6 +167,9 @@
 				57DD4EB5280156FF00D0F249 /* HorizonCalendar */,
 				57F5BC70280D96D100191F64 /* ComposableArchitecture */,
 				577A482128263A29007090BF /* Charts */,
+				579F5956284CE4D7003D8F6D /* FirebaseFirestore */,
+				579F5958284CE4D7003D8F6D /* FirebaseFirestoreCombine-Community */,
+				579F595A284CE4D7003D8F6D /* FirebaseFirestoreSwift */,
 			);
 			productName = Pancake;
 			productReference = 57FFECC727F966CE00B03EE1 /* Pancake.app */;
@@ -191,6 +203,7 @@
 				57DD4EB4280156FF00D0F249 /* XCRemoteSwiftPackageReference "HorizonCalendar" */,
 				57F5BC6F280D96D100191F64 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				577A482028263A29007090BF /* XCRemoteSwiftPackageReference "Charts" */,
+				579F5955284CE4D7003D8F6D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 57FFECC827F966CE00B03EE1 /* Products */;
 			projectDirPath = "";
@@ -207,6 +220,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				57FFECD227F966D000B03EE1 /* Preview Assets.xcassets in Resources */,
+				579F5954284CE3E5003D8F6D /* GoogleService-Info.plist in Resources */,
 				57FFECCF27F966D000B03EE1 /* Assets.xcassets in Resources */,
 				5728CDF92816D0C800BBC308 /* Settings.plist in Resources */,
 			);
@@ -445,6 +459,14 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		579F5955284CE4D7003D8F6D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
 		57DD4EB4280156FF00D0F249 /* XCRemoteSwiftPackageReference "HorizonCalendar" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/HorizonCalendar";
@@ -468,6 +490,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 577A482028263A29007090BF /* XCRemoteSwiftPackageReference "Charts" */;
 			productName = Charts;
+		};
+		579F5956284CE4D7003D8F6D /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 579F5955284CE4D7003D8F6D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		579F5958284CE4D7003D8F6D /* FirebaseFirestoreCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 579F5955284CE4D7003D8F6D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseFirestoreCombine-Community";
+		};
+		579F595A284CE4D7003D8F6D /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 579F5955284CE4D7003D8F6D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestoreSwift;
 		};
 		57DD4EB5280156FF00D0F249 /* HorizonCalendar */ = {
 			isa = XCSwiftPackageProductDependency;
