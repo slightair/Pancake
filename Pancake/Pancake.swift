@@ -33,7 +33,7 @@ struct AppEnvironment {
         uuid: UUID.init,
         dashboardClient: .live,
         unsplashClient: .live,
-        metricsClient: .mock
+        metricsClient: .live
     )
 }
 
@@ -84,7 +84,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
                     .receive(on: environment.mainQueue)
                     .catchToEffect()
                     .map(AppAction.wallpaperResponse),
-                environment.metricsClient.roomMetricsHistories()
+                environment.metricsClient.roomSensorsHistories()
                     .receive(on: environment.mainQueue)
                     .catchToEffect()
                     .map(AppAction.roomMetricsHistoriesResponse),

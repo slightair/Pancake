@@ -1,6 +1,6 @@
 import Foundation
 
-struct SensorsRecord: Equatable {
+struct SensorsRecord: Equatable, Codable {
     let date: Date
     let temperature: Double
     let humidity: Double
@@ -31,5 +31,12 @@ struct SensorsRecord: Equatable {
         default:
             return "---"
         }
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case date = "time"
+        case temperature
+        case humidity
+        case co2
     }
 }
