@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5701AFE4285EECDD0084ADD0 /* CasePaths in Frameworks */ = {isa = PBXBuildFile; productRef = 5701AFE3285EECDD0084ADD0 /* CasePaths */; };
 		5728CDF12813DB2900BBC308 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF02813DB2900BBC308 /* Header.swift */; };
 		5728CDF32814306A00BBC308 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF22814306A00BBC308 /* Event.swift */; };
 		5728CDF52815926200BBC308 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF42815926200BBC308 /* Home.swift */; };
@@ -66,6 +67,7 @@
 				57DD4EB6280156FF00D0F249 /* HorizonCalendar in Frameworks */,
 				579F5959284CE4D7003D8F6D /* FirebaseFirestoreCombine-Community in Frameworks */,
 				57F5BC71280D96D100191F64 /* ComposableArchitecture in Frameworks */,
+				5701AFE4285EECDD0084ADD0 /* CasePaths in Frameworks */,
 				579F595B284CE4D7003D8F6D /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -170,6 +172,7 @@
 				579F5956284CE4D7003D8F6D /* FirebaseFirestore */,
 				579F5958284CE4D7003D8F6D /* FirebaseFirestoreCombine-Community */,
 				579F595A284CE4D7003D8F6D /* FirebaseFirestoreSwift */,
+				5701AFE3285EECDD0084ADD0 /* CasePaths */,
 			);
 			productName = Pancake;
 			productReference = 57FFECC727F966CE00B03EE1 /* Pancake.app */;
@@ -204,6 +207,7 @@
 				57F5BC6F280D96D100191F64 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				577A482028263A29007090BF /* XCRemoteSwiftPackageReference "Charts" */,
 				579F5955284CE4D7003D8F6D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				5701AFE2285EECDD0084ADD0 /* XCRemoteSwiftPackageReference "swift-case-paths" */,
 			);
 			productRefGroup = 57FFECC827F966CE00B03EE1 /* Products */;
 			projectDirPath = "";
@@ -451,6 +455,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5701AFE2285EECDD0084ADD0 /* XCRemoteSwiftPackageReference "swift-case-paths" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-case-paths.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.0;
+			};
+		};
 		577A482028263A29007090BF /* XCRemoteSwiftPackageReference "Charts" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/danielgindi/Charts";
@@ -480,12 +492,17 @@
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.34.0;
+				minimumVersion = 0.36.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5701AFE3285EECDD0084ADD0 /* CasePaths */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5701AFE2285EECDD0084ADD0 /* XCRemoteSwiftPackageReference "swift-case-paths" */;
+			productName = CasePaths;
+		};
 		577A482128263A29007090BF /* Charts */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 577A482028263A29007090BF /* XCRemoteSwiftPackageReference "Charts" */;

@@ -114,19 +114,19 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
     headerReducer
         .pullback(
             state: \.header,
-            action: /AppAction.header,
+            action: CasePath(AppAction.header),
             environment: { _ in .init() }
         ),
     eventReducer
         .pullback(
             state: \.event,
-            action: /AppAction.event,
+            action: CasePath(AppAction.event),
             environment: { _ in .init() }
         ),
     homeReducer
         .pullback(
             state: \.home,
-            action: /AppAction.home,
+            action: CasePath(AppAction.home),
             environment: { _ in .init() }
         )
 )
