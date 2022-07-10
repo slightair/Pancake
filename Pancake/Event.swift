@@ -58,11 +58,11 @@ struct EventView: View {
             GeometryReader { geometry in
                 let baseWidth = (geometry.size.width - AppTheme.screenPadding * 2) / 3
                 HStack(alignment: .top, spacing: AppTheme.screenPadding) {
-                    EventListView()
-                        .frame(width: baseWidth * 2 + AppTheme.screenPadding)
                     CalendarView(selectedDate: viewStore.date)
                         .cornerRadius(AppTheme.cornerRadius)
                         .frame(width: baseWidth)
+                    EventListView()
+                        .frame(width: baseWidth * 2 + AppTheme.screenPadding)
                 }
             }
             .frame(maxHeight: 301)

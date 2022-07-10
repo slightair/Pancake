@@ -33,6 +33,7 @@ enum RoomStatus: Equatable, Identifiable {
     case summary(RoomSensorsHistory)
     case temperatureAndHumidity(RoomSensorsHistory)
     case co2(RoomSensorsHistory)
+    case blank
 
     var id: String {
         switch self {
@@ -42,6 +43,8 @@ enum RoomStatus: Equatable, Identifiable {
             return "TemperatureAndHumidity/\(history.id)"
         case let .co2(history):
             return "CO2/\(history.id)"
+        case .blank:
+            return "Blank"
         }
     }
 }
@@ -69,7 +72,7 @@ struct HomeState: Equatable, Identifiable {
                     RoomStatus.co2(history),
                 ].compactMap { status in
                     if !history.room.hasCO2Sensor, case .co2 = status {
-                        return nil
+                        return RoomStatus.blank
                     } else {
                         return status
                     }
@@ -125,6 +128,8 @@ struct HomeView: View {
                                     RoomStatusView(history: history, content: .temperatureAndHumidity)
                                 case let .co2(history):
                                     RoomStatusView(history: history, content: .co2)
+                                case .blank:
+                                    RoomBlankView()
                                 }
                             }
                             .aspectRatio(1.6, contentMode: .fit)

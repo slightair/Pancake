@@ -142,7 +142,7 @@ struct AppTheme {
     static let cornerRadius: CGFloat = 8
 
     struct UIKit {
-        static let backgroundColor = UIColor(red: 0.109, green: 0.109, blue: 0.117, alpha: 0.4)
+        static let backgroundColor = UIColor(red: 0.109, green: 0.109, blue: 0.117, alpha: 0.6)
         static let headerColor = UIColor(white: 0.8, alpha: 1.0)
         static let textColor = UIColor.white
     }
@@ -157,7 +157,6 @@ struct AppView: View {
                 HeaderView(store: store.scope(state: \.header, action: AppAction.header))
                 EventView(store: store.scope(state: \.event, action: AppAction.event))
                 HomeView(store: store.scope(state: \.home, action: AppAction.home))
-                Spacer()
             }
             .padding(AppTheme.screenPadding)
             .background {

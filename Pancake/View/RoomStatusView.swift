@@ -136,7 +136,6 @@ struct RoomSummaryView: View {
                     DiscomfortIndexGaugeView(discomfortIndex: current.discomfortIndex)
                 }
             }
-            Divider().background(Color.white)
             Spacer()
         }
         .padding(AppTheme.panelPadding)
@@ -257,24 +256,49 @@ struct RoomStatusView: View {
     }
 }
 
+struct RoomBlankView: View {
+    var body: some View {
+        ZStack {
+            Color(.clear)
+            Text("N/A")
+                .foregroundColor(AppTheme.headerColor)
+                .font(AppTheme.headerFont)
+        }
+        .padding(AppTheme.panelPadding)
+        .background {
+            AppTheme.backgroundColor
+        }
+        .cornerRadius(AppTheme.cornerRadius)
+    }
+}
+
 struct RoomStatusView_Previews: PreviewProvider {
     static var previews: some View {
-        HStack {
-            Group {
-                RoomSummaryView(
-                    history: .mockLiving
-                )
-                RoomStatusView(
-                    history: .mockLiving,
-                    content: .temperatureAndHumidity
-                )
-                RoomStatusView(
-                    history: .mockLiving,
-                    content: .co2
-                )
+        VStack {
+            HStack {
+                Group {
+                    RoomSummaryView(
+                        history: .mockLiving
+                    )
+                    RoomStatusView(
+                        history: .mockLiving,
+                        content: .temperatureAndHumidity
+                    )
+                    RoomStatusView(
+                        history: .mockLiving,
+                        content: .co2
+                    )
+                }
+                .aspectRatio(1.6, contentMode: .fit)
+                .frame(width: 240)
             }
-            .aspectRatio(1.6, contentMode: .fit)
-            .frame(width: 240)
+            HStack {
+                Group {
+                    RoomBlankView()
+                        .aspectRatio(1.6, contentMode: .fit)
+                        .frame(width: 240)
+                }
+            }
         }
     }
 }

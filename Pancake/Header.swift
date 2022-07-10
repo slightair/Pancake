@@ -62,16 +62,24 @@ struct HeaderView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            HStack(spacing: 16) {
-                Text(viewStore.dateString)
-                    .foregroundColor(AppTheme.textColor)
-                    .font(.system(size: 90))
-                    .monospacedDigit()
-                    .bold()
-                Spacer()
-                WeatherView(weather: viewStore.dashboard.weather)
-                TrainServiceView(statuses: viewStore.dashboard.trainStatuses)
+            HStack {
+                VStack {
+                    Text(viewStore.dateString)
+                        .foregroundColor(AppTheme.textColor)
+                        .font(.system(size: 100))
+                        .monospacedDigit()
+                        .bold()
+                }
+                VStack {
+                    HStack(spacing: 16) {
+                        Spacer()
+                        WeatherView(weather: viewStore.dashboard.weather)
+                        TrainServiceView(statuses: viewStore.dashboard.trainStatuses)
+                    }
+                    Spacer()
+                }
             }
+            .frame(height: 210)
             .padding(AppTheme.panelPadding)
             .background {
                 AppTheme.backgroundColor
