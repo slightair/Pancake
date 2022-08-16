@@ -55,52 +55,89 @@ struct CO2ChartView: UIViewRepresentable {
     }
 }
 
-struct DiscomfortIndexGaugeView: View {
-    private let cornerRadius: CGFloat = 24
-    private let height: CGFloat = 4
-
+struct DiscomfortIndexView: View {
     let discomfortIndex: Double
 
-    var gaugeValue: Double {
-        if discomfortIndex <= 55 {
-            return 0.0
-        } else if discomfortIndex >= 85 {
-            return 1.0
-        } else {
-            return (discomfortIndex - 55) / 30
+    var discomfortIndexText: String {
+        switch discomfortIndex {
+        case 0 ..< 50:
+            return "寒くてたまらない"
+        case 50 ..< 55:
+            return "寒い"
+        case 55 ..< 60:
+            return "肌寒い"
+        case 60 ..< 65:
+            return "何も感じない"
+        case 65 ..< 70:
+            return "快適"
+        case 70 ..< 75:
+            return "暑くない"
+        case 75 ..< 80:
+            return "やや暑い"
+        case 80 ..< 85:
+            return "暑くて汗が出る"
+        case 85 ..< 100:
+            return "暑くてたまらない"
+        default:
+            return "---"
+        }
+    }
+
+    var symbolColor: Color {
+        let hue: Double
+        switch discomfortIndex {
+        case 0 ..< 50:
+            hue = 0.6
+        case 50 ..< 85:
+            hue = (1.0 - (discomfortIndex - 50) / 35.0) * 0.6
+        case 85 ..< 100:
+            hue = 0.0
+        default:
+            hue = 0.0
+            return .white
+        }
+        return Color(hue: hue, saturation: 1.0, brightness: 0.8)
+    }
+
+    var symbolName: String {
+        switch discomfortIndex {
+        case 0 ..< 50:
+            return "di1"
+        case 50 ..< 55:
+            return "di2"
+        case 55 ..< 60:
+            return "di3"
+        case 60 ..< 65:
+            return "di4"
+        case 65 ..< 70:
+            return "di5"
+        case 70 ..< 75:
+            return "di6"
+        case 75 ..< 80:
+            return "di7"
+        case 80 ..< 85:
+            return "di8"
+        case 85 ..< 100:
+            return "di9"
+        default:
+            return "di9"
         }
     }
 
     var body: some View {
-        GeometryReader { geometry in
-            ZStack(alignment: .leading) {
-                LinearGradient(
-                    gradient: Gradient(
-                        stops: [
-                            Gradient.Stop(color: .blue, location: 0.0),
-                            Gradient.Stop(color: .cyan, location: 0.17),
-                            Gradient.Stop(color: .green, location: 0.42),
-                            Gradient.Stop(color: .yellow, location: 0.67),
-                            Gradient.Stop(color: .orange, location: 0.83),
-                            Gradient.Stop(color: .red, location: 1.0),
-                        ]
-                    ),
-                    startPoint: .leading,
-                    endPoint: .trailing
-                )
-                .frame(height: height)
-                .cornerRadius(cornerRadius)
-                Circle()
-                    .stroke()
-                    .foregroundColor(.gray)
-                    .background(.white)
-                    .frame(width: height, height: height)
-                    .offset(x: (geometry.size.width - height) * gaugeValue, y: 0)
-            }
-            .frame(height: height)
-            .clipped()
+        HStack(alignment: .top) {
+            Text("\(discomfortIndex, specifier: "%.f") - \(discomfortIndexText)")
+                .foregroundColor(AppTheme.textColor)
+                .font(AppTheme.textFont)
+            Spacer()
+            Image(symbolName)
+                .renderingMode(.template)
+                .resizable()
+                .frame(width: 44, height: 44)
+                .foregroundColor(symbolColor)
+            Spacer()
+                .frame(width: 4)
         }
-        .frame(height: height)
     }
 }
 
@@ -127,13 +164,7 @@ struct RoomSummaryView: View {
                         .font(AppTheme.headerFont)
                         Spacer()
                     }
-                    HStack(alignment: .top) {
-                        Text("\(current.discomfortIndex, specifier: "%.f") - \(current.discomfortIndexText)")
-                            .foregroundColor(AppTheme.textColor)
-                            .font(AppTheme.textFont)
-                        Spacer()
-                    }
-                    DiscomfortIndexGaugeView(discomfortIndex: current.discomfortIndex)
+                    DiscomfortIndexView(discomfortIndex: current.discomfortIndex)
                 }
             }
             Spacer()
@@ -229,8 +260,8 @@ struct RoomStatusView: View {
                     case .temperatureAndHumidity:
                         if let current = history.records.last {
                             Text("\(current.temperature, specifier: "%.1f")℃") +
-                                Text(" / ") +
-                                Text("\(current.humidity, specifier: "%.f")%")
+                            Text(" / ") +
+                            Text("\(current.humidity, specifier: "%.f")%")
                         }
                     case .co2:
                         if let current = history.records.last {
@@ -273,6 +304,8 @@ struct RoomBlankView: View {
 }
 
 struct RoomStatusView_Previews: PreviewProvider {
+    static let width: CGFloat = 270
+
     static var previews: some View {
         VStack {
             HStack {
@@ -284,20 +317,20 @@ struct RoomStatusView_Previews: PreviewProvider {
                         history: .mockLiving,
                         content: .temperatureAndHumidity
                     )
+                }
+                .aspectRatio(1.6, contentMode: .fit)
+                .frame(width: width)
+            }
+            HStack {
+                Group {
                     RoomStatusView(
                         history: .mockLiving,
                         content: .co2
                     )
+                    RoomBlankView()
                 }
                 .aspectRatio(1.6, contentMode: .fit)
-                .frame(width: 240)
-            }
-            HStack {
-                Group {
-                    RoomBlankView()
-                        .aspectRatio(1.6, contentMode: .fit)
-                        .frame(width: 240)
-                }
+                .frame(width: width)
             }
         }
     }
