@@ -16,7 +16,15 @@ extension Dashboard {
             tempMaxDiff: -2,
             chanceOfRain: 20,
             iconURL: nil
-        )
+        ),
+        hourlyForecast: [
+            HourlyForecastRecord(time: 10, temp: 18, weather: "晴れ", chanceOfRain: 0, iconURL: nil),
+            HourlyForecastRecord(time: 11, temp: 20, weather: "晴れ", chanceOfRain: 10, iconURL: nil),
+            HourlyForecastRecord(time: 12, temp: 21, weather: "晴れ", chanceOfRain: 0, iconURL: nil),
+            HourlyForecastRecord(time: 13, temp: 22, weather: "晴れ", chanceOfRain: 10, iconURL: nil),
+            HourlyForecastRecord(time: 14, temp: 21, weather: "晴れ", chanceOfRain: 20, iconURL: nil),
+            HourlyForecastRecord(time: 15, temp: 19, weather: "晴れ", chanceOfRain: 0, iconURL: nil),
+        ]
     )
 }
 
@@ -77,10 +85,16 @@ struct HeaderView: View {
                         TrainServiceView(statuses: viewStore.dashboard.trainStatuses)
                     }
                     Spacer()
+                    HStack(spacing: 2) {
+                        Spacer()
+                        ForEach(viewStore.dashboard.hourlyForecast) { record in
+                            HourlyForecastRecordView(record: record)
+                        }
+                    }
                 }
             }
-            .frame(height: 210)
-            .padding(AppTheme.panelPadding)
+            .frame(height: 244)
+            .padding(12)
             .background {
                 AppTheme.backgroundColor
             }

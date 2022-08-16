@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/abseil-cpp-SwiftPM.git",
       "state" : {
-        "revision" : "d302de612e3d57c6f4afaf087da18fba8eac72a7",
-        "version" : "0.20220203.1"
+        "revision" : "583de9bd60f66b40e78d08599cc92036c2e7e4e1",
+        "version" : "0.20220203.2"
       }
     },
     {
@@ -21,10 +21,10 @@
     {
       "identity" : "charts",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/danielgindi/Charts",
+      "location" : "https://github.com/dangthaison91/Charts",
       "state" : {
-        "revision" : "b38b8d45a8cbda9f0f2a3566778ed114f06056b7",
-        "version" : "4.0.3"
+        "branch" : "master-xcode-14",
+        "revision" : "696c6e5e893cd550dbbaeb4b4466d8793dcc0cae"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleDataTransport.git",
       "state" : {
-        "revision" : "b905c49326b72211531ed9d7baa02d724828a8dc",
-        "version" : "9.1.4"
+        "revision" : "5056b15c5acbb90cd214fe4d6138bdf5a740e5a8",
+        "version" : "9.2.0"
       }
     },
     {

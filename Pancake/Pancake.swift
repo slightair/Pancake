@@ -157,6 +157,7 @@ struct AppView: View {
                 HeaderView(store: store.scope(state: \.header, action: AppAction.header))
                 EventView(store: store.scope(state: \.event, action: AppAction.event))
                 HomeView(store: store.scope(state: \.home, action: AppAction.home))
+                Spacer(minLength: 0)
             }
             .padding(AppTheme.screenPadding)
             .background {

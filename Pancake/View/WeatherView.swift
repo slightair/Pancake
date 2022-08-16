@@ -44,17 +44,22 @@ struct WeatherView: View {
                     .frame(width: 94, height: 60)
             } placeholder: {
                 Image(systemName: "questionmark")
-                    .resizable()
+                    .foregroundColor(AppTheme.headerColor)
                     .aspectRatio(contentMode: .fit)
                     .padding()
                     .frame(width: 94, height: 60)
-                    .foregroundColor(AppTheme.textColor)
             }
+            .padding()
+            .background {
+                Color(.white)
+                    .frame(width: 90, height: 90)
+            }
+            .mask {
+                Circle()
+                    .frame(width: 88)
+            }
+
             tempView()
-            Text("\(weather.chanceOfRain)%")
-                .foregroundColor(AppTheme.textColor)
-                .monospacedDigit()
-                .bold()
         }
     }
 }
@@ -64,5 +69,8 @@ struct WeatherView_Previews: PreviewProvider {
         WeatherView(
             weather: Dashboard.mock.weather
         )
+        .background {
+            AppTheme.backgroundColor
+        }
     }
 }

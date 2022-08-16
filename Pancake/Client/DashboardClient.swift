@@ -53,9 +53,30 @@ struct Weather: Hashable, Decodable {
     )
 }
 
+struct HourlyForecastRecord: Equatable, Identifiable, Decodable {
+    var id: Int {
+        time
+    }
+
+    let time: Int
+    let temp: Int
+    let weather: String
+    let chanceOfRain: Int
+    let iconURL: URL?
+
+    enum CodingKeys: String, CodingKey {
+        case time
+        case temp
+        case weather
+        case chanceOfRain = "rain"
+        case iconURL = "icon"
+    }
+}
+
 struct Dashboard: Equatable, Decodable {
     let trainStatuses: [TrainStatus]
     let weather: Weather
+    let hourlyForecast: [HourlyForecastRecord]
 }
 
 extension Dashboard {
@@ -65,7 +86,8 @@ extension Dashboard {
             TrainStatus(route: .chuo, status: "----"),
             TrainStatus(route: .yamanote, status: "----"),
         ],
-        weather: .unknown
+        weather: .unknown,
+        hourlyForecast: []
     )
 }
 
