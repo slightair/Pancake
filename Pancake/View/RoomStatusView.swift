@@ -292,7 +292,7 @@ struct RoomBlankView: View {
         ZStack {
             Color(.clear)
             Text("N/A")
-                .foregroundColor(AppTheme.headerColor)
+                .foregroundColor(AppTheme.notAvailableColor)
                 .font(AppTheme.headerFont)
         }
         .padding(AppTheme.panelPadding)

@@ -93,7 +93,7 @@ struct HeaderView: View {
                     }
                 }
             }
-            .frame(height: 244)
+            .frame(height: 228)
             .padding(12)
             .background {
                 AppTheme.backgroundColor

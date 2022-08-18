@@ -3,8 +3,30 @@ import Foundation
 import SwiftUI
 
 struct EventState: Equatable, Identifiable {
-    let id = UUID()
+    var id: TimeInterval {
+        date.timeIntervalSince1970
+    }
+
     var date = Date()
+    var events: [Event] = []
+}
+
+extension EventState {
+    static let mock = EventState(
+        date: Date(timeIntervalSince1970: 1659279600),
+        events: [
+            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660057200), title: "散歩1"),
+            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660143600), title: "散歩2"),
+            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660230000), title: "散歩3"),
+            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660316400), title: "散歩4"),
+            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660402800), title: "散歩5"),
+            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660489200), title: "散歩6"),
+            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660575600), title: "散歩7"),
+            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660662000), title: "散歩8"),
+            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660748400), title: "散歩9"),
+            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660834800), title: "散歩10"),
+        ]
+    )
 }
 
 enum EventAction: Equatable {
@@ -22,15 +44,45 @@ let eventReducer = Reducer<EventState, EventAction, EventEnvironment> { state, a
 }
 
 struct EventListItemView: View {
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd HH:mm"
+        return formatter
+    }()
+
+    let event: Event
+
+    var eventTime: String {
+        Self.dateFormatter.string(from: event.date)
+    }
+
     var body: some View {
-        VStack {
-            Text("4/12 10:00")
+        VStack(alignment: .leading) {
+            Text(event.title)
                 .foregroundColor(AppTheme.textColor)
-                .bold()
-                .frame(maxWidth: .infinity, alignment: .leading)
-            Text("散歩")
-                .foregroundColor(AppTheme.textColor)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .font(AppTheme.textFont)
+            Text(eventTime)
+                .monospacedDigit()
+                .foregroundColor(AppTheme.headerColor)
+                .font(AppTheme.headerFont)
+        }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .foregroundColor(AppTheme.textColor)
+            .padding(AppTheme.panelPadding)
+            .background {
+                AppTheme.backgroundColor
+            }
+            .cornerRadius(AppTheme.cornerRadius)
+    }
+}
+
+struct EventListItemEmptyView: View {
+    var body: some View {
+        ZStack {
+            Color(.clear)
+            Text("N/A")
+                .foregroundColor(AppTheme.notAvailableColor)
+                .font(AppTheme.headerFont)
         }
         .padding(AppTheme.panelPadding)
         .background {
@@ -41,10 +93,20 @@ struct EventListItemView: View {
 }
 
 struct EventListView: View {
+    let events: [Event]
+    let maxCount = 6
+
     var body: some View {
         VStack(spacing: AppTheme.screenPadding) {
-            ForEach(0 ..< 5) { _ in
-                EventListItemView()
+            ForEach(events.prefix(maxCount)) { event in
+                EventListItemView(event: event)
+            }
+
+            if events.count < maxCount {
+                let numPadding = maxCount - events.count
+                ForEach(0 ..< numPadding, id: \.self) { index in
+                    EventListItemEmptyView()
+                }
             }
         }
     }
@@ -61,11 +123,11 @@ struct EventView: View {
                     CalendarView(selectedDate: viewStore.date)
                         .cornerRadius(AppTheme.cornerRadius)
                         .frame(width: baseWidth)
-                    EventListView()
+                    EventListView(events: viewStore.events)
                         .frame(width: baseWidth * 2 + AppTheme.screenPadding)
                 }
             }
-            .frame(maxHeight: 301)
+            .frame(maxHeight: 311)
         }
     }
 }
@@ -74,7 +136,7 @@ struct EventView_Previews: PreviewProvider {
     static var previews: some View {
         EventView(
             store: Store(
-                initialState: EventState(),
+                initialState: .mock,
                 reducer: eventReducer,
                 environment: EventEnvironment()
             )
