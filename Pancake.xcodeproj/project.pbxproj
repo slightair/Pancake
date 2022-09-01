@@ -27,8 +27,10 @@
 		57B8AC1D289F9964001CE330 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 57B8AC1C289F9964001CE330 /* Charts */; };
 		57B8AC1F28A76953001CE330 /* HourlyForecastRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B8AC1E28A76953001CE330 /* HourlyForecastRecordView.swift */; };
 		57B8AC2128ACBAE6001CE330 /* EventClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B8AC2028ACBAE6001CE330 /* EventClient.swift */; };
+		57B8AC2328AF591C001CE330 /* BLEAdvertisementScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B8AC2228AF591C001CE330 /* BLEAdvertisementScanner.swift */; };
 		57DD4EB6280156FF00D0F249 /* HorizonCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 57DD4EB5280156FF00D0F249 /* HorizonCalendar */; };
 		57DD4EB82801573800D0F249 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD4EB72801573800D0F249 /* CalendarView.swift */; };
+		57EDCAFB28BDE3C40064E7E5 /* BLEAdvertisementClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EDCAFA28BDE3C40064E7E5 /* BLEAdvertisementClient.swift */; };
 		57F5BC71280D96D100191F64 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 57F5BC70280D96D100191F64 /* ComposableArchitecture */; };
 		57F5BC73280D980D00191F64 /* Pancake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F5BC72280D980D00191F64 /* Pancake.swift */; };
 		57FFECCB27F966CE00B03EE1 /* PancakeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FFECCA27F966CE00B03EE1 /* PancakeApp.swift */; };
@@ -52,7 +54,9 @@
 		579F5953284CE3E5003D8F6D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		57B8AC1E28A76953001CE330 /* HourlyForecastRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyForecastRecordView.swift; sourceTree = "<group>"; };
 		57B8AC2028ACBAE6001CE330 /* EventClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventClient.swift; sourceTree = "<group>"; };
+		57B8AC2228AF591C001CE330 /* BLEAdvertisementScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEAdvertisementScanner.swift; sourceTree = "<group>"; };
 		57DD4EB72801573800D0F249 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		57EDCAFA28BDE3C40064E7E5 /* BLEAdvertisementClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEAdvertisementClient.swift; sourceTree = "<group>"; };
 		57F5BC72280D980D00191F64 /* Pancake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pancake.swift; sourceTree = "<group>"; };
 		57FFECC727F966CE00B03EE1 /* Pancake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pancake.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57FFECCA27F966CE00B03EE1 /* PancakeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PancakeApp.swift; sourceTree = "<group>"; };
@@ -86,6 +90,7 @@
 				5728CDFD281A389B00BBC308 /* UnsplashClient.swift */,
 				577A481B282396A6007090BF /* MetricsClient.swift */,
 				57B8AC2028ACBAE6001CE330 /* EventClient.swift */,
+				57EDCAFA28BDE3C40064E7E5 /* BLEAdvertisementClient.swift */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -139,6 +144,7 @@
 			children = (
 				579F594F284CD2CF003D8F6D /* SensorsRecord.swift */,
 				579F5951284CD333003D8F6D /* RoomSensorsHistory.swift */,
+				57B8AC2228AF591C001CE330 /* BLEAdvertisementScanner.swift */,
 			);
 			path = Sensor;
 			sourceTree = "<group>";
@@ -243,11 +249,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57B8AC2328AF591C001CE330 /* BLEAdvertisementScanner.swift in Sources */,
 				5728CDF32814306A00BBC308 /* Event.swift in Sources */,
 				5728CDF12813DB2900BBC308 /* Header.swift in Sources */,
 				57DD4EB82801573800D0F249 /* CalendarView.swift in Sources */,
 				5728CDFE281A389C00BBC308 /* UnsplashClient.swift in Sources */,
 				57B8AC1F28A76953001CE330 /* HourlyForecastRecordView.swift in Sources */,
+				57EDCAFB28BDE3C40064E7E5 /* BLEAdvertisementClient.swift in Sources */,
 				579F5950284CD2CF003D8F6D /* SensorsRecord.swift in Sources */,
 				57F5BC73280D980D00191F64 /* Pancake.swift in Sources */,
 				577A481C282396A6007090BF /* MetricsClient.swift in Sources */,
@@ -406,6 +414,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = dev.slightair.ios.Pancake;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
@@ -436,6 +445,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = dev.slightair.ios.Pancake;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
 			};

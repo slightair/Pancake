@@ -21,7 +21,7 @@ struct PancakeApp: App {
                 store: Store(
                     initialState: AppState(),
                     reducer: appReducer,
-                    environment: .live
+                    environment: .dev
                 )
             )
         }

@@ -4,8 +4,9 @@ import FirebaseFirestoreSwift
 
 struct MetricsClient {
     var roomSensorsHistories: () -> Effect<[RoomSensorsHistory], Failure>
-    var saveRoomSensorRecord: (Room, SensorsRecord) -> Effect<Void, Failure>
+    var saveRoomSensorRecords: ([Room: SensorsRecord]) -> Effect<Success, Failure>
 
+    struct Success: Equatable {}
     struct Failure: Error, Equatable {}
 }
 
@@ -32,13 +33,29 @@ extension MetricsClient {
             .mapError { _ in Failure() }
             .eraseToEffect()
         },
-        saveRoomSensorRecord: { room, record in
+        saveRoomSensorRecords: { records in
             Effect.task {
                 let db = Firestore.firestore()
-                _ = try db.collection("rooms").document(room.rawValue).collection("metrics").addDocument(from: record)
+                @Sendable func saveRoomSensorRecord(room: Room) async throws {
+                    _ = try db.collection("rooms").document(room.rawValue).collection("metrics").addDocument(from: records[room])
+                }
+
+                async let saveLiving: Void = saveRoomSensorRecord(room: .living)
+                async let saveBedroom: Void = saveRoomSensorRecord(room: .bedroom)
+                async let saveStudy: Void = saveRoomSensorRecord(room: .study)
+
+                _ = try await [saveLiving, saveBedroom, saveStudy]
+                return Success()
             }
             .mapError { _ in Failure() }
             .eraseToEffect()
+        }
+    )
+
+    static let dev = MetricsClient(
+        roomSensorsHistories: live.roomSensorsHistories,
+        saveRoomSensorRecords: { records in
+            Effect(value: Success())
         }
     )
 
@@ -46,8 +63,8 @@ extension MetricsClient {
         roomSensorsHistories: {
             Effect(value: [.mockLiving, .mockBedroom, .mockStudy])
         },
-        saveRoomSensorRecord: { room, record in
-            Effect(value: ())
+        saveRoomSensorRecords: { records in
+            Effect(value: Success())
         }
     )
 }

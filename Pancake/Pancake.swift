@@ -13,10 +13,13 @@ enum AppAction: Equatable {
     case onDisappear
     case tick
     case historyUpdate
+    case recordMetrics
     case dashboardResponse(Result<Dashboard, DashboardClient.Failure>)
     case wallpaperResponse(Result<UnsplashPhoto, UnsplashClient.Failure>)
     case roomMetricsHistoriesResponse(Result<[RoomSensorsHistory], MetricsClient.Failure>)
+    case saveRoomMetricsResponse(Result<MetricsClient.Success, MetricsClient.Failure>)
     case eventListResponse(Result<[Event], EventClient.Failure>)
+    case bleAdvertisementResponse(Result<[Room: SensorsRecord], BLEAdvertisementClient.Failure>)
     case header(HeaderAction)
     case event(EventAction)
     case home(HomeAction)
@@ -29,6 +32,7 @@ struct AppEnvironment {
     var unsplashClient: UnsplashClient
     var metricsClient: MetricsClient
     var eventClient: EventClient
+    var bleAdvertisementClient: BLEAdvertisementClient
 
     static let live = Self(
         mainQueue: .main,
@@ -36,7 +40,18 @@ struct AppEnvironment {
         dashboardClient: .live,
         unsplashClient: .live,
         metricsClient: .live,
-        eventClient: .live
+        eventClient: .live,
+        bleAdvertisementClient: .live
+    )
+
+    static let dev = Self(
+        mainQueue: .main,
+        uuid: UUID.init,
+        dashboardClient: .live,
+        unsplashClient: .live,
+        metricsClient: .dev,
+        eventClient: .live,
+        bleAdvertisementClient: .dev
     )
 }
 
@@ -44,6 +59,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
     .init { state, action, environment in
         struct TickTimerID: Hashable {}
         struct HistoryUpdateTimerID: Hashable {}
+        struct RecordMetricsTimerID: Hashable {}
 
         let startTimers: Effect<AppAction, Never> = .merge([
             Effect.timer(id: TickTimerID(), every: 1, tolerance: 0, on: environment.mainQueue)
@@ -52,11 +68,15 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
             Effect.timer(id: HistoryUpdateTimerID(), every: 600, tolerance: 0, on: environment.mainQueue)
                 .map { _ in .historyUpdate }
                 .eraseToEffect(),
+            Effect.timer(id: RecordMetricsTimerID(), every: 10, tolerance: 0, on: environment.mainQueue)
+                .map { _ in .recordMetrics }
+                .eraseToEffect(),
         ])
 
         let cancelTimers: Effect<AppAction, Never> = .merge([
             .cancel(id: TickTimerID()),
             .cancel(id: HistoryUpdateTimerID()),
+            .cancel(id: RecordMetricsTimerID()),
         ])
 
         let startUp: Effect<AppAction, Never> = .merge([
@@ -96,6 +116,11 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
                     .catchToEffect()
                     .map(AppAction.eventListResponse),
             ])
+        case .recordMetrics:
+            return environment.bleAdvertisementClient.sensors()
+                .receive(on: environment.mainQueue)
+                .catchToEffect()
+                .map(AppAction.bleAdvertisementResponse)
         case let .dashboardResponse(.success(dashboard)):
             state.header.dashboard = dashboard
             return .none
@@ -114,10 +139,23 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
         case let .roomMetricsHistoriesResponse(.failure(error)):
             print(error)
             return .none
+        case .saveRoomMetricsResponse(.success):
+            return .none
+        case let .saveRoomMetricsResponse(.failure(error)):
+            print(error)
+            return .none
         case let .eventListResponse(.success(eventList)):
             state.event.events = eventList
             return .none
         case let .eventListResponse(.failure(error)):
+            print(error)
+            return .none
+        case let .bleAdvertisementResponse(.success(sensorsRecord)):
+            return environment.metricsClient.saveRoomSensorRecords(sensorsRecord)
+                .receive(on: environment.mainQueue)
+                .catchToEffect()
+                .map(AppAction.saveRoomMetricsResponse)
+        case let .bleAdvertisementResponse(.failure(error)):
             print(error)
             return .none
         default:

@@ -13,9 +13,9 @@ extension Calendar {
 }
 
 struct CalendarView: UIViewRepresentable {
-    static var calendar = Calendar.current
+    static let calendar = Calendar.current
 
-    static var monthHeaderDateFormatter: DateFormatter = {
+    static let monthHeaderDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.calendar = calendar
         dateFormatter.locale = calendar.locale
@@ -27,7 +27,7 @@ struct CalendarView: UIViewRepresentable {
         return dateFormatter
     }()
 
-    static var dayDateFormatter: DateFormatter = {
+    static let dayDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.calendar = calendar
         dateFormatter.locale = calendar.locale
