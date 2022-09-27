@@ -21,10 +21,10 @@
     {
       "identity" : "charts",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/dangthaison91/Charts",
+      "location" : "https://github.com/danielgindi/Charts",
       "state" : {
-        "branch" : "master-xcode-14",
-        "revision" : "696c6e5e893cd550dbbaeb4b4466d8793dcc0cae"
+        "revision" : "07b23476ad52b926be772f317d8f1d4511ee8d02",
+        "version" : "4.1.0"
       }
     },
     {
