@@ -92,19 +92,16 @@ extension Dashboard {
 }
 
 struct DashboardClient {
-    var dashboard: () -> Effect<Dashboard, Failure>
+    var dashboard: (URL) -> Effect<Dashboard, Failure>
 
     struct Failure: Error, Equatable {}
 }
 
 extension DashboardClient {
     static let live = DashboardClient(
-        dashboard: {
+        dashboard: { apiURL in
             Effect.task {
-                let settings = NSDictionary(contentsOf: Bundle.main.url(forResource: "Settings", withExtension: "plist")!)!
-                let url = URL(string: settings["DashboardAPIURL"] as! String)!
-
-                let (data, _) = try await URLSession.shared.data(from: url)
+                let (data, _) = try await URLSession.shared.data(from: apiURL)
                 return try JSONDecoder().decode(Dashboard.self, from: data)
             }
             .mapError { _ in Failure() }

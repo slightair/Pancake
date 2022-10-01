@@ -33,6 +33,7 @@ struct AppEnvironment {
     var metricsClient: MetricsClient
     var eventClient: EventClient
     var bleAdvertisementClient: BLEAdvertisementClient
+    var settings: Settings
 
     static let live = Self(
         mainQueue: .main,
@@ -99,11 +100,11 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
             ])
         case .historyUpdate:
             return .merge([
-                environment.dashboardClient.dashboard()
+                environment.dashboardClient.dashboard(environment.settings.api.dashboardAPIURL)
                     .receive(on: environment.mainQueue)
                     .catchToEffect()
                     .map(AppAction.dashboardResponse),
-                environment.unsplashClient.wallpaper()
+                environment.unsplashClient.wallpaper(environment.settings.api.unsplashAccessKey)
                     .receive(on: environment.mainQueue)
                     .catchToEffect()
                     .map(AppAction.wallpaperResponse),

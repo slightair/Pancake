@@ -2,7 +2,23 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>DashboardAPIURL</key>
-	<string></string>
+	<key>api</key>
+	<dict>
+		<key>dashboardAPI</key>
+		<string></string>
+		<key>unsplashAccessKey</key>
+		<string></string>
+	</dict>
+	<key>sensor</key>
+	<dict>
+		<key>livingThermometerPeripheralID</key>
+		<string></string>
+		<key>livingCO2PeripheralID</key>
+		<string></string>
+		<key>bedroomThermometerPeripheralID</key>
+		<string></string>
+		<key>studyThermometerPeripheralID</key>
+		<string></string>
+	</dict>
 </dict>
 </plist>

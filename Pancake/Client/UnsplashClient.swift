@@ -27,10 +27,10 @@ extension UnsplashPhoto {
 }
 
 struct UnsplashClient {
-    var topicPhotos: (String, Int) -> Effect<[UnsplashPhoto], Failure>
-    var wallpaper: () -> Effect<UnsplashPhoto, Failure> {
-        {
-            topicPhotos("textures-patterns", 10)
+    var topicPhotos: (String, String, Int) -> Effect<[UnsplashPhoto], Failure>
+    var wallpaper: (String) -> Effect<UnsplashPhoto, Failure> {
+        { accessKey in
+            topicPhotos(accessKey, "textures-patterns", 10)
                 .map { photos in
                     photos.randomElement()!
                 }
@@ -42,10 +42,8 @@ struct UnsplashClient {
 
 extension UnsplashClient {
     static let live = UnsplashClient(
-        topicPhotos: { topic, numberOfPhotos in
+        topicPhotos: { accessKey, topic, numberOfPhotos in
             Effect.task {
-                let settings = NSDictionary(contentsOf: Bundle.main.url(forResource: "Settings", withExtension: "plist")!)!
-                let accessKey = settings["UnsplashAccessKey"] as! String
                 var urlComponents = URLComponents(string: "https://api.unsplash.com/topics/\(topic)/photos")!
                 urlComponents.queryItems = [
                     .init(name: "per_page", value: "\(numberOfPhotos)"),

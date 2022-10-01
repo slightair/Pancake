@@ -14,6 +14,7 @@
 		5728CDF92816D0C800BBC308 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5728CDF82816D0C800BBC308 /* Settings.plist */; };
 		5728CDFC2816D43A00BBC308 /* DashboardClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDFB2816D43A00BBC308 /* DashboardClient.swift */; };
 		5728CDFE281A389C00BBC308 /* UnsplashClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDFD281A389B00BBC308 /* UnsplashClient.swift */; };
+		576E4C2D28E4819400EF0B06 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576E4C2C28E4819400EF0B06 /* Settings.swift */; };
 		577A4815281A6C48007090BF /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577A4814281A6C48007090BF /* WeatherView.swift */; };
 		577A4817281A6CD0007090BF /* TrainServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577A4816281A6CD0007090BF /* TrainServiceView.swift */; };
 		577A481C282396A6007090BF /* MetricsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577A481B282396A6007090BF /* MetricsClient.swift */; };
@@ -45,6 +46,7 @@
 		5728CDF82816D0C800BBC308 /* Settings.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Settings.plist; sourceTree = "<group>"; };
 		5728CDFB2816D43A00BBC308 /* DashboardClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardClient.swift; sourceTree = "<group>"; };
 		5728CDFD281A389B00BBC308 /* UnsplashClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashClient.swift; sourceTree = "<group>"; };
+		576E4C2C28E4819400EF0B06 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		577A4814281A6C48007090BF /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
 		577A4816281A6CD0007090BF /* TrainServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainServiceView.swift; sourceTree = "<group>"; };
 		577A481B282396A6007090BF /* MetricsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsClient.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 				5728CDF02813DB2900BBC308 /* Header.swift */,
 				5728CDF22814306A00BBC308 /* Event.swift */,
 				5728CDF42815926200BBC308 /* Home.swift */,
+				576E4C2C28E4819400EF0B06 /* Settings.swift */,
 				57FFECCE27F966D000B03EE1 /* Assets.xcassets */,
 				57FFECD027F966D000B03EE1 /* Preview Content */,
 			);
@@ -267,6 +270,7 @@
 				57B8AC2128ACBAE6001CE330 /* EventClient.swift in Sources */,
 				5728CDFC2816D43A00BBC308 /* DashboardClient.swift in Sources */,
 				577A482428263A7D007090BF /* RoomStatusView.swift in Sources */,
+				576E4C2D28E4819400EF0B06 /* Settings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
