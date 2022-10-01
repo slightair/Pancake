@@ -110,28 +110,28 @@ enum BLEAdvertisementScannerError: Error, Equatable {
 
 final class BLEAdvertisementScanner: NSObject, @unchecked Sendable {
     private var scanContinuation: CheckedContinuation<[String: SensorData], Error>?
-    private var centralManager: CBCentralManager?
-    private var sensors: [String: SensorData.Type] = [:]
+    private var centralManager: CBCentralManager!
     private var currentSensorValues: [String: SensorData] = [:]
+    private var needsStartScanning = false
+    private var sensors: [String: SensorData.Type] = [:]
 
-    func start(queue: DispatchQueue?) {
-        if centralManager != nil {
-            return
-        }
-        centralManager = CBCentralManager(delegate: self, queue: queue)
+    private let watchMode: Bool
+
+    private var sensorServices: [CBUUID] {
+        sensors.values
+            .map { $0.serviceID }
+            .uniqued()
+            .map { CBUUID(string: $0) }
     }
 
-    func registerSensor(peripheralIdentifier: String, sensorDataType: SensorData.Type) {
-        sensors[peripheralIdentifier] = sensorDataType
+    init(watchMode: Bool = false) {
+        self.watchMode = watchMode
+        super.init()
+        centralManager = CBCentralManager(delegate: self, queue: nil)
     }
 
-    func clearSensors() {
-        sensors.removeAll()
-    }
-
-    func scanSensorValues() async throws -> [String: SensorData] {
-//        let timeoutSeconds = 30
-        let timeoutSeconds = 3
+    func scanSensorValues(sensors: [String: SensorData.Type], timeoutSeconds: Int) async throws -> [String: SensorData] {
+        self.sensors = sensors
 
         return try await withThrowingTaskGroup(of: [String: SensorData].self) { group in
             group.addTask {
@@ -141,8 +141,7 @@ final class BLEAdvertisementScanner: NSObject, @unchecked Sendable {
             group.addTask {
                 try await Task.sleep(nanoseconds: UInt64(timeoutSeconds * 1_000_000_000))
                 try Task.checkCancellation()
-//                throw BLEAdvertisementScannerError.TimeOut
-                return [:]
+                throw BLEAdvertisementScannerError.TimeOut
             }
 
             let result = try await group.next()!
@@ -155,31 +154,51 @@ final class BLEAdvertisementScanner: NSObject, @unchecked Sendable {
         try await withCheckedThrowingContinuation { continuation in
             if let recentScanContinuation = scanContinuation {
                 recentScanContinuation.resume(throwing: BLEAdvertisementScannerError.AbortScanSensors)
-                centralManager?.stopScan()
+                scanContinuation = nil
+                centralManager.stopScan()
             }
 
             currentSensorValues = [:]
             scanContinuation = continuation
 
-            let services = sensors.values
-                .map { $0.serviceID }
-                .uniqued()
-                .map { CBUUID(string: $0) }
-            centralManager?.scanForPeripherals(withServices: services, options: nil)
+            if centralManager.state == .poweredOn && !centralManager.isScanning {
+                centralManager.scanForPeripherals(withServices: sensorServices, options: nil)
+            } else {
+                needsStartScanning = true
+            }
         }
     }
 
     private func parse(peripheralIdentifier: String, advertisementData: [String: Any]) {
-        guard let dataType = sensors[peripheralIdentifier], let data = dataType.parse(advertisementData: advertisementData) else {
+        guard let dataType = sensors[peripheralIdentifier] else {
+            return
+        }
+
+        guard let data = dataType.parse(advertisementData: advertisementData) else {
             scanContinuation?.resume(throwing: BLEAdvertisementScannerError.CouldNotParseSensorValue)
-            centralManager?.stopScan()
+            scanContinuation = nil
+            centralManager.stopScan()
             return
         }
         currentSensorValues[peripheralIdentifier] = data
 
         if Set(currentSensorValues.keys) == Set(sensors.keys) {
             scanContinuation?.resume(returning: currentSensorValues)
-            centralManager?.stopScan()
+            scanContinuation = nil
+            centralManager.stopScan()
+        }
+    }
+
+    private func watch(peripheralIdentifier: String, advertisementData: [String: Any]) {
+        let knownSensorDataTypes: [SensorData.Type] = [
+            ThermometerSensorData.self,
+            CO2SensorData.self,
+        ]
+
+        knownSensorDataTypes.forEach { dataType in
+            if let data = dataType.parse(advertisementData: advertisementData) {
+                print("[SensorData] type: \(String(describing: dataType)), peripheralIdentifier: \(peripheralIdentifier), sensorData: <\(data)>")
+            }
         }
     }
 }
@@ -200,6 +219,10 @@ extension BLEAdvertisementScanner: CBCentralManagerDelegate {
             state = "poweredOff"
         case .poweredOn:
             state = "poweredOn"
+            if needsStartScanning && !centralManager.isScanning {
+                needsStartScanning = false
+                central.scanForPeripherals(withServices: sensorServices, options: nil)
+            }
         @unknown default:
             state = "unknown"
         }
@@ -208,6 +231,15 @@ extension BLEAdvertisementScanner: CBCentralManagerDelegate {
     }
 
     func centralManager(_: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String: Any], rssi _: NSNumber) {
-        parse(peripheralIdentifier: peripheral.identifier.uuidString, advertisementData: advertisementData)
+        if watchMode {
+            watch(peripheralIdentifier: peripheral.identifier.uuidString, advertisementData: advertisementData)
+        } else {
+            parse(peripheralIdentifier: peripheral.identifier.uuidString, advertisementData: advertisementData)
+        }
     }
+}
+
+extension BLEAdvertisementScanner {
+    static let live = BLEAdvertisementScanner()
+    static let watch = BLEAdvertisementScanner(watchMode: true)
 }

@@ -32,6 +32,7 @@ struct AppEnvironment {
     var unsplashClient: UnsplashClient
     var metricsClient: MetricsClient
     var eventClient: EventClient
+    var bleAdvertisementScanner: BLEAdvertisementScanner
     var bleAdvertisementClient: BLEAdvertisementClient
     var settings: Settings
 
@@ -42,7 +43,9 @@ struct AppEnvironment {
         unsplashClient: .live,
         metricsClient: .live,
         eventClient: .live,
-        bleAdvertisementClient: .live
+        bleAdvertisementScanner: .live,
+        bleAdvertisementClient: .live,
+        settings: .live
     )
 
     static let dev = Self(
@@ -52,7 +55,21 @@ struct AppEnvironment {
         unsplashClient: .live,
         metricsClient: .dev,
         eventClient: .live,
-        bleAdvertisementClient: .dev
+        bleAdvertisementScanner: .watch,
+        bleAdvertisementClient: .dev,
+        settings: .live
+    )
+
+    static let watch = Self(
+        mainQueue: .main,
+        uuid: UUID.init,
+        dashboardClient: .live,
+        unsplashClient: .live,
+        metricsClient: .dev,
+        eventClient: .live,
+        bleAdvertisementScanner: .watch,
+        bleAdvertisementClient: .watch,
+        settings: .live
     )
 }
 
@@ -69,7 +86,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
             Effect.timer(id: HistoryUpdateTimerID(), every: 600, tolerance: 0, on: environment.mainQueue)
                 .map { _ in .historyUpdate }
                 .eraseToEffect(),
-            Effect.timer(id: RecordMetricsTimerID(), every: 10, tolerance: 0, on: environment.mainQueue)
+            Effect.timer(id: RecordMetricsTimerID(), every: 600, tolerance: 0, on: environment.mainQueue)
                 .map { _ in .recordMetrics }
                 .eraseToEffect(),
         ])
@@ -83,6 +100,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
         let startUp: Effect<AppAction, Never> = .merge([
             startTimers,
             Effect(value: AppAction.historyUpdate),
+            Effect(value: AppAction.recordMetrics),
         ])
 
         let terminate = cancelTimers
@@ -118,7 +136,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
                     .map(AppAction.eventListResponse),
             ])
         case .recordMetrics:
-            return environment.bleAdvertisementClient.sensors()
+            return environment.bleAdvertisementClient.sensors(environment.bleAdvertisementScanner, environment.settings.sensor)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
                 .map(AppAction.bleAdvertisementResponse)
