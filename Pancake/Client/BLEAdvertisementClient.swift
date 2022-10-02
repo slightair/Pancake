@@ -4,7 +4,9 @@ import Foundation
 struct BLEAdvertisementClient {
     var sensors: (BLEAdvertisementScanner, Settings.Sensor) -> Effect<[Room: SensorsRecord], Failure>
 
-    struct Failure: Error, Equatable {}
+    struct Failure: Error, Equatable {
+        let message: String
+    }
 }
 
 extension BLEAdvertisementClient {
@@ -32,7 +34,7 @@ extension BLEAdvertisementClient {
                     .study: SensorsRecord(date: date, temperature: studyThermometer.temperature, humidity: Double(studyThermometer.humidity), co2: 0),
                 ]
             }
-            .mapError { _ in Failure() }
+            .mapError { error in Failure(message: error.localizedDescription) }
             .eraseToEffect()
         }
     )
@@ -43,7 +45,7 @@ extension BLEAdvertisementClient {
                 _ = try await scanner.scanSensorValues(sensors: [:], timeoutSeconds: 600)
                 return [:]
             }
-            .mapError { _ in Failure() }
+            .mapError { error in Failure(message: error.localizedDescription) }
             .eraseToEffect()
         }
     )

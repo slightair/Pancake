@@ -7,7 +7,9 @@ struct MetricsClient {
     var saveRoomSensorRecords: ([Room: SensorsRecord]) -> Effect<Success, Failure>
 
     struct Success: Equatable {}
-    struct Failure: Error, Equatable {}
+    struct Failure: Error, Equatable {
+        let message: String
+    }
 }
 
 extension MetricsClient {
@@ -30,7 +32,7 @@ extension MetricsClient {
                     roomSensorsHistory(of: .study),
                 ]
             }
-            .mapError { _ in Failure() }
+            .mapError { error in Failure(message: error.localizedDescription) }
             .eraseToEffect()
         },
         saveRoomSensorRecords: { records in
@@ -47,7 +49,7 @@ extension MetricsClient {
                 _ = try await [saveLiving, saveBedroom, saveStudy]
                 return Success()
             }
-            .mapError { _ in Failure() }
+            .mapError { error in Failure(message: error.localizedDescription) }
             .eraseToEffect()
         }
     )

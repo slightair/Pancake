@@ -10,7 +10,9 @@ struct Event: Identifiable, Equatable {
 struct EventClient {
     var events: () -> Effect<[Event], Failure>
 
-    struct Failure: Error, Equatable {}
+    struct Failure: Error, Equatable {
+        let message: String
+    }
 }
 
 extension EventClient {
@@ -28,7 +30,7 @@ extension EventClient {
                 }
 
                 if !accessToEvent {
-                    throw Failure()
+                    throw Failure(message: "Unauthorized")
                 }
 
                 let predicate = eventStore.predicateForReminders(in: nil)
@@ -42,7 +44,7 @@ extension EventClient {
                         return nil
                     }
             }
-            .mapError { _ in Failure() }
+            .mapError { error in Failure(message: error.localizedDescription) }
             .eraseToEffect()
         }
     )

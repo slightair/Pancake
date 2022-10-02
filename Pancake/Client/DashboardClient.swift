@@ -94,7 +94,9 @@ extension Dashboard {
 struct DashboardClient {
     var dashboard: (URL) -> Effect<Dashboard, Failure>
 
-    struct Failure: Error, Equatable {}
+    struct Failure: Error, Equatable {
+        let message: String
+    }
 }
 
 extension DashboardClient {
@@ -104,7 +106,7 @@ extension DashboardClient {
                 let (data, _) = try await URLSession.shared.data(from: apiURL)
                 return try JSONDecoder().decode(Dashboard.self, from: data)
             }
-            .mapError { _ in Failure() }
+            .mapError { error in Failure(message: error.localizedDescription) }
             .eraseToEffect()
         }
     )

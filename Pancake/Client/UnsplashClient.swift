@@ -37,7 +37,9 @@ struct UnsplashClient {
         }
     }
 
-    struct Failure: Error, Equatable {}
+    struct Failure: Error, Equatable {
+        let message: String
+    }
 }
 
 extension UnsplashClient {
@@ -55,7 +57,7 @@ extension UnsplashClient {
                 let (data, _) = try await URLSession.shared.data(from: url)
                 return try JSONDecoder().decode([UnsplashPhoto].self, from: data)
             }
-            .mapError { _ in Failure() }
+            .mapError { error in Failure(message: error.localizedDescription) }
             .eraseToEffect()
         }
     )
