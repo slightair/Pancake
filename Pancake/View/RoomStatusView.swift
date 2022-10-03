@@ -196,7 +196,7 @@ struct RoomStatusView: View {
     let content: Content
 
     private func makeMetricsHistoryDataSet(_ keyPath: KeyPath<SensorsRecord, Double>) -> LineChartDataSet {
-        let records = history.records.sorted(by: { $0.date > $1.date }).map { $0[keyPath: keyPath] }
+        let records = history.records.sorted(by: { $0.date < $1.date }).map { $0[keyPath: keyPath] }
         let dataSet = LineChartDataSet(entries: records.enumerated().map { index, value in
             ChartDataEntry(x: Double(index), y: value)
         })

@@ -20,9 +20,11 @@ extension MetricsClient {
                 @Sendable func roomSensorsHistory(of room: Room) async throws -> RoomSensorsHistory {
                     RoomSensorsHistory(
                         room: room,
-                        records: try await db.collection("rooms").document(room.rawValue).collection("metrics").getDocuments().documents.map { doc in
-                            try Firestore.Decoder().decode(SensorsRecord.self, from: doc.data())
-                        }
+                        records: try await db.collection("rooms").document(room.rawValue).collection("metrics")
+                            .whereField("time", isGreaterThan: Date().addingTimeInterval(-3600 * 24))
+                            .getDocuments().documents.map { doc in
+                                try Firestore.Decoder().decode(SensorsRecord.self, from: doc.data())
+                            }
                     )
                 }
 
