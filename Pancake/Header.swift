@@ -32,6 +32,7 @@ struct HeaderState: Equatable, Identifiable {
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
+        formatter.locale = Locale(identifier: "ja_JP")
         return formatter
     }()
 

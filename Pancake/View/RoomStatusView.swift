@@ -11,9 +11,11 @@ struct TemperatureAndHumidityChartView: UIViewRepresentable {
         view.xAxis.enabled = false
         view.leftAxis.drawAxisLineEnabled = false
         view.leftAxis.labelTextColor = textColor
+        view.leftAxis.labelFont = .monospacedDigitSystemFont(ofSize: 10, weight: .bold)
         view.leftAxis.drawGridLinesEnabled = false
         view.rightAxis.drawAxisLineEnabled = false
         view.rightAxis.labelTextColor = textColor
+        view.rightAxis.labelFont = .monospacedDigitSystemFont(ofSize: 10, weight: .bold)
         view.rightAxis.drawGridLinesEnabled = false
         view.legend.enabled = false
         view.doubleTapToZoomEnabled = false
@@ -39,6 +41,7 @@ struct CO2ChartView: UIViewRepresentable {
         view.xAxis.enabled = false
         view.leftAxis.drawAxisLineEnabled = false
         view.leftAxis.labelTextColor = textColor
+        view.leftAxis.labelFont = .monospacedDigitSystemFont(ofSize: 10, weight: .bold)
         view.leftAxis.drawGridLinesEnabled = false
         view.rightAxis.enabled = false
         view.legend.enabled = false
@@ -248,7 +251,7 @@ struct RoomStatusView: View {
                     case .temperatureAndHumidity:
                         Image(systemName: "thermometer")
                     case .co2:
-                        Image(systemName: "cloud.fill")
+                        Image(systemName: "carbon.dioxide.cloud.fill")
                     }
                     Text(content.title)
                 }

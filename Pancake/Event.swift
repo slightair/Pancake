@@ -46,7 +46,8 @@ let eventReducer = Reducer<EventState, EventAction, EventEnvironment> { state, a
 struct EventListItemView: View {
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MM/dd HH:mm"
+        formatter.dateFormat = "yyyy/MM/dd(E) HH:mm"
+        formatter.locale = Locale(identifier: "ja_JP")
         return formatter
     }()
 
@@ -58,7 +59,10 @@ struct EventListItemView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text(event.title)
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                Image(systemName: "calendar.badge.clock")
+                Text(event.title)
+            }
                 .foregroundColor(AppTheme.textColor)
                 .font(AppTheme.textFont)
             Text(eventTime)
@@ -98,7 +102,7 @@ struct EventListView: View {
 
     var body: some View {
         VStack(spacing: AppTheme.screenPadding) {
-            ForEach(events.prefix(maxCount)) { event in
+            ForEach(events.sorted { $0.date < $1.date }.prefix(maxCount)) { event in
                 EventListItemView(event: event)
             }
 

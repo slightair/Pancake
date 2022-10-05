@@ -100,7 +100,6 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
         let startUp: Effect<AppAction, Never> = .merge([
             startTimers,
             Effect(value: AppAction.historyUpdate),
-            Effect(value: AppAction.recordMetrics),
         ])
 
         let terminate = cancelTimers

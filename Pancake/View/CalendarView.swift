@@ -14,15 +14,16 @@ extension Calendar {
 
 struct CalendarView: UIViewRepresentable {
     static let calendar = Calendar.current
+    static let locale = Locale(identifier: "ja_JP")
 
     static let monthHeaderDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.calendar = calendar
-        dateFormatter.locale = calendar.locale
+        dateFormatter.locale = locale
         dateFormatter.dateFormat = DateFormatter.dateFormat(
             fromTemplate: "MMMM yyyy",
             options: 0,
-            locale: calendar.locale ?? Locale.current
+            locale: locale
         )
         return dateFormatter
     }()
@@ -30,11 +31,11 @@ struct CalendarView: UIViewRepresentable {
     static let dayDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.calendar = calendar
-        dateFormatter.locale = calendar.locale
+        dateFormatter.locale = locale
         dateFormatter.dateFormat = DateFormatter.dateFormat(
             fromTemplate: "EEEE, MMM d, yyyy",
             options: 0,
-            locale: calendar.locale ?? Locale.current
+            locale: locale
         )
         return dateFormatter
     }()
@@ -62,6 +63,7 @@ struct CalendarView: UIViewRepresentable {
         .monthHeaderItemProvider { month in
             var invariantViewProperties = MonthHeaderView.InvariantViewProperties.base
             invariantViewProperties.textColor = AppTheme.UIKit.textColor
+            invariantViewProperties.font = .boldSystemFont(ofSize: 24)
             let firstDateInMonth = calendar.firstDate(of: month)
             let monthText = Self.monthHeaderDateFormatter.string(from: firstDateInMonth)
             return CalendarItemModel<MonthHeaderView>(
