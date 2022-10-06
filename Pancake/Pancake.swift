@@ -13,6 +13,7 @@ enum AppAction: Equatable {
     case onDisappear
     case tick
     case historyUpdate
+    case wallpaperUpdate
     case recordMetrics
     case dashboardResponse(Result<Dashboard, DashboardClient.Failure>)
     case wallpaperResponse(Result<UnsplashPhoto, UnsplashClient.Failure>)
@@ -78,6 +79,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
         struct TickTimerID: Hashable {}
         struct HistoryUpdateTimerID: Hashable {}
         struct RecordMetricsTimerID: Hashable {}
+        struct WallpaperUpdateTimerID: Hashable {}
 
         let startTimers: Effect<AppAction, Never> = .merge([
             Effect.timer(id: TickTimerID(), every: 1, tolerance: 0, on: environment.mainQueue)
@@ -85,6 +87,9 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
                 .eraseToEffect(),
             Effect.timer(id: HistoryUpdateTimerID(), every: 600, tolerance: 0, on: environment.mainQueue)
                 .map { _ in .historyUpdate }
+                .eraseToEffect(),
+            Effect.timer(id: WallpaperUpdateTimerID(), every: 300, tolerance: 0, on: environment.mainQueue)
+                .map { _ in .wallpaperUpdate }
                 .eraseToEffect(),
             Effect.timer(id: RecordMetricsTimerID(), every: 600, tolerance: 0, on: environment.mainQueue)
                 .map { _ in .recordMetrics }
@@ -95,11 +100,13 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
             .cancel(id: TickTimerID()),
             .cancel(id: HistoryUpdateTimerID()),
             .cancel(id: RecordMetricsTimerID()),
+            .cancel(id: WallpaperUpdateTimerID()),
         ])
 
         let startUp: Effect<AppAction, Never> = .merge([
             startTimers,
             Effect(value: AppAction.historyUpdate),
+            Effect(value: AppAction.wallpaperUpdate),
         ])
 
         let terminate = cancelTimers
@@ -121,10 +128,6 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
                     .receive(on: environment.mainQueue)
                     .catchToEffect()
                     .map(AppAction.dashboardResponse),
-                environment.unsplashClient.wallpaper(environment.settings.api.unsplashAccessKey)
-                    .receive(on: environment.mainQueue)
-                    .catchToEffect()
-                    .map(AppAction.wallpaperResponse),
                 environment.metricsClient.roomSensorsHistories()
                     .receive(on: environment.mainQueue)
                     .catchToEffect()
@@ -134,6 +137,11 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
                     .catchToEffect()
                     .map(AppAction.eventListResponse),
             ])
+        case .wallpaperUpdate:
+            return environment.unsplashClient.wallpaper(environment.settings.api.unsplashAccessKey)
+                .receive(on: environment.mainQueue)
+                .catchToEffect()
+                .map(AppAction.wallpaperResponse)
         case .recordMetrics:
             return environment.bleAdvertisementClient.sensors(environment.bleAdvertisementScanner, environment.settings.sensor)
                 .receive(on: environment.mainQueue)
@@ -232,12 +240,15 @@ struct AppView: View {
             }
             .padding(AppTheme.screenPadding)
             .background {
-                AsyncImage(url: viewStore.wallpaper?.urls.full) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                } placeholder: {
-                    AppTheme.backgroundColor
+                AsyncImage(url: viewStore.wallpaper?.urls.full, transaction: Transaction(animation: .easeIn(duration: 1.0))) { phase in
+                    switch phase {
+                    case let .success(image):
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    default:
+                        AppTheme.backgroundColor
+                    }
                 }
             }
             .onAppear { viewStore.send(.onAppear) }
