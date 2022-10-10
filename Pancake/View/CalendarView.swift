@@ -111,15 +111,18 @@ struct CalendarView: UIViewRepresentable {
 
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        GeometryReader { geometry in
-            let baseWidth = geometry.size.width / 3
-            HStack(alignment: .top) {
-                CalendarView(selectedDate: Date(timeIntervalSince1970: 1_656_601_200))
-                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppTheme.cornerRadius))
-                    .frame(width: baseWidth)
-                Spacer()
+        Grid {
+            GridRow {
+                Color.gray.gridCellColumns(2)
+                HStack {
+                    Spacer(minLength: 16)
+                    CalendarView(selectedDate: Date(timeIntervalSince1970: 1_659_193_200))
+                    Spacer(minLength: 16)
+                }
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppTheme.cornerRadius))
             }
+            .frame(maxHeight: 360)
         }
-        .frame(maxHeight: 300)
+        .padding(AppTheme.screenPadding)
     }
 }

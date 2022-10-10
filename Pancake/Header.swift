@@ -71,43 +71,46 @@ struct HeaderView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            HStack {
-                VStack {
+            VStack {
+                HStack(spacing: 16) {
                     Text(viewStore.dateString)
                         .foregroundColor(AppTheme.textColor)
                         .font(.system(size: 100))
                         .monospacedDigit()
                         .bold()
-                }
-                VStack {
-                    HStack(spacing: 16) {
-                        Spacer()
-                        WeatherView(weather: viewStore.dashboard.weather)
-                        TrainServiceView(statuses: viewStore.dashboard.trainStatuses)
-                    }
                     Spacer()
-                    HStack(spacing: 2) {
-                        Spacer()
-                        ForEach(viewStore.dashboard.hourlyForecast) { record in
-                            HourlyForecastRecordView(record: record)
-                        }
+                    WeatherView(weather: viewStore.dashboard.weather)
+                    TrainServiceView(statuses: viewStore.dashboard.trainStatuses)
+                }
+                HStack(spacing: 2) {
+                    ForEach(viewStore.dashboard.hourlyForecast) { record in
+                        HourlyForecastRecordView(record: record)
                     }
                 }
             }
-            .frame(height: 238)
             .padding(12)
+            .frame(maxHeight: .infinity)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppTheme.cornerRadius))
         }
     }
 }
 
 struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
-        HeaderView(
-            store: Store(
-                initialState: .mock,
-                reducer: headerReducer,
-                environment: HeaderEnvironment()
-            )
-        )
+        Grid {
+            GridRow {
+                HeaderView(
+                    store: Store(
+                        initialState: .mock,
+                        reducer: headerReducer,
+                        environment: HeaderEnvironment()
+                    )
+                )
+                .gridCellColumns(2)
+                Color.gray
+            }
+            .frame(height: 360)
+        }
+        .padding(AppTheme.screenPadding)
     }
 }
