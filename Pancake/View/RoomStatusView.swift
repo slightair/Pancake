@@ -173,10 +173,7 @@ struct RoomSummaryView: View {
             Spacer()
         }
         .padding(AppTheme.panelPadding)
-        .background {
-            AppTheme.backgroundColor
-        }
-        .cornerRadius(AppTheme.cornerRadius)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppTheme.cornerRadius))
     }
 }
 
@@ -283,10 +280,7 @@ struct RoomStatusView: View {
             }
         }
         .padding(AppTheme.panelPadding)
-        .background {
-            AppTheme.backgroundColor
-        }
-        .cornerRadius(AppTheme.cornerRadius)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppTheme.cornerRadius))
     }
 }
 
@@ -299,10 +293,6 @@ struct RoomBlankView: View {
                 .font(AppTheme.headerFont)
         }
         .padding(AppTheme.panelPadding)
-        .background {
-            AppTheme.backgroundColor
-        }
-        .cornerRadius(AppTheme.cornerRadius)
     }
 }
 

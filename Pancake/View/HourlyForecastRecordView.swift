@@ -6,7 +6,7 @@ struct HourlyForecastRecordView: View {
     var body: some View {
         VStack(spacing: 2) {
             Text("\(record.time)")
-                .foregroundColor(AppTheme.headerColor)
+                .foregroundColor(AppTheme.textColor)
                 .font(.system(size: 12))
                 .monospacedDigit()
             AsyncImage(url: record.iconURL) { image in
@@ -16,7 +16,7 @@ struct HourlyForecastRecordView: View {
                     .frame(width: 33, height: 30)
             } placeholder: {
                 Image(systemName: "questionmark")
-                    .foregroundColor(AppTheme.headerColor)
+                    .foregroundColor(AppTheme.textColor)
                     .aspectRatio(contentMode: .fit)
                     .padding()
                     .frame(width: 33, height: 30)
@@ -31,12 +31,12 @@ struct HourlyForecastRecordView: View {
                     .frame(width: 44)
             }
             Text(record.weather)
-                .foregroundColor(AppTheme.headerColor)
+                .foregroundColor(AppTheme.textColor)
                 .font(.system(size: 14))
                 .monospacedDigit()
                 .bold()
             Text("\(record.temp)℃ \(record.chanceOfRain)%")
-                .foregroundColor(AppTheme.headerColor)
+                .foregroundColor(AppTheme.textColor)
                 .font(.system(size: 12))
                 .monospacedDigit()
                 .bold()
@@ -48,8 +48,6 @@ struct HourlyForecastRecordView: View {
 struct HourlyForecastRecordView_Previews: PreviewProvider {
     static var previews: some View {
         HourlyForecastRecordView(record: Dashboard.mock.hourlyForecast.first!)
-            .background {
-                AppTheme.backgroundColor
-            }
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppTheme.cornerRadius))
     }
 }

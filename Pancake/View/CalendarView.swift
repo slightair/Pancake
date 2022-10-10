@@ -44,7 +44,7 @@ struct CalendarView: UIViewRepresentable {
 
     func makeUIView(context _: Context) -> HorizonCalendar.CalendarView {
         let calendarView = HorizonCalendar.CalendarView(initialContent: makeContent())
-        calendarView.backgroundColor = AppTheme.UIKit.backgroundColor
+        calendarView.backgroundColor = .clear
         return calendarView
     }
 
@@ -115,6 +115,7 @@ struct CalendarView_Previews: PreviewProvider {
             let baseWidth = geometry.size.width / 3
             HStack(alignment: .top) {
                 CalendarView(selectedDate: Date(timeIntervalSince1970: 1_656_601_200))
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppTheme.cornerRadius))
                     .frame(width: baseWidth)
                 Spacer()
             }

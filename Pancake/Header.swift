@@ -94,12 +94,8 @@ struct HeaderView: View {
                     }
                 }
             }
-            .frame(height: 228)
+            .frame(height: 238)
             .padding(12)
-            .background {
-                AppTheme.backgroundColor
-            }
-            .cornerRadius(AppTheme.cornerRadius)
         }
     }
 }

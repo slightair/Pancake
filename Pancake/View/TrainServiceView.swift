@@ -38,8 +38,6 @@ struct TrainServiceView_Previews: PreviewProvider {
         TrainServiceView(
             statuses: Dashboard.mock.trainStatuses
         )
-        .background {
-            AppTheme.backgroundColor
-        }
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppTheme.cornerRadius))
     }
 }

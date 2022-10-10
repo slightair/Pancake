@@ -73,10 +73,7 @@ struct EventListItemView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .foregroundColor(AppTheme.textColor)
             .padding(AppTheme.panelPadding)
-            .background {
-                AppTheme.backgroundColor
-            }
-            .cornerRadius(AppTheme.cornerRadius)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppTheme.cornerRadius))
     }
 }
 
@@ -89,10 +86,6 @@ struct EventListItemEmptyView: View {
                 .font(AppTheme.headerFont)
         }
         .padding(AppTheme.panelPadding)
-        .background {
-            AppTheme.backgroundColor
-        }
-        .cornerRadius(AppTheme.cornerRadius)
     }
 }
 
@@ -125,7 +118,7 @@ struct EventView: View {
                 let baseWidth = (geometry.size.width - AppTheme.screenPadding * 2) / 3
                 HStack(alignment: .top, spacing: AppTheme.screenPadding) {
                     CalendarView(selectedDate: viewStore.date)
-                        .cornerRadius(AppTheme.cornerRadius)
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppTheme.cornerRadius))
                         .frame(width: baseWidth)
                     EventListView(events: viewStore.events)
                         .frame(width: baseWidth * 2 + AppTheme.screenPadding)
