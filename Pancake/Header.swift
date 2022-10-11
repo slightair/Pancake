@@ -24,6 +24,8 @@ extension Dashboard {
             HourlyForecastRecord(time: 13, temp: 22, weather: "晴れ", chanceOfRain: 10, iconURL: nil),
             HourlyForecastRecord(time: 14, temp: 21, weather: "晴れ", chanceOfRain: 20, iconURL: nil),
             HourlyForecastRecord(time: 15, temp: 19, weather: "晴れ", chanceOfRain: 0, iconURL: nil),
+            HourlyForecastRecord(time: 16, temp: 21, weather: "晴れ", chanceOfRain: 20, iconURL: nil),
+            HourlyForecastRecord(time: 17, temp: 19, weather: "晴れ", chanceOfRain: 0, iconURL: nil),
         ]
     )
 }
@@ -71,7 +73,7 @@ struct HeaderView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            VStack {
+            VStack(spacing: 16) {
                 HStack(spacing: 16) {
                     Text(viewStore.dateString)
                         .foregroundColor(AppTheme.textColor)
@@ -87,10 +89,9 @@ struct HeaderView: View {
                         HourlyForecastRecordView(record: record)
                     }
                 }
+                Spacer()
             }
             .padding(12)
-            .frame(maxHeight: .infinity)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppTheme.cornerRadius))
         }
     }
 }
@@ -106,7 +107,11 @@ struct HeaderView_Previews: PreviewProvider {
                         environment: HeaderEnvironment()
                     )
                 )
+                .frame(maxHeight: .infinity)
                 .gridCellColumns(2)
+                .background {
+                    Color(red: 0.9, green: 0.9, blue: 0.9)
+                }
                 Color.gray
             }
             .frame(height: 360)

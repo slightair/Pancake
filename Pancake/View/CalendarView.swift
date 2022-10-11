@@ -76,8 +76,15 @@ struct CalendarView: UIViewRepresentable {
         }
         .dayOfWeekItemProvider { _, weekdayIndex in
             var invariantViewProperties = DayOfWeekView.InvariantViewProperties.base
-            invariantViewProperties.textColor = AppTheme.UIKit.textColor
             invariantViewProperties.font = .boldSystemFont(ofSize: 16)
+            switch weekdayIndex {
+            case 0:
+                invariantViewProperties.textColor = UIColor(red: 0.93, green: 0.33, blue: 0.27, alpha: 1.0)
+            case 6:
+                invariantViewProperties.textColor = UIColor(red: 0.50, green: 0.82, blue: 0.98, alpha: 1.0)
+            default:
+                invariantViewProperties.textColor = AppTheme.UIKit.textColor
+            }
             let dayOfWeekText = Self.monthHeaderDateFormatter.veryShortStandaloneWeekdaySymbols[weekdayIndex]
             return CalendarItemModel<DayOfWeekView>(
                 invariantViewProperties: invariantViewProperties,
@@ -119,7 +126,6 @@ struct CalendarView_Previews: PreviewProvider {
                     CalendarView(selectedDate: Date(timeIntervalSince1970: 1_659_193_200))
                     Spacer(minLength: 16)
                 }
-                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppTheme.cornerRadius))
             }
             .frame(maxHeight: 360)
         }

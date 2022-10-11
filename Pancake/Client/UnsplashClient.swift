@@ -49,7 +49,7 @@ extension UnsplashClient {
                 var urlComponents = URLComponents(string: "https://api.unsplash.com/topics/\(topic)/photos")!
                 urlComponents.queryItems = [
                     .init(name: "per_page", value: "\(numberOfPhotos)"),
-                    .init(name: "orientation", value: "portrait"),
+                    .init(name: "orientation", value: "landscape"),
                     .init(name: "client_id", value: accessKey),
                 ]
                 let url = urlComponents.url!

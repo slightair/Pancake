@@ -73,7 +73,6 @@ struct EventListItemView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .foregroundColor(AppTheme.textColor)
             .padding(AppTheme.panelPadding)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppTheme.cornerRadius))
     }
 }
 

@@ -128,18 +128,16 @@ struct DiscomfortIndexView: View {
     }
 
     var body: some View {
-        HStack(alignment: .top) {
+        HStack(alignment: .top, spacing: 8) {
+            Image(symbolName)
+                .renderingMode(.template)
+                .resizable()
+                .frame(width: 20, height: 20)
+                .foregroundColor(symbolColor)
             Text("\(discomfortIndex, specifier: "%.f") - \(discomfortIndexText)")
                 .foregroundColor(AppTheme.textColor)
                 .font(AppTheme.textFont)
             Spacer()
-            Image(symbolName)
-                .renderingMode(.template)
-                .resizable()
-                .frame(width: 44, height: 44)
-                .foregroundColor(symbolColor)
-            Spacer()
-                .frame(width: 4)
         }
     }
 }
@@ -173,7 +171,6 @@ struct RoomSummaryView: View {
             Spacer()
         }
         .padding(AppTheme.panelPadding)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppTheme.cornerRadius))
     }
 }
 
@@ -280,7 +277,6 @@ struct RoomStatusView: View {
             }
         }
         .padding(AppTheme.panelPadding)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppTheme.cornerRadius))
     }
 }
 
