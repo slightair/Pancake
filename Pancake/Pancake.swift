@@ -2,6 +2,7 @@ import ComposableArchitecture
 import SwiftUI
 
 struct AppState: Equatable {
+    var date = Date()
     var wallpaper: UnsplashPhoto?
     var header = HeaderState()
     var event = EventState()
@@ -118,6 +119,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
             return terminate
         case .tick:
             let date = Date()
+            state.date = date
             return .merge([
                 Effect(value: .header(.timeUpdate(date))),
                 Effect(value: .event(.eventListUpdate(date))),
@@ -212,6 +214,7 @@ struct AppTheme {
     static let headerColor = Color(uiColor: UIKit.headerColor)
     static let textColor = Color(uiColor: UIKit.textColor)
     static let notAvailableColor = Color(uiColor: UIKit.notAvailableColor)
+    static let shadowColor = Color(red: 0.3, green: 0.3, blue: 0.3)
     static let headerFont = Font.system(size: 10).monospacedDigit().bold()
     static let textFont = Font.system(.body).monospacedDigit().bold()
     static let screenPadding: CGFloat = 4
@@ -219,9 +222,9 @@ struct AppTheme {
     static let cornerRadius: CGFloat = 8
 
     struct UIKit {
-        static let headerColor = UIColor(white: 0.8, alpha: 1.0)
+        static let headerColor = UIColor.white
         static let textColor = UIColor.white
-        static let notAvailableColor = UIColor(white: 0.8, alpha: 0.4)
+        static let notAvailableColor = UIColor.clear
     }
 }
 
@@ -230,12 +233,25 @@ struct AppView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            VStack(spacing: AppTheme.screenPadding) {
-                HeaderView(store: store.scope(state: \.header, action: AppAction.header))
-                EventView(store: store.scope(state: \.event, action: AppAction.event))
-                HomeView(store: store.scope(state: \.home, action: AppAction.home))
-                Spacer(minLength: 0)
+            Grid(horizontalSpacing: AppTheme.screenPadding,
+                 verticalSpacing: AppTheme.screenPadding) {
+                GridRow {
+                    HeaderView(store: store.scope(state: \.header, action: AppAction.header))
+                        .gridCellColumns(2)
+                    HStack {
+                        Spacer(minLength: 16)
+                        CalendarView(selectedDate: viewStore.date)
+                        Spacer(minLength: 16)
+                    }
+                }
+                .frame(height: 360)
+                GridRow(alignment: .top) {
+                    HomeView(store: store.scope(state: \.home, action: AppAction.home))
+                        .gridCellColumns(2)
+                    EventView(store: store.scope(state: \.event, action: AppAction.event))
+                }
             }
+                 .shadow(color: AppTheme.shadowColor, radius: 1)
             .padding(AppTheme.screenPadding)
             .background {
                 AsyncImage(url: viewStore.wallpaper?.urls.full, transaction: Transaction(animation: .easeIn(duration: 1.0))) { phase in

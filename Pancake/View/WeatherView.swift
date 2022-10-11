@@ -69,6 +69,5 @@ struct WeatherView_Previews: PreviewProvider {
         WeatherView(
             weather: Dashboard.mock.weather
         )
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppTheme.cornerRadius))
     }
 }

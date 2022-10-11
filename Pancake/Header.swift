@@ -24,6 +24,8 @@ extension Dashboard {
             HourlyForecastRecord(time: 13, temp: 22, weather: "晴れ", chanceOfRain: 10, iconURL: nil),
             HourlyForecastRecord(time: 14, temp: 21, weather: "晴れ", chanceOfRain: 20, iconURL: nil),
             HourlyForecastRecord(time: 15, temp: 19, weather: "晴れ", chanceOfRain: 0, iconURL: nil),
+            HourlyForecastRecord(time: 16, temp: 21, weather: "晴れ", chanceOfRain: 20, iconURL: nil),
+            HourlyForecastRecord(time: 17, temp: 19, weather: "晴れ", chanceOfRain: 0, iconURL: nil),
         ]
     )
 }
@@ -71,30 +73,24 @@ struct HeaderView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            HStack {
-                VStack {
+            VStack(spacing: 16) {
+                HStack(spacing: 16) {
                     Text(viewStore.dateString)
                         .foregroundColor(AppTheme.textColor)
                         .font(.system(size: 100))
                         .monospacedDigit()
                         .bold()
-                }
-                VStack {
-                    HStack(spacing: 16) {
-                        Spacer()
-                        WeatherView(weather: viewStore.dashboard.weather)
-                        TrainServiceView(statuses: viewStore.dashboard.trainStatuses)
-                    }
                     Spacer()
-                    HStack(spacing: 2) {
-                        Spacer()
-                        ForEach(viewStore.dashboard.hourlyForecast) { record in
-                            HourlyForecastRecordView(record: record)
-                        }
+                    WeatherView(weather: viewStore.dashboard.weather)
+                    TrainServiceView(statuses: viewStore.dashboard.trainStatuses)
+                }
+                HStack(spacing: 2) {
+                    ForEach(viewStore.dashboard.hourlyForecast) { record in
+                        HourlyForecastRecordView(record: record)
                     }
                 }
+                Spacer()
             }
-            .frame(height: 238)
             .padding(12)
         }
     }
@@ -102,12 +98,24 @@ struct HeaderView: View {
 
 struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
-        HeaderView(
-            store: Store(
-                initialState: .mock,
-                reducer: headerReducer,
-                environment: HeaderEnvironment()
-            )
-        )
+        Grid {
+            GridRow {
+                HeaderView(
+                    store: Store(
+                        initialState: .mock,
+                        reducer: headerReducer,
+                        environment: HeaderEnvironment()
+                    )
+                )
+                .frame(maxHeight: .infinity)
+                .gridCellColumns(2)
+                .background {
+                    Color(red: 0.9, green: 0.9, blue: 0.9)
+                }
+                Color.gray
+            }
+            .frame(height: 360)
+        }
+        .padding(AppTheme.screenPadding)
     }
 }

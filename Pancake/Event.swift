@@ -73,7 +73,6 @@ struct EventListItemView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .foregroundColor(AppTheme.textColor)
             .padding(AppTheme.panelPadding)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppTheme.cornerRadius))
     }
 }
 
@@ -91,7 +90,7 @@ struct EventListItemEmptyView: View {
 
 struct EventListView: View {
     let events: [Event]
-    let maxCount = 6
+    let maxCount = 8
 
     var body: some View {
         VStack(spacing: AppTheme.screenPadding) {
@@ -114,29 +113,25 @@ struct EventView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            GeometryReader { geometry in
-                let baseWidth = (geometry.size.width - AppTheme.screenPadding * 2) / 3
-                HStack(alignment: .top, spacing: AppTheme.screenPadding) {
-                    CalendarView(selectedDate: viewStore.date)
-                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: AppTheme.cornerRadius))
-                        .frame(width: baseWidth)
-                    EventListView(events: viewStore.events)
-                        .frame(width: baseWidth * 2 + AppTheme.screenPadding)
-                }
-            }
-            .frame(maxHeight: 311)
+            EventListView(events: viewStore.events)
         }
     }
 }
 
 struct EventView_Previews: PreviewProvider {
     static var previews: some View {
-        EventView(
-            store: Store(
-                initialState: .mock,
-                reducer: eventReducer,
-                environment: EventEnvironment()
-            )
-        )
+        Grid {
+            GridRow {
+                Color.gray.gridCellColumns(2)
+                EventView(
+                    store: Store(
+                        initialState: .mock,
+                        reducer: eventReducer,
+                        environment: EventEnvironment()
+                    )
+                )
+            }
+        }
+        .padding(AppTheme.screenPadding)
     }
 }
