@@ -105,7 +105,7 @@ struct AppTheme {
     static let headerColor = Color(uiColor: UIKit.headerColor)
     static let textColor = Color(uiColor: UIKit.textColor)
     static let notAvailableColor = Color(uiColor: UIKit.notAvailableColor)
-    static let shadowColor = Color(red: 0.3, green: 0.3, blue: 0.3)
+    static let shadowColor = Color(red: 0.1, green: 0.1, blue: 0.1)
     static let headerFont = Font.system(size: 10).monospacedDigit().bold()
     static let textFont = Font.system(.body).monospacedDigit().bold()
     static let screenPadding: CGFloat = 4
@@ -142,7 +142,7 @@ struct PancakeView: View {
                     EventView(store: store.scope(state: \.eventList, action: Pancake.Action.eventList))
                 }
             }
-                 .shadow(color: AppTheme.shadowColor, radius: 1)
+                 .shadow(color: AppTheme.shadowColor, radius: 8, x: 2, y: 4)
                  .padding(AppTheme.screenPadding)
                  .background {
                      AsyncImage(url: viewStore.wallpaper?.urls.full, transaction: Transaction(animation: .easeIn(duration: 1.0))) { phase in
