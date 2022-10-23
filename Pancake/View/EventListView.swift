@@ -2,44 +2,31 @@ import ComposableArchitecture
 import Foundation
 import SwiftUI
 
-struct EventState: Equatable, Identifiable {
-    var id: TimeInterval {
-        date.timeIntervalSince1970
+struct EventList: ReducerProtocol {
+    struct State: Equatable {
+        var events: [Event] = []
     }
 
-    var date = Date()
-    var events: [Event] = []
-}
+    enum Action {
+        case eventListUpdate
+        case eventListResponse(TaskResult<[Event]>)
+    }
 
-extension EventState {
-    static let mock = EventState(
-        date: Date(timeIntervalSince1970: 1659279600),
-        events: [
-            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660057200), title: "散歩1"),
-            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660143600), title: "散歩2"),
-            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660230000), title: "散歩3"),
-            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660316400), title: "散歩4"),
-            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660402800), title: "散歩5"),
-            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660489200), title: "散歩6"),
-            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660575600), title: "散歩7"),
-            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660662000), title: "散歩8"),
-            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660748400), title: "散歩9"),
-            Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660834800), title: "散歩10"),
-        ]
-    )
-}
+    @Dependency(\.eventClient) var eventClient
 
-enum EventAction: Equatable {
-    case eventListUpdate(Date)
-}
-
-struct EventEnvironment {}
-
-let eventReducer = Reducer<EventState, EventAction, EventEnvironment> { state, action, _ in
-    switch action {
-    case let .eventListUpdate(date):
-        state.date = date
-        return .none
+    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+        switch action {
+        case .eventListUpdate:
+            return .task {
+                await .eventListResponse(TaskResult { try await eventClient.events() })
+            }
+        case let .eventListResponse(.success(eventList)):
+            state.events = eventList
+            return .none
+        case let .eventListResponse(.failure(error)):
+            print(error)
+            return .none
+        }
     }
 }
 
@@ -109,10 +96,10 @@ struct EventListView: View {
 }
 
 struct EventView: View {
-    let store: Store<EventState, EventAction>
+    let store: StoreOf<EventList>
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             EventListView(events: viewStore.events)
         }
     }
@@ -125,9 +112,10 @@ struct EventView_Previews: PreviewProvider {
                 Color.gray.gridCellColumns(2)
                 EventView(
                     store: Store(
-                        initialState: .mock,
-                        reducer: eventReducer,
-                        environment: EventEnvironment()
+                        initialState: EventList.State(
+                            events: Event.mockEvents
+                        ),
+                        reducer: EventList()
                     )
                 )
             }

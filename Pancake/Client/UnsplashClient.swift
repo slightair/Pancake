@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import Foundation
 
 struct UnsplashPhoto: Equatable, Decodable {
     struct URLs: Equatable, Decodable {
@@ -27,38 +28,45 @@ extension UnsplashPhoto {
 }
 
 struct UnsplashClient {
-    var topicPhotos: (String, String, Int) -> Effect<[UnsplashPhoto], Failure>
-    var wallpaper: (String) -> Effect<UnsplashPhoto, Failure> {
+    var topicPhotos: @Sendable (String, String, Int) async throws -> [UnsplashPhoto]
+    var wallpaper: @Sendable (String) async throws -> UnsplashPhoto {
         { accessKey in
-            topicPhotos(accessKey, "textures-patterns", 10)
-                .map { photos in
-                    photos.randomElement()!
-                }
+            try await topicPhotos(accessKey, "textures-patterns", 10).randomElement()!
         }
-    }
-
-    struct Failure: Error, Equatable {
-        let message: String
     }
 }
 
 extension UnsplashClient {
     static let live = UnsplashClient(
         topicPhotos: { accessKey, topic, numberOfPhotos in
-            Effect.task {
-                var urlComponents = URLComponents(string: "https://api.unsplash.com/topics/\(topic)/photos")!
-                urlComponents.queryItems = [
-                    .init(name: "per_page", value: "\(numberOfPhotos)"),
-                    .init(name: "orientation", value: "landscape"),
-                    .init(name: "client_id", value: accessKey),
-                ]
-                let url = urlComponents.url!
+            var urlComponents = URLComponents(string: "https://api.unsplash.com/topics/\(topic)/photos")!
+            urlComponents.queryItems = [
+                .init(name: "per_page", value: "\(numberOfPhotos)"),
+                .init(name: "orientation", value: "landscape"),
+                .init(name: "client_id", value: accessKey),
+            ]
+            let url = urlComponents.url!
 
-                let (data, _) = try await URLSession.shared.data(from: url)
-                return try JSONDecoder().decode([UnsplashPhoto].self, from: data)
-            }
-            .mapError { error in Failure(message: error.localizedDescription) }
-            .eraseToEffect()
+            let (data, _) = try await URLSession.shared.data(from: url)
+            return try JSONDecoder().decode([UnsplashPhoto].self, from: data)
         }
     )
+
+    static let mock = UnsplashClient(
+        topicPhotos: { _, _, _ in
+            [.mock]
+        }
+    )
+}
+
+private enum UnsplashClientKey: DependencyKey {
+    static let liveValue = UnsplashClient.live
+    static let previewValue = UnsplashClient.mock
+}
+
+extension DependencyValues {
+    var unsplashClient: UnsplashClient {
+        get { self[UnsplashClientKey.self] }
+        set { self[UnsplashClientKey.self] = newValue }
+    }
 }

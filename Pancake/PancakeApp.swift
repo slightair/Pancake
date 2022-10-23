@@ -17,11 +17,14 @@ struct PancakeApp: App {
 
     var body: some Scene {
         WindowGroup {
-            AppView(
+            PancakeView(
                 store: Store(
-                    initialState: AppState(),
-                    reducer: appReducer,
-                    environment: .dev
+                    initialState: Pancake.State(),
+                    reducer: Pancake()
+                        ._printChanges()
+                        .dependency(\.bleAdvertisementScanner, MockBLEAdvertisementScanner())
+                        .dependency(\.bleAdvertisementClient, .mock)
+                        .dependency(\.metricsClient, .saveDryRun)
                 )
             )
         }

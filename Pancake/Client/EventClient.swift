@@ -7,51 +7,66 @@ struct Event: Identifiable, Equatable {
     let title: String
 }
 
-struct EventClient {
-    var events: () -> Effect<[Event], Failure>
+extension Event {
+    static let mockEvents: [Event] = [
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660057200), title: "散歩1"),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660143600), title: "散歩2"),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660230000), title: "散歩3"),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660316400), title: "散歩4"),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660402800), title: "散歩5"),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660489200), title: "散歩6"),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660575600), title: "散歩7"),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660662000), title: "散歩8"),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660748400), title: "散歩9"),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660834800), title: "散歩10"),
+    ]
+}
 
-    struct Failure: Error, Equatable {
-        let message: String
-    }
+enum EventError: LocalizedError {
+    case unauthorized
+    case failedToReadReminders
+}
+
+struct EventClient {
+    var events: @Sendable () async throws -> [Event]
 }
 
 extension EventClient {
     static let live = EventClient(
         events: {
-            Effect.task {
-                let eventStore = EKEventStore()
-                let type: EKEntityType = .reminder
-                let accessToEvent: Bool
+            let eventStore = EKEventStore()
+            let type: EKEntityType = .reminder
+            let accessToEvent: Bool
 
-                if EKEventStore.authorizationStatus(for: type) != .authorized {
-                    accessToEvent = try await eventStore.requestAccess(to: type)
-                } else {
-                    accessToEvent = true
-                }
-
-                if !accessToEvent {
-                    throw Failure(message: "Unauthorized")
-                }
-
-                let predicate = eventStore.predicateForReminders(in: nil)
-                let reminders = try await eventStore.fetchReminders(matching: predicate)
-
-                return reminders.filter { !$0.isCompleted }
-                    .compactMap { reminder in
-                        if let dueDate = reminder.dueDateComponents?.date {
-                            return Event(id: reminder.calendarItemIdentifier, date: dueDate, title: reminder.title)
-                        }
-                        return nil
-                    }
+            if EKEventStore.authorizationStatus(for: type) != .authorized {
+                accessToEvent = try await eventStore.requestAccess(to: type)
+            } else {
+                accessToEvent = true
             }
-            .mapError { error in Failure(message: error.localizedDescription) }
-            .eraseToEffect()
+
+            if !accessToEvent { throw EventError.unauthorized }
+
+            let predicate = eventStore.predicateForReminders(in: nil)
+            let reminders = try await eventStore.fetchReminders(matching: predicate)
+
+            return reminders.filter { !$0.isCompleted }
+                .compactMap { reminder in
+                    reminder.dueDateComponents?.date.map {
+                        Event(
+                            id: reminder.calendarItemIdentifier,
+                            date: $0,
+                            title: reminder.title
+                        )
+                    }
+                }
         }
     )
-}
 
-enum EventError: LocalizedError {
-    case failedToReadReminders
+    static let mock = EventClient(
+        events: {
+            Event.mockEvents
+        }
+    )
 }
 
 extension EKEventStore {
@@ -65,5 +80,17 @@ extension EKEventStore {
                 }
             }
         }
+    }
+}
+
+private enum EventClientKey: DependencyKey {
+    static let liveValue = EventClient.live
+    static let previewValue = EventClient.mock
+}
+
+extension DependencyValues {
+    var eventClient: EventClient {
+        get { self[EventClientKey.self] }
+        set { self[EventClientKey.self] = newValue }
     }
 }

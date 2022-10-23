@@ -7,10 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5701AFE4285EECDD0084ADD0 /* CasePaths in Frameworks */ = {isa = PBXBuildFile; productRef = 5701AFE3285EECDD0084ADD0 /* CasePaths */; };
-		5728CDF12813DB2900BBC308 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF02813DB2900BBC308 /* Header.swift */; };
-		5728CDF32814306A00BBC308 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF22814306A00BBC308 /* Event.swift */; };
-		5728CDF52815926200BBC308 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF42815926200BBC308 /* Home.swift */; };
+		5728CDF12813DB2900BBC308 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF02813DB2900BBC308 /* HeaderView.swift */; };
+		5728CDF32814306A00BBC308 /* EventListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF22814306A00BBC308 /* EventListView.swift */; };
+		5728CDF52815926200BBC308 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF42815926200BBC308 /* HomeView.swift */; };
 		5728CDF92816D0C800BBC308 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5728CDF82816D0C800BBC308 /* Settings.plist */; };
 		5728CDFC2816D43A00BBC308 /* DashboardClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDFB2816D43A00BBC308 /* DashboardClient.swift */; };
 		5728CDFE281A389C00BBC308 /* UnsplashClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDFD281A389B00BBC308 /* UnsplashClient.swift */; };
@@ -33,16 +32,16 @@
 		57DD4EB82801573800D0F249 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD4EB72801573800D0F249 /* CalendarView.swift */; };
 		57EDCAFB28BDE3C40064E7E5 /* BLEAdvertisementClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EDCAFA28BDE3C40064E7E5 /* BLEAdvertisementClient.swift */; };
 		57F5BC71280D96D100191F64 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 57F5BC70280D96D100191F64 /* ComposableArchitecture */; };
-		57F5BC73280D980D00191F64 /* Pancake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F5BC72280D980D00191F64 /* Pancake.swift */; };
+		57F5BC73280D980D00191F64 /* PancakeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F5BC72280D980D00191F64 /* PancakeView.swift */; };
 		57FFECCB27F966CE00B03EE1 /* PancakeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FFECCA27F966CE00B03EE1 /* PancakeApp.swift */; };
 		57FFECCF27F966D000B03EE1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57FFECCE27F966D000B03EE1 /* Assets.xcassets */; };
 		57FFECD227F966D000B03EE1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57FFECD127F966D000B03EE1 /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5728CDF02813DB2900BBC308 /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
-		5728CDF22814306A00BBC308 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
-		5728CDF42815926200BBC308 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
+		5728CDF02813DB2900BBC308 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		5728CDF22814306A00BBC308 /* EventListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListView.swift; sourceTree = "<group>"; };
+		5728CDF42815926200BBC308 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		5728CDF82816D0C800BBC308 /* Settings.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Settings.plist; sourceTree = "<group>"; };
 		5728CDFB2816D43A00BBC308 /* DashboardClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardClient.swift; sourceTree = "<group>"; };
 		5728CDFD281A389B00BBC308 /* UnsplashClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashClient.swift; sourceTree = "<group>"; };
@@ -59,7 +58,7 @@
 		57B8AC2228AF591C001CE330 /* BLEAdvertisementScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEAdvertisementScanner.swift; sourceTree = "<group>"; };
 		57DD4EB72801573800D0F249 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		57EDCAFA28BDE3C40064E7E5 /* BLEAdvertisementClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEAdvertisementClient.swift; sourceTree = "<group>"; };
-		57F5BC72280D980D00191F64 /* Pancake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pancake.swift; sourceTree = "<group>"; };
+		57F5BC72280D980D00191F64 /* PancakeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PancakeView.swift; sourceTree = "<group>"; };
 		57FFECC727F966CE00B03EE1 /* Pancake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pancake.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57FFECCA27F966CE00B03EE1 /* PancakeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PancakeApp.swift; sourceTree = "<group>"; };
 		57FFECCE27F966D000B03EE1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -77,7 +76,6 @@
 				57AAA7E228E341A4008CE2E9 /* Charts in Frameworks */,
 				579F5959284CE4D7003D8F6D /* FirebaseFirestoreCombine-Community in Frameworks */,
 				57F5BC71280D96D100191F64 /* ComposableArchitecture in Frameworks */,
-				5701AFE4285EECDD0084ADD0 /* CasePaths in Frameworks */,
 				579F595B284CE4D7003D8F6D /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -85,6 +83,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		57226C69290517A70007BED6 /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				57DD4EB72801573800D0F249 /* CalendarView.swift */,
+				577A4814281A6C48007090BF /* WeatherView.swift */,
+				57B8AC1E28A76953001CE330 /* HourlyForecastRecordView.swift */,
+				577A4816281A6CD0007090BF /* TrainServiceView.swift */,
+				577A482328263A7D007090BF /* RoomStatusView.swift */,
+			);
+			path = Component;
+			sourceTree = "<group>";
+		};
 		5728CDFA2816D42900BBC308 /* Client */ = {
 			isa = PBXGroup;
 			children = (
@@ -123,10 +133,6 @@
 				5728CDF82816D0C800BBC308 /* Settings.plist */,
 				579F5953284CE3E5003D8F6D /* GoogleService-Info.plist */,
 				57FFECCA27F966CE00B03EE1 /* PancakeApp.swift */,
-				57F5BC72280D980D00191F64 /* Pancake.swift */,
-				5728CDF02813DB2900BBC308 /* Header.swift */,
-				5728CDF22814306A00BBC308 /* Event.swift */,
-				5728CDF42815926200BBC308 /* Home.swift */,
 				576E4C2C28E4819400EF0B06 /* Settings.swift */,
 				57FFECCE27F966D000B03EE1 /* Assets.xcassets */,
 				57FFECD027F966D000B03EE1 /* Preview Content */,
@@ -155,11 +161,11 @@
 		57FFECDA27F9699100B03EE1 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				57DD4EB72801573800D0F249 /* CalendarView.swift */,
-				577A4814281A6C48007090BF /* WeatherView.swift */,
-				57B8AC1E28A76953001CE330 /* HourlyForecastRecordView.swift */,
-				577A4816281A6CD0007090BF /* TrainServiceView.swift */,
-				577A482328263A7D007090BF /* RoomStatusView.swift */,
+				5728CDF22814306A00BBC308 /* EventListView.swift */,
+				5728CDF02813DB2900BBC308 /* HeaderView.swift */,
+				5728CDF42815926200BBC308 /* HomeView.swift */,
+				57F5BC72280D980D00191F64 /* PancakeView.swift */,
+				57226C69290517A70007BED6 /* Component */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -186,7 +192,6 @@
 				579F5956284CE4D7003D8F6D /* FirebaseFirestore */,
 				579F5958284CE4D7003D8F6D /* FirebaseFirestoreCombine-Community */,
 				579F595A284CE4D7003D8F6D /* FirebaseFirestoreSwift */,
-				5701AFE3285EECDD0084ADD0 /* CasePaths */,
 				57AAA7E128E341A4008CE2E9 /* Charts */,
 			);
 			productName = Pancake;
@@ -221,7 +226,6 @@
 				57DD4EB4280156FF00D0F249 /* XCRemoteSwiftPackageReference "HorizonCalendar" */,
 				57F5BC6F280D96D100191F64 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				579F5955284CE4D7003D8F6D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				5701AFE2285EECDD0084ADD0 /* XCRemoteSwiftPackageReference "swift-case-paths" */,
 				57AAA7E028E341A4008CE2E9 /* XCRemoteSwiftPackageReference "Charts" */,
 			);
 			productRefGroup = 57FFECC827F966CE00B03EE1 /* Products */;
@@ -253,18 +257,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				57B8AC2328AF591C001CE330 /* BLEAdvertisementScanner.swift in Sources */,
-				5728CDF32814306A00BBC308 /* Event.swift in Sources */,
-				5728CDF12813DB2900BBC308 /* Header.swift in Sources */,
+				5728CDF32814306A00BBC308 /* EventListView.swift in Sources */,
+				5728CDF12813DB2900BBC308 /* HeaderView.swift in Sources */,
 				57DD4EB82801573800D0F249 /* CalendarView.swift in Sources */,
 				5728CDFE281A389C00BBC308 /* UnsplashClient.swift in Sources */,
 				57B8AC1F28A76953001CE330 /* HourlyForecastRecordView.swift in Sources */,
 				57EDCAFB28BDE3C40064E7E5 /* BLEAdvertisementClient.swift in Sources */,
 				579F5950284CD2CF003D8F6D /* SensorsRecord.swift in Sources */,
-				57F5BC73280D980D00191F64 /* Pancake.swift in Sources */,
+				57F5BC73280D980D00191F64 /* PancakeView.swift in Sources */,
 				577A481C282396A6007090BF /* MetricsClient.swift in Sources */,
 				579F5952284CD333003D8F6D /* RoomSensorsHistory.swift in Sources */,
 				577A4815281A6C48007090BF /* WeatherView.swift in Sources */,
-				5728CDF52815926200BBC308 /* Home.swift in Sources */,
+				5728CDF52815926200BBC308 /* HomeView.swift in Sources */,
 				57FFECCB27F966CE00B03EE1 /* PancakeApp.swift in Sources */,
 				577A4817281A6CD0007090BF /* TrainServiceView.swift in Sources */,
 				57B8AC2128ACBAE6001CE330 /* EventClient.swift in Sources */,
@@ -483,14 +487,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		5701AFE2285EECDD0084ADD0 /* XCRemoteSwiftPackageReference "swift-case-paths" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pointfreeco/swift-case-paths.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.0;
-			};
-		};
 		579F5955284CE4D7003D8F6D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -526,11 +522,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		5701AFE3285EECDD0084ADD0 /* CasePaths */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5701AFE2285EECDD0084ADD0 /* XCRemoteSwiftPackageReference "swift-case-paths" */;
-			productName = CasePaths;
-		};
 		579F5956284CE4D7003D8F6D /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 579F5955284CE4D7003D8F6D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

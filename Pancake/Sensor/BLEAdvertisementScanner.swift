@@ -1,3 +1,4 @@
+import ComposableArchitecture
 import CoreBluetooth
 import Foundation
 
@@ -108,7 +109,11 @@ enum BLEAdvertisementScannerError: Error, Equatable {
     case TimeOut
 }
 
-final class BLEAdvertisementScanner: NSObject, @unchecked Sendable {
+protocol BLEAdvertisementScanner: Sendable {
+    func scanSensorValues(sensors: [String: SensorData.Type], timeoutSeconds: Int) async throws -> [String: SensorData]
+}
+
+final class LiveBLEAdvertisementScanner: NSObject, BLEAdvertisementScanner, @unchecked Sendable {
     private var scanContinuation: CheckedContinuation<[String: SensorData], Error>?
     private var centralManager: CBCentralManager!
     private var currentSensorValues: [String: SensorData] = [:]
@@ -203,7 +208,7 @@ final class BLEAdvertisementScanner: NSObject, @unchecked Sendable {
     }
 }
 
-extension BLEAdvertisementScanner: CBCentralManagerDelegate {
+extension LiveBLEAdvertisementScanner: CBCentralManagerDelegate {
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         let state: String
         switch central.state {
@@ -239,7 +244,20 @@ extension BLEAdvertisementScanner: CBCentralManagerDelegate {
     }
 }
 
-extension BLEAdvertisementScanner {
-    static let live = BLEAdvertisementScanner()
-    static let watch = BLEAdvertisementScanner(watchMode: true)
+struct MockBLEAdvertisementScanner: BLEAdvertisementScanner {
+    func scanSensorValues(sensors: [String : SensorData.Type], timeoutSeconds: Int) async throws -> [String : SensorData] {
+        [:]
+    }
+}
+
+private enum BLEAdvertisementScannerKey: DependencyKey {
+    static let liveValue: any BLEAdvertisementScanner = LiveBLEAdvertisementScanner()
+    static let previewValue: any BLEAdvertisementScanner = MockBLEAdvertisementScanner()
+}
+
+extension DependencyValues {
+    var bleAdvertisementScanner: any BLEAdvertisementScanner {
+        get { self[BLEAdvertisementScannerKey.self] }
+        set { self[BLEAdvertisementScannerKey.self] = newValue }
+    }
 }
