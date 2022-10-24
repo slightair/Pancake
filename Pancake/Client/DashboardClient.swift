@@ -94,8 +94,8 @@ extension Dashboard {
     static let mock = Dashboard(
         trainStatuses: [
             TrainStatus(route: .sobu, status: "平常運転"),
-            TrainStatus(route: .chuo, status: "平常運転"),
-            TrainStatus(route: .yamanote, status: "平常運転"),
+            TrainStatus(route: .chuo, status: "運転見合わせ"),
+            TrainStatus(route: .yamanote, status: "遅延"),
         ],
         weather: Weather(
             tempMin: 3,

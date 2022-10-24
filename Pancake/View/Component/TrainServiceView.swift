@@ -17,7 +17,7 @@ struct TrainServiceView: View {
     let statuses: [TrainStatus]
 
     var body: some View {
-        VStack(spacing: 4) {
+        VStack(alignment: .leading, spacing: 4) {
             ForEach(statuses) { status in
                 HStack {
                     Rectangle()
