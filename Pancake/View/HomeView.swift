@@ -69,14 +69,7 @@ struct Home: ReducerProtocol {
                     roomStatuses: [
                         RoomStatus.summary(history),
                         RoomStatus.temperatureAndHumidity(history),
-                        RoomStatus.co2(history),
-                    ].compactMap { status in
-                        if !history.room.hasCO2Sensor, case .co2 = status {
-                            return RoomStatus.blank
-                        } else {
-                            return status
-                        }
-                    }
+                    ]
                 )
             }
         }
@@ -136,7 +129,7 @@ struct HomeView: View {
                 LazyVGrid(
                     columns: Array(
                         repeating: GridItem(.flexible(), spacing: AppTheme.screenPadding),
-                        count: 3
+                        count: 2
                     ),
                     spacing: AppTheme.screenPadding
                 ) {
@@ -174,6 +167,7 @@ struct HomeView_Previews: PreviewProvider {
                 reducer: Home()
             )
         )
+        .frame(width: 640)
     }
 }
 

@@ -124,22 +124,32 @@ struct PancakeView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            Grid(horizontalSpacing: AppTheme.screenPadding,
-                 verticalSpacing: AppTheme.screenPadding) {
-                GridRow {
-                    HeaderView(store: store.scope(state: \.header, action: Pancake.Action.header))
-                        .gridCellColumns(2)
-                    HStack {
-                        Spacer(minLength: 16)
-                        CalendarView(selectedDate: viewStore.date)
-                        Spacer(minLength: 16)
+            VStack {
+                HStack(alignment: .top) {
+                    VStack {
+                        Spacer(minLength: 24)
+                        HeaderView(store: store.scope(state: \.header, action: Pancake.Action.header))
                     }
+                    Spacer()
+                    VStack {
+                        Spacer(minLength: 16)
+                        HStack {
+                            Spacer(minLength: 16)
+                            CalendarView(selectedDate: viewStore.date)
+                            Spacer(minLength: 16)
+                        }
+                    }
+                    .frame(width: 360)
                 }
                 .frame(height: 360)
-                GridRow(alignment: .top) {
+
+                HStack(alignment: .top) {
                     HomeView(store: store.scope(state: \.home, action: Pancake.Action.home))
-                        .gridCellColumns(2)
-                    EventView(store: store.scope(state: \.eventList, action: Pancake.Action.eventList))
+                        .frame(width: 500)
+                    VStack {
+                        EventView(store: store.scope(state: \.eventList, action: Pancake.Action.eventList))
+                        Color.clear
+                    }
                 }
             }
                  .shadow(color: AppTheme.shadowColor, radius: 8, x: 2, y: 4)

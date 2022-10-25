@@ -142,30 +142,104 @@ struct DiscomfortIndexView: View {
     }
 }
 
+struct CO2View: View {
+    let co2: Double
+
+    var co2Text: String {
+        switch co2 {
+        case 0 ..< 800:
+            return "正常"
+        case 800 ..< 1200:
+            return "換気推奨"
+        case 1200 ..< 1500:
+            return "換気注意"
+        default:
+            return "換気必須"
+        }
+    }
+
+    var symbolColor: Color {
+        switch co2 {
+        case 0 ..< 800:
+            return .green
+        case 800 ..< 1200:
+            return .yellow
+        case 1200 ..< 1500:
+            return .orange
+        default:
+            return .red
+        }
+    }
+
+    var symbolName: String {
+        switch co2 {
+        case 0 ..< 800:
+            return "di5"
+        case 800 ..< 1200:
+            return "di6"
+        case 1200 ..< 1500:
+            return "di7"
+        default:
+            return "di8"
+        }
+    }
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 8) {
+            Image(symbolName)
+                .renderingMode(.template)
+                .resizable()
+                .frame(width: 20, height: 20)
+                .foregroundColor(symbolColor)
+            Text("\(Int(co2))ppm - \(co2Text)")
+                .foregroundColor(AppTheme.textColor)
+                .font(AppTheme.textFont)
+            Spacer()
+        }
+    }
+}
+
 struct RoomSummaryView: View {
     let history: RoomSensorsHistory
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .firstTextBaseline, spacing: 2) {
                 Image(systemName: "house.fill")
                 Text(history.room.name)
             }
             .foregroundColor(AppTheme.headerColor)
             .font(.headline)
-            Divider().background(Color.white)
+
             if let current = history.records.last {
-                VStack(alignment: .center, spacing: 6) {
-                    HStack(alignment: .top) {
-                        HStack(alignment: .firstTextBaseline, spacing: 2) {
-                            Image(systemName: "person.fill.questionmark")
-                            Text("不快指数")
+                VStack(spacing: 16) {
+                    VStack(spacing: 8) {
+                        HStack(alignment: .top) {
+                            HStack(alignment: .firstTextBaseline, spacing: 2) {
+                                Image(systemName: "person.fill.questionmark")
+                                Text("不快指数")
+                            }
+                            .foregroundColor(AppTheme.headerColor)
+                            .font(AppTheme.headerFont)
+                            Spacer()
                         }
-                        .foregroundColor(AppTheme.headerColor)
-                        .font(AppTheme.headerFont)
-                        Spacer()
+                        DiscomfortIndexView(discomfortIndex: current.discomfortIndex)
                     }
-                    DiscomfortIndexView(discomfortIndex: current.discomfortIndex)
+
+                    if history.room.hasCO2Sensor {
+                        VStack(spacing: 8) {
+                            HStack(alignment: .top) {
+                                HStack(alignment: .firstTextBaseline, spacing: 2) {
+                                    Image(systemName: "carbon.dioxide.cloud.fill")
+                                    Text("CO2")
+                                }
+                                .foregroundColor(AppTheme.headerColor)
+                                .font(AppTheme.headerFont)
+                                Spacer()
+                            }
+                            CO2View(co2: current.co2)
+                        }
+                    }
                 }
             }
             Spacer()

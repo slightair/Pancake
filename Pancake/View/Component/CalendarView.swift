@@ -102,6 +102,8 @@ struct CalendarView: UIViewRepresentable {
             if calendar.date(selectedDate, matchesComponents: day.components) {
                 let color: UIColor = AppTheme.UIKit.textColor
                 invariantViewProperties.backgroundShapeDrawingConfig.fillColor = color.withAlphaComponent(0.2)
+                invariantViewProperties.backgroundShapeDrawingConfig.borderColor = color.withAlphaComponent(0.5)
+                invariantViewProperties.backgroundShapeDrawingConfig.borderWidth = 2
             }
             invariantViewProperties.textColor = AppTheme.UIKit.textColor
             return CalendarItemModel<DayView>(
@@ -118,17 +120,31 @@ struct CalendarView: UIViewRepresentable {
 
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        Grid {
-            GridRow {
-                Color.gray.gridCellColumns(2)
-                HStack {
+        VStack {
+            HStack(alignment: .top) {
+                Color.gray
+                VStack {
                     Spacer(minLength: 16)
-                    CalendarView(selectedDate: Date(timeIntervalSince1970: 1_659_193_200))
-                    Spacer(minLength: 16)
+                    HStack {
+                        Spacer(minLength: 16)
+                        CalendarView(selectedDate: Date(timeIntervalSince1970: 1_659_193_200))
+                        Spacer(minLength: 16)
+                    }
+                }
+                .frame(width: 360)
+            }
+            .frame(height: 360)
+            HStack(alignment: .top) {
+                Color.gray
+                    .frame(width: 400)
+                VStack {
+                    Color.gray
+                    Color.gray
                 }
             }
-            .frame(maxHeight: 360)
         }
+        .shadow(color: AppTheme.shadowColor, radius: 8, x: 2, y: 4)
         .padding(AppTheme.screenPadding)
+
     }
 }
