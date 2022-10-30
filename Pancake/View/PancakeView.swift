@@ -36,9 +36,9 @@ struct Pancake: ReducerProtocol, Sendable {
     var body: some ReducerProtocol<State, Action> {
         let startTimers: EffectTask<Action> = .merge([
             EffectTask.timer(id: TickTimerID.self, every: 1, on: mainQueue).map { _ in .tick },
-            EffectTask.timer(id: HistoryUpdateTimerID.self, every: 600, on: mainQueue).map { _ in .historyUpdate },
+            EffectTask.timer(id: HistoryUpdateTimerID.self, every: 900, on: mainQueue).map { _ in .historyUpdate },
             EffectTask.timer(id: WallpaperUpdateTimerID.self, every: 600, on: mainQueue).map { _ in .wallpaperUpdate },
-            EffectTask.timer(id: RecordMetricsTimerID.self, every: 600, on: mainQueue).map { _ in .recordMetrics },
+            EffectTask.timer(id: RecordMetricsTimerID.self, every: 900, on: mainQueue).map { _ in .recordMetrics },
         ])
 
         let cancelTimers: EffectTask<Action> = .merge([

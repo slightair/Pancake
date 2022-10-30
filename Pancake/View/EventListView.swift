@@ -38,39 +38,28 @@ struct EventListItemView: View {
         return formatter
     }()
 
-    let event: Event
+    let event: Event?
 
     var eventTime: String {
-        Self.dateFormatter.string(from: event.date)
+        if let event {
+            return Self.dateFormatter.string(from: event.date)
+        } else {
+            return "---"
+        }
     }
 
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .firstTextBaseline, spacing: 4) {
                 Image(systemName: "calendar.badge.clock")
-                Text(event.title)
+                Text(event?.title ?? "---")
             }
-                .foregroundColor(AppTheme.textColor)
                 .font(AppTheme.textFont)
             Text(eventTime)
-                .monospacedDigit()
-                .foregroundColor(AppTheme.headerColor)
                 .font(AppTheme.headerFont)
         }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .foregroundColor(AppTheme.textColor)
-    }
-}
-
-struct EventListItemEmptyView: View {
-    var body: some View {
-        ZStack {
-            Color(.clear)
-            Text("N/A")
-                .foregroundColor(AppTheme.notAvailableColor)
-                .font(AppTheme.headerFont)
-        }
-        .padding(AppTheme.panelPadding)
+            .foregroundColor(event != nil ? AppTheme.textColor : AppTheme.notAvailableColor)
     }
 }
 
@@ -87,14 +76,18 @@ struct EventListView: View {
             if events.count < maxCount {
                 let numPadding = maxCount - events.count
                 ForEach(0 ..< numPadding, id: \.self) { index in
-                    EventListItemEmptyView()
+                    EventListItemView(event: nil)
                 }
             }
 
             if events.count > maxCount {
                 let moreEventCounts = events.count - maxCount
-                Text("+ \(moreEventCounts) events")
+                Text("+\(moreEventCounts) event\(moreEventCounts > 1 ? "s" : "")")
                     .foregroundColor(AppTheme.headerColor)
+                    .font(AppTheme.headerFont)
+            } else {
+                Text("---")
+                    .foregroundColor(AppTheme.notAvailableColor)
                     .font(AppTheme.headerFont)
             }
         }
