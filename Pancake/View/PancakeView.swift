@@ -8,6 +8,7 @@ struct Pancake: ReducerProtocol, Sendable {
         var header = Header.State()
         var eventList = EventList.State()
         var home = Home.State()
+        var map = Map.State()
     }
 
     enum Action {
@@ -21,6 +22,7 @@ struct Pancake: ReducerProtocol, Sendable {
         case header(Header.Action)
         case eventList(EventList.Action)
         case home(Home.Action)
+        case map(Map.Action)
     }
 
     @Dependency(\.mainQueue) var mainQueue
@@ -32,6 +34,7 @@ struct Pancake: ReducerProtocol, Sendable {
     private enum HistoryUpdateTimerID {}
     private enum WallpaperUpdateTimerID {}
     private enum RecordMetricsTimerID {}
+    private enum MapUpdateTimerID {}
 
     var body: some ReducerProtocol<State, Action> {
         let startTimers: EffectTask<Action> = .merge([
@@ -39,6 +42,7 @@ struct Pancake: ReducerProtocol, Sendable {
             EffectTask.timer(id: HistoryUpdateTimerID.self, every: 900, on: mainQueue).map { _ in .historyUpdate },
             EffectTask.timer(id: WallpaperUpdateTimerID.self, every: 600, on: mainQueue).map { _ in .wallpaperUpdate },
             EffectTask.timer(id: RecordMetricsTimerID.self, every: 900, on: mainQueue).map { _ in .recordMetrics },
+            EffectTask.timer(id: MapUpdateTimerID.self, every: 300, on: mainQueue).map { _ in .map(.mapUpdate) },
         ])
 
         let cancelTimers: EffectTask<Action> = .merge([
@@ -46,12 +50,14 @@ struct Pancake: ReducerProtocol, Sendable {
             .cancel(id: HistoryUpdateTimerID.self),
             .cancel(id: RecordMetricsTimerID.self),
             .cancel(id: WallpaperUpdateTimerID.self),
+            .cancel(id: MapUpdateTimerID.self),
         ])
 
         let startUp: EffectTask<Action> = .merge([
             startTimers,
             EffectTask(value: .historyUpdate),
             EffectTask(value: .wallpaperUpdate),
+            EffectTask(value: .map(.mapUpdate)),
         ])
 
         let terminate = cancelTimers
@@ -98,6 +104,9 @@ struct Pancake: ReducerProtocol, Sendable {
         Scope(state: \.home, action: /Action.home) {
             Home()
         }
+        Scope(state: \.map, action: /Action.map) {
+            Map()
+        }
     }
 }
 
@@ -131,15 +140,10 @@ struct PancakeView: View {
                         HeaderView(store: store.scope(state: \.header, action: Pancake.Action.header))
                     }
                     Spacer()
-                    VStack {
-                        Spacer(minLength: 16)
-                        HStack {
-                            Spacer(minLength: 16)
-                            CalendarView(selectedDate: viewStore.date)
-                            Spacer(minLength: 16)
-                        }
-                    }
-                    .frame(width: 360)
+                    CalendarView(selectedDate: viewStore.date)
+                        .padding([.leading, .trailing], 16)
+                        .padding([.top], 24)
+                        .frame(width: 360)
                 }
                 .frame(height: 360)
 
@@ -148,7 +152,8 @@ struct PancakeView: View {
                         .frame(width: 500)
                     VStack {
                         EventView(store: store.scope(state: \.eventList, action: Pancake.Action.eventList))
-                        Color.clear
+                        MapView(store: store.scope(state: \.map, action: Pancake.Action.map))
+                            .padding([.trailing], AppTheme.screenPadding)
                     }
                 }
             }

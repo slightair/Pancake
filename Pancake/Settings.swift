@@ -5,6 +5,7 @@ struct Settings: Decodable {
     struct API: Decodable {
         let dashboardAPI: String
         let unsplashAccessKey: String
+        let overlayImageProviderURLTemplate: String
 
         var dashboardAPIURL: URL {
             URL(string: dashboardAPI)!
@@ -31,7 +32,8 @@ extension Settings {
     static let mock = Settings(
         api: API(
             dashboardAPI: "https://example.com",
-            unsplashAccessKey: "access key"
+            unsplashAccessKey: "access key",
+            overlayImageProviderURLTemplate: "https://example.com/{timeKey}.png"
         ),
         sensor: Sensor(
             livingThermometerPeripheralID: "living thermometer",

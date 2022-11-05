@@ -8,6 +8,8 @@
 		<string></string>
 		<key>unsplashAccessKey</key>
 		<string></string>
+		<key>overlayImageProviderURLTemplate</key>
+		<string></string>
 	</dict>
 	<key>sensor</key>
 	<dict>
