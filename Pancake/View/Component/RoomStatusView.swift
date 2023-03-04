@@ -367,34 +367,22 @@ struct RoomBlankView: View {
 }
 
 struct RoomStatusView_Previews: PreviewProvider {
-    static let width: CGFloat = 270
-
     static var previews: some View {
-        VStack {
-            HStack {
-                Group {
-                    RoomSummaryView(
-                        history: .mockLiving
-                    )
-                    RoomStatusView(
-                        history: .mockLiving,
-                        content: .temperatureAndHumidity
-                    )
-                }
-                .aspectRatio(1.6, contentMode: .fit)
-                .frame(width: width)
-            }
-            HStack {
-                Group {
-                    RoomStatusView(
-                        history: .mockLiving,
-                        content: .co2
-                    )
-                    RoomBlankView()
-                }
-                .aspectRatio(1.6, contentMode: .fit)
-                .frame(width: width)
-            }
+        Group {
+            RoomSummaryView(
+                history: .mockLiving
+            )
+            RoomStatusView(
+                history: .mockLiving,
+                content: .temperatureAndHumidity
+            )
+            RoomStatusView(
+                history: .mockLiving,
+                content: .co2
+            )
+            RoomBlankView()
         }
+        .previewLayout(PreviewLayout.fixed(width: 270, height: 168))
+        .background { Color.black }
     }
 }

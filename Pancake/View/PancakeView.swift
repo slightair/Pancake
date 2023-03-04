@@ -138,11 +138,11 @@ struct PancakeView: View {
                     VStack {
                         Spacer(minLength: 24)
                         HeaderView(store: store.scope(state: \.header, action: Pancake.Action.header))
+                        Spacer()
                     }
                     Spacer()
                     CalendarView(selectedDate: viewStore.date)
-                        .padding([.leading, .trailing], 16)
-                        .padding([.top], 24)
+                        .padding([.leading, .trailing, .top], 24)
                         .frame(width: 360)
                 }
                 .frame(height: 360)
@@ -185,5 +185,6 @@ struct AppView_Previews: PreviewProvider {
                 reducer: Pancake()
             )
         )
+        .previewDevice(PreviewDevice(rawValue: "iPad Pro (10.5-inch)"))
     }
 }

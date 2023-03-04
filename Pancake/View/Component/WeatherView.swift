@@ -69,5 +69,7 @@ struct WeatherView_Previews: PreviewProvider {
         WeatherView(
             weather: Dashboard.mock.weather
         )
+        .previewLayout(PreviewLayout.sizeThatFits)
+        .background { Color.black }
     }
 }

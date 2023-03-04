@@ -120,31 +120,9 @@ struct CalendarView: UIViewRepresentable {
 
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        VStack {
-            HStack(alignment: .top) {
-                Color.gray
-                VStack {
-                    Spacer(minLength: 16)
-                    HStack {
-                        Spacer(minLength: 16)
-                        CalendarView(selectedDate: Date(timeIntervalSince1970: 1_659_193_200))
-                        Spacer(minLength: 16)
-                    }
-                }
-                .frame(width: 360)
-            }
-            .frame(height: 360)
-            HStack(alignment: .top) {
-                Color.gray
-                    .frame(width: 400)
-                VStack {
-                    Color.gray
-                    Color.gray
-                }
-            }
-        }
-        .shadow(color: AppTheme.shadowColor, radius: 8, x: 2, y: 4)
-        .padding(AppTheme.screenPadding)
-
+        CalendarView(selectedDate: Date(timeIntervalSince1970: 1_659_193_200))
+            .padding([.leading, .trailing, .top], 24)
+            .previewLayout(PreviewLayout.fixed(width: 360, height: 360))
+            .background { Color.black }
     }
 }

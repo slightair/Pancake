@@ -72,7 +72,6 @@ struct HeaderView: View {
                         HourlyForecastRecordView(record: record)
                     }
                 }
-                Spacer()
             }
             .padding(12)
         }
@@ -81,22 +80,15 @@ struct HeaderView: View {
 
 struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
-        Grid {
-            GridRow {
-                HeaderView(
-                    store: Store(
-                        initialState: Header.State(
-                            dashboard: .mock
-                        ),
-                        reducer: Header()
-                    )
-                )
-                .frame(maxHeight: .infinity)
-                .gridCellColumns(2)
-                Color.gray
-            }
-            .frame(height: 360)
-        }
-        .padding(AppTheme.screenPadding)
+        HeaderView(
+            store: Store(
+                initialState: Header.State(
+                    dashboard: .mock
+                ),
+                reducer: Header()
+            )
+        )
+        .previewLayout(PreviewLayout.sizeThatFits)
+        .background { Color.black }
     }
 }

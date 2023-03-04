@@ -48,5 +48,7 @@ struct HourlyForecastRecordView: View {
 struct HourlyForecastRecordView_Previews: PreviewProvider {
     static var previews: some View {
         HourlyForecastRecordView(record: Dashboard.mock.hourlyForecast.first!)
+            .previewLayout(PreviewLayout.sizeThatFits)
+            .background { Color.black }
     }
 }

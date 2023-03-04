@@ -38,5 +38,7 @@ struct TrainServiceView_Previews: PreviewProvider {
         TrainServiceView(
             statuses: Dashboard.mock.trainStatuses
         )
+        .previewLayout(PreviewLayout.sizeThatFits)
+        .background { Color.black }
     }
 }

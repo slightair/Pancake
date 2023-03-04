@@ -167,7 +167,8 @@ struct HomeView_Previews: PreviewProvider {
                 reducer: Home()
             )
         )
-        .frame(width: 640)
+        .previewLayout(PreviewLayout.fixed(width: 540, height: 504))
+        .background { Color.black }
     }
 }
 

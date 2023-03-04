@@ -107,30 +107,15 @@ struct EventView: View {
 
 struct EventView_Previews: PreviewProvider {
     static var previews: some View {
-        VStack {
-            HStack(alignment: .top) {
-                Color.gray
-                Color.gray
-                    .frame(width: 360)
-            }
-            .frame(height: 360)
-            HStack(alignment: .top) {
-                Color.gray
-                    .frame(width: 400)
-                VStack {
-                    EventView(
-                        store: Store(
-                            initialState: EventList.State(
-                                events: Event.mockEvents
-                            ),
-                            reducer: EventList()
-                        )
-                    )
-                    Color.gray
-                }
-            }
-        }
-        .shadow(color: AppTheme.shadowColor, radius: 8, x: 2, y: 4)
-        .padding(AppTheme.screenPadding)
+        EventView(
+            store: Store(
+                initialState: EventList.State(
+                    events: Event.mockEvents
+                ),
+                reducer: EventList()
+            )
+        )
+        .previewLayout(PreviewLayout.fixed(width: 360, height: 160))
+        .background { Color.black }
     }
 }

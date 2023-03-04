@@ -93,6 +93,7 @@ struct MapView_Previews: PreviewProvider {
                 reducer: Map()
             )
         )
+        .previewDevice(PreviewDevice(rawValue: "iPad Pro (10.5-inch)"))
     }
 }
 
