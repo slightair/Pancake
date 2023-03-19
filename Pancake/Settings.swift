@@ -21,6 +21,7 @@ struct Settings: Decodable {
 
     let api: API
     let sensor: Sensor
+    let tags: [String: String]
 }
 
 extension Settings {
@@ -40,7 +41,11 @@ extension Settings {
             livingCO2PeripheralID: "living co2",
             bedroomThermometerPeripheralID: "bedroom thermometer",
             studyThermometerPeripheralID: "study thermometer"
-        )
+        ),
+        tags: [
+            "Alice": "#ff9966",
+            "Bob": "#6699ff",
+        ]
     )
 }
 

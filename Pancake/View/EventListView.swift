@@ -31,6 +31,8 @@ struct EventList: ReducerProtocol {
 }
 
 struct EventListItemView: View {
+    @Dependency(\.settings) var settings
+
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd(E) HH:mm"
@@ -48,11 +50,43 @@ struct EventListItemView: View {
         }
     }
 
+    func parseEventName() -> (String?, String) {
+        var color: String? = nil
+        var name: String = "---"
+
+        if let title = event?.title {
+            settings.tags.forEach { tag, tagColor in
+                let tagPattern = "[\(tag)]"
+                if title.hasPrefix(tagPattern) {
+                    if let tagRange = title.range(of: tagPattern) {
+                        name = String(title[tagRange.upperBound...])
+                        color = tagColor
+                    }
+                    return
+                }
+            }
+            if color == nil {
+                name = title
+            }
+        }
+        return (color, name)
+    }
+
+    @ViewBuilder
+    func eventName() -> some View {
+        let (symbolColor, title) = parseEventName()
+        if let symbolColor {
+            Image(systemName: "person.fill")
+                .foregroundColor(Color(hexString: symbolColor))
+        }
+        Text(title)
+    }
+
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .firstTextBaseline, spacing: 4) {
                 Image(systemName: "calendar.badge.clock")
-                Text(event?.title ?? "---")
+                eventName()
             }
                 .font(AppTheme.textFont)
             Text(eventTime)

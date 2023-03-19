@@ -9,8 +9,8 @@ struct Event: Identifiable, Equatable {
 
 extension Event {
     static let mockEvents: [Event] = [
-        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660057200), title: "散歩1"),
-        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660143600), title: "散歩2"),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660057200), title: "[Bob]散歩1"),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660143600), title: "[Alice]散歩2"),
         Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660230000), title: "散歩3"),
         Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660316400), title: "散歩4"),
         Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660402800), title: "散歩5"),
