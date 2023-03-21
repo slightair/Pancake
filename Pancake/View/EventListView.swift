@@ -13,12 +13,13 @@ struct EventList: ReducerProtocol {
     }
 
     @Dependency(\.eventClient) var eventClient
+    @Dependency(\.settings.tags) var decorateTags
 
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .eventListUpdate:
             return .task {
-                await .eventListResponse(TaskResult { try await eventClient.events() })
+                await .eventListResponse(TaskResult { try await eventClient.events(decorateTags) })
             }
         case let .eventListResponse(.success(eventList)):
             state.events = eventList
@@ -50,43 +51,19 @@ struct EventListItemView: View {
         }
     }
 
-    func parseEventName() -> (String?, String) {
-        var color: String? = nil
-        var name: String = "---"
-
-        if let title = event?.title {
-            settings.tags.forEach { tag, tagColor in
-                let tagPattern = "[\(tag)]"
-                if title.hasPrefix(tagPattern) {
-                    if let tagRange = title.range(of: tagPattern) {
-                        name = String(title[tagRange.upperBound...])
-                        color = tagColor
-                    }
-                    return
-                }
-            }
-            if color == nil {
-                name = title
-            }
-        }
-        return (color, name)
-    }
-
-    @ViewBuilder
-    func eventName() -> some View {
-        let (symbolColor, title) = parseEventName()
-        if let symbolColor {
-            Image(systemName: "person.fill")
-                .foregroundColor(Color(hexString: symbolColor))
-        }
-        Text(title)
-    }
-
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .firstTextBaseline, spacing: 4) {
                 Image(systemName: "calendar.badge.clock")
-                eventName()
+                if let event {
+                    if let tag = event.tag {
+                        Image(systemName: "person.fill")
+                            .foregroundColor(Color(hexString: tag.colorCode))
+                    }
+                    Text(event.title)
+                } else {
+                    Text("---")
+                }
             }
                 .font(AppTheme.textFont)
             Text(eventTime)

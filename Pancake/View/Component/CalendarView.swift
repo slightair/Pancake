@@ -29,6 +29,7 @@ struct CalendarView: UIViewRepresentable {
     }()
 
     var selectedDate: Date
+    var events: [Event]
 
     func makeUIView(context _: Context) -> HorizonCalendar.CalendarView {
         let calendarView = HorizonCalendar.CalendarView(initialContent: makeContent())
@@ -58,9 +59,9 @@ struct CalendarView: UIViewRepresentable {
             return DayOfWeekView(dayOfWeek: dayOfWeek, dayOfWeekText: dayOfWeekText).calendarItemModel
         }
         .dayItemProvider { day in
-            let date = calendar.date(from: day.components)
             let isSelected = calendar.date(selectedDate, matchesComponents: day.components)
-            return DayView(dayNumber: day.day, isSelected: isSelected).calendarItemModel
+            let dayEvents = events.filter { calendar.date($0.date, matchesComponents: day.components) }
+            return DayView(dayNumber: day.day, isSelected: isSelected, events: dayEvents).calendarItemModel
         }
     }
 }
@@ -103,6 +104,11 @@ struct DayOfWeekView: View {
 struct DayView: View {
     let dayNumber: Int
     let isSelected: Bool
+    let events: [Event]
+
+    var markEvents: [Event] {
+        [Event](events.prefix(3))
+    }
 
     var body: some View {
         ZStack(alignment: .center) {
@@ -112,15 +118,37 @@ struct DayView: View {
                     RoundedRectangle(cornerRadius: 8)
                         .foregroundColor(isSelected ? AppTheme.textColor.opacity(0.2) : .clear)
                 }
-            Text("\(dayNumber)")
-                .foregroundColor(AppTheme.textColor)
+            VStack(spacing: 4) {
+                Text("\(dayNumber)")
+                    .foregroundColor(AppTheme.textColor)
+
+                HStack(spacing: 4) {
+                    if events.isEmpty {
+                        ForEach(0..<3) { event in
+                            Circle()
+                                .frame(width: 6)
+                                .foregroundColor(Color.clear)
+                        }
+                    } else {
+                        ForEach(markEvents) { event in
+                            let color = event.tag.flatMap { Color(hexString: $0.colorCode) } ?? AppTheme.textColor
+                            Circle()
+                                .frame(width: 6)
+                                .foregroundColor(color)
+                        }
+                    }
+                }
+            }
         }
     }
 }
 
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        CalendarView(selectedDate: Date(timeIntervalSince1970: 1_659_193_200))
+        CalendarView(
+            selectedDate: Date(timeIntervalSince1970: 1_659_193_200),
+            events: Event.mockEvents
+        )
             .padding([.leading, .trailing, .top], 24)
             .previewLayout(PreviewLayout.fixed(width: 360, height: 360))
             .previewDisplayName("CalendarView")
@@ -128,7 +156,7 @@ struct CalendarView_Previews: PreviewProvider {
 
         ZStack {
             Color.black
-            DayView(dayNumber: 31, isSelected: true)
+            DayView(dayNumber: 31, isSelected: true, events: Event.mockEvents)
                 .frame(width: 48, height: 48)
         }
             .previewDisplayName("DayView")

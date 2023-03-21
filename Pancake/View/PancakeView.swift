@@ -141,7 +141,7 @@ struct PancakeView: View {
                         Spacer()
                     }
                     Spacer()
-                    CalendarView(selectedDate: viewStore.date)
+                    CalendarView(selectedDate: viewStore.date, events: viewStore.eventList.events)
                         .padding([.leading, .trailing, .top], 24)
                         .frame(width: 360)
                 }

@@ -2,23 +2,29 @@ import ComposableArchitecture
 import EventKit
 
 struct Event: Identifiable, Equatable {
+    struct Tag: Equatable {
+        let name: String
+        let colorCode: String
+    }
+
     var id: String
     let date: Date
     let title: String
+    let tag: Tag?
 }
 
 extension Event {
     static let mockEvents: [Event] = [
-        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660057200), title: "[Bob]散歩1"),
-        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660143600), title: "[Alice]散歩2"),
-        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660230000), title: "散歩3"),
-        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660316400), title: "散歩4"),
-        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660402800), title: "散歩5"),
-        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660489200), title: "散歩6"),
-        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660575600), title: "散歩7"),
-        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660662000), title: "散歩8"),
-        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660748400), title: "散歩9"),
-        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1660834800), title: "散歩10"),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1656979947), title: "散歩1", tag: Tag(name:"Bob", colorCode: "#6699ff")),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1657151510), title: "散歩2", tag: Tag(name: "Alice", colorCode: "#ff9966")),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1657422530), title: "散歩3", tag: nil),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1657453591), title: "散歩4", tag: nil),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1657455861), title: "散歩5", tag: nil),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1657680762), title: "散歩6", tag: nil),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1657894558), title: "散歩7", tag: nil),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1657989718), title: "散歩8", tag: nil),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1658201017), title: "散歩9", tag: nil),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1659043194), title: "散歩10", tag: nil),
     ]
 }
 
@@ -28,12 +34,12 @@ enum EventError: LocalizedError {
 }
 
 struct EventClient {
-    var events: @Sendable () async throws -> [Event]
+    var events: @Sendable ([String: String]) async throws -> [Event]
 }
 
 extension EventClient {
     static let live = EventClient(
-        events: {
+        events: { decorateTags in
             let eventStore = EKEventStore()
             let type: EKEntityType = .reminder
             let accessToEvent: Bool
@@ -49,13 +55,32 @@ extension EventClient {
             let predicate = eventStore.predicateForReminders(in: nil)
             let reminders = try await eventStore.fetchReminders(matching: predicate)
 
+            func parseEventTags(baseTitle: String) -> (String, Event.Tag?) {
+                var title: String = baseTitle
+                var tag: Event.Tag? = nil
+
+                decorateTags.forEach { tagName, colorCode in
+                    let tagPattern = "[\(tagName)]"
+                    if baseTitle.hasPrefix(tagPattern) {
+                        if let tagRange = baseTitle.range(of: tagPattern) {
+                            title = String(baseTitle[tagRange.upperBound...])
+                            tag = Event.Tag(name: tagName, colorCode: colorCode)
+                        }
+                        return
+                    }
+                }
+                return (title, tag)
+            }
+
             return reminders.filter { !$0.isCompleted }
                 .compactMap { reminder in
                     reminder.dueDateComponents?.date.map {
-                        Event(
+                        let (title, tag) = parseEventTags(baseTitle: reminder.title)
+                        return Event(
                             id: reminder.calendarItemIdentifier,
                             date: $0,
-                            title: reminder.title
+                            title: title,
+                            tag: tag
                         )
                     }
                 }
@@ -63,7 +88,7 @@ extension EventClient {
     )
 
     static let mock = EventClient(
-        events: {
+        events: { _ in
             Event.mockEvents
         }
     )
