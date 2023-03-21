@@ -28,18 +28,6 @@ struct CalendarView: UIViewRepresentable {
         return dateFormatter
     }()
 
-    static let dayDateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.calendar = calendar
-        dateFormatter.locale = locale
-        dateFormatter.dateFormat = DateFormatter.dateFormat(
-            fromTemplate: "EEEE, MMM d, yyyy",
-            options: 0,
-            locale: locale
-        )
-        return dateFormatter
-    }()
-
     var selectedDate: Date
 
     func makeUIView(context _: Context) -> HorizonCalendar.CalendarView {
@@ -61,59 +49,71 @@ struct CalendarView: UIViewRepresentable {
         )
         .interMonthSpacing(24)
         .monthHeaderItemProvider { month in
-            var invariantViewProperties = MonthHeaderView.InvariantViewProperties.base
-            invariantViewProperties.textColor = AppTheme.UIKit.textColor
-            invariantViewProperties.font = .boldSystemFont(ofSize: 24)
             let firstDateInMonth = calendar.firstDate(of: month)
             let monthText = Self.monthHeaderDateFormatter.string(from: firstDateInMonth)
-            return CalendarItemModel<MonthHeaderView>(
-                invariantViewProperties: invariantViewProperties,
-                viewModel: .init(
-                    monthText: monthText,
-                    accessibilityLabel: monthText
-                )
-            )
+            return MonthHeaderView2(monthText: monthText).calendarItemModel
         }
-        .dayOfWeekItemProvider { _, weekdayIndex in
-            var invariantViewProperties = DayOfWeekView.InvariantViewProperties.base
-            invariantViewProperties.font = .boldSystemFont(ofSize: 16)
-            switch weekdayIndex {
-            case 0:
-                invariantViewProperties.textColor = UIColor(red: 0.93, green: 0.33, blue: 0.27, alpha: 1.0)
-            case 6:
-                invariantViewProperties.textColor = UIColor(red: 0.50, green: 0.82, blue: 0.98, alpha: 1.0)
-            default:
-                invariantViewProperties.textColor = AppTheme.UIKit.textColor
-            }
-            let dayOfWeekText = Self.monthHeaderDateFormatter.veryShortStandaloneWeekdaySymbols[weekdayIndex]
-            return CalendarItemModel<DayOfWeekView>(
-                invariantViewProperties: invariantViewProperties,
-                viewModel: .init(
-                    dayOfWeekText: dayOfWeekText,
-                    accessibilityLabel: dayOfWeekText
-                )
-            )
+        .dayOfWeekItemProvider { _, dayOfWeek in
+            let dayOfWeekText = Self.monthHeaderDateFormatter.veryShortStandaloneWeekdaySymbols[dayOfWeek]
+            return DayOfWeekView(dayOfWeek: dayOfWeek, dayOfWeekText: dayOfWeekText).calendarItemModel
         }
         .dayItemProvider { day in
-            var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
-            invariantViewProperties.shape = .rectangle(cornerRadius: 8)
-            invariantViewProperties.interaction = .disabled
             let date = calendar.date(from: day.components)
-            if calendar.date(selectedDate, matchesComponents: day.components) {
-                let color: UIColor = AppTheme.UIKit.textColor
-                invariantViewProperties.backgroundShapeDrawingConfig.fillColor = color.withAlphaComponent(0.2)
-                invariantViewProperties.backgroundShapeDrawingConfig.borderColor = color.withAlphaComponent(0.5)
-                invariantViewProperties.backgroundShapeDrawingConfig.borderWidth = 2
-            }
-            invariantViewProperties.textColor = AppTheme.UIKit.textColor
-            return CalendarItemModel<DayView>(
-                invariantViewProperties: invariantViewProperties,
-                viewModel: .init(
-                    dayText: "\(day.day)",
-                    accessibilityLabel: date.map { Self.dayDateFormatter.string(from: $0) },
-                    accessibilityHint: nil
-                )
-            )
+            let isSelected = calendar.date(selectedDate, matchesComponents: day.components)
+            return DayView(dayNumber: day.day, isSelected: isSelected).calendarItemModel
+        }
+    }
+}
+
+struct MonthHeaderView2: View {
+    let monthText: String
+
+    var body: some View {
+        HStack {
+            Text(monthText)
+                .font(.system(size: 24, weight: .bold))
+                .foregroundColor(AppTheme.textColor)
+            Spacer()
+        }
+    }
+}
+
+struct DayOfWeekView: View {
+    let dayOfWeek: Int
+    let dayOfWeekText: String
+
+    var textColor: Color {
+        switch dayOfWeek {
+        case 0:
+            return Color(red: 0.93, green: 0.33, blue: 0.27)
+        case 6:
+            return Color(red: 0.50, green: 0.82, blue: 0.98)
+        default:
+            return AppTheme.textColor
+        }
+    }
+
+    var body: some View {
+        Text(dayOfWeekText)
+            .font(.system(size: 16, weight: .bold))
+            .foregroundColor(textColor)
+    }
+}
+
+struct DayView: View {
+    let dayNumber: Int
+    let isSelected: Bool
+
+    var body: some View {
+        ZStack(alignment: .center) {
+            RoundedRectangle(cornerRadius: 8)
+                .strokeBorder(isSelected ? AppTheme.textColor.opacity(0.5) : .clear, lineWidth: 2)
+                .background {
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundColor(isSelected ? AppTheme.textColor.opacity(0.2) : .clear)
+                }
+            Text("\(dayNumber)")
+                .foregroundColor(AppTheme.textColor)
         }
     }
 }
@@ -123,6 +123,15 @@ struct CalendarView_Previews: PreviewProvider {
         CalendarView(selectedDate: Date(timeIntervalSince1970: 1_659_193_200))
             .padding([.leading, .trailing, .top], 24)
             .previewLayout(PreviewLayout.fixed(width: 360, height: 360))
+            .previewDisplayName("CalendarView")
             .background { Color.black }
+
+        ZStack {
+            Color.black
+            DayView(dayNumber: 31, isSelected: true)
+                .frame(width: 48, height: 48)
+        }
+            .previewDisplayName("DayView")
+            .previewLayout(PreviewLayout.fixed(width: 360, height: 360))
     }
 }
