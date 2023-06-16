@@ -15,18 +15,33 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct PancakeApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
+    private enum Mode {
+        case development
+        case production
+    }
+
+    private func makeStore(mode: Mode) -> StoreOf<Pancake> {
+        switch mode {
+        case .development:
+            return Store(
+                initialState: Pancake.State(),
+                reducer: Pancake()
+                    ._printChanges()
+                    .dependency(\.bleAdvertisementScanner, MockBLEAdvertisementScanner())
+                    .dependency(\.bleAdvertisementClient, .mock)
+                    .dependency(\.metricsClient, .saveDryRun)
+            )
+        case .production:
+            return Store(
+                initialState: Pancake.State(),
+                reducer: Pancake()
+            )
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
-            PancakeView(
-                store: Store(
-                    initialState: Pancake.State(),
-                    reducer: Pancake()
-                        ._printChanges()
-                        .dependency(\.bleAdvertisementScanner, MockBLEAdvertisementScanner())
-                        .dependency(\.bleAdvertisementClient, .mock)
-                        .dependency(\.metricsClient, .saveDryRun)
-                )
-            )
+            PancakeView(store: makeStore(mode: .development))
         }
     }
 }
