@@ -26,7 +26,6 @@ struct PancakeApp: App {
             return Store(
                 initialState: Pancake.State(),
                 reducer: Pancake()
-                    ._printChanges()
                     .dependency(\.bleAdvertisementScanner, MockBLEAdvertisementScanner())
                     .dependency(\.bleAdvertisementClient, .mock)
                     .dependency(\.metricsClient, .saveDryRun)

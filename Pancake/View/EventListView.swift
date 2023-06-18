@@ -76,23 +76,31 @@ struct EventListItemView: View {
 
 struct EventListView: View {
     let events: [Event]
-    let maxCount = 4
+    let maxEventCount: Int
 
     var body: some View {
         VStack(spacing: AppTheme.screenPadding) {
-            ForEach(events.sorted { $0.date < $1.date }.prefix(maxCount)) { event in
-                EventListItemView(event: event)
+            VStack(spacing: 8) {
+                ForEach(events.sorted { $0.date < $1.date }.prefix(maxEventCount)) { event in
+                    EventListItemView(event: event)
+                }
             }
 
-            if events.count < maxCount {
-                let numPadding = maxCount - events.count
+            if events.count < maxEventCount {
+                let numPadding = maxEventCount - events.count
                 ForEach(0 ..< numPadding, id: \.self) { index in
                     EventListItemView(event: nil)
                 }
             }
 
-            if events.count > maxCount {
-                let moreEventCounts = events.count - maxCount
+            Spacer()
+
+            if events.isEmpty {
+                Text("no events")
+                    .foregroundColor(AppTheme.headerColor)
+                    .font(AppTheme.headerFont)
+            } else if events.count > maxEventCount {
+                let moreEventCounts = events.count - maxEventCount
                 Text("+\(moreEventCounts) event\(moreEventCounts > 1 ? "s" : "")")
                     .foregroundColor(AppTheme.headerColor)
                     .font(AppTheme.headerFont)
@@ -108,10 +116,11 @@ struct EventListView: View {
 
 struct EventView: View {
     let store: StoreOf<EventList>
+    let maxEventCount: Int
 
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
-            EventListView(events: viewStore.events)
+            EventListView(events: viewStore.events, maxEventCount: maxEventCount)
         }
     }
 }
@@ -124,9 +133,10 @@ struct EventView_Previews: PreviewProvider {
                     events: Event.mockEvents
                 ),
                 reducer: EventList()
-            )
+            ),
+            maxEventCount: 4
         )
-        .previewLayout(PreviewLayout.fixed(width: 360, height: 160))
+        .previewLayout(PreviewLayout.fixed(width: 360, height: 360))
         .background { Color.black }
     }
 }

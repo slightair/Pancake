@@ -50,15 +50,6 @@ struct WeatherView: View {
                     .frame(width: 94, height: 60)
             }
             .padding()
-            .background {
-                Color(.white)
-                    .frame(width: 90, height: 90)
-            }
-            .mask {
-                Circle()
-                    .frame(width: 88)
-            }
-
             tempView()
         }
     }

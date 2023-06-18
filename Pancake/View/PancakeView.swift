@@ -16,8 +16,6 @@ struct Pancake: ReducerProtocol, Sendable {
         case onDisappear
         case tick
         case historyUpdate
-        case wallpaperUpdate
-        case wallpaperResponse(TaskResult<UnsplashPhoto>)
         case recordMetrics
         case header(Header.Action)
         case eventList(EventList.Action)
@@ -32,7 +30,6 @@ struct Pancake: ReducerProtocol, Sendable {
 
     private enum TickTimerID {}
     private enum HistoryUpdateTimerID {}
-    private enum WallpaperUpdateTimerID {}
     private enum RecordMetricsTimerID {}
     private enum MapUpdateTimerID {}
 
@@ -40,7 +37,6 @@ struct Pancake: ReducerProtocol, Sendable {
         let startTimers: EffectTask<Action> = .merge([
             EffectTask.timer(id: TickTimerID.self, every: 1, on: mainQueue).map { _ in .tick },
             EffectTask.timer(id: HistoryUpdateTimerID.self, every: 900, on: mainQueue).map { _ in .historyUpdate },
-            EffectTask.timer(id: WallpaperUpdateTimerID.self, every: 600, on: mainQueue).map { _ in .wallpaperUpdate },
             EffectTask.timer(id: RecordMetricsTimerID.self, every: 900, on: mainQueue).map { _ in .recordMetrics },
             EffectTask.timer(id: MapUpdateTimerID.self, every: 300, on: mainQueue).map { _ in .map(.mapUpdate) },
         ])
@@ -49,14 +45,12 @@ struct Pancake: ReducerProtocol, Sendable {
             .cancel(id: TickTimerID.self),
             .cancel(id: HistoryUpdateTimerID.self),
             .cancel(id: RecordMetricsTimerID.self),
-            .cancel(id: WallpaperUpdateTimerID.self),
             .cancel(id: MapUpdateTimerID.self),
         ])
 
         let startUp: EffectTask<Action> = .merge([
             startTimers,
             EffectTask(value: .historyUpdate),
-            EffectTask(value: .wallpaperUpdate),
             EffectTask(value: .map(.mapUpdate)),
         ])
 
@@ -79,16 +73,6 @@ struct Pancake: ReducerProtocol, Sendable {
                     EffectTask(value: .home(.metricsHistoriesUpdate)),
                     EffectTask(value: .eventList(.eventListUpdate)),
                 ])
-            case .wallpaperUpdate:
-                return .task {
-                    await .wallpaperResponse(TaskResult { try await unsplashClient.wallpaper(settings.api.unsplashAccessKey) })
-                }
-            case let .wallpaperResponse(.success(wallpaper)):
-                state.wallpaper = wallpaper
-                return .none
-            case let .wallpaperResponse(.failure(error)):
-                print(error)
-                return .none
             case .recordMetrics:
                 return EffectTask(value: .home(.recordMetrics))
             default:
@@ -111,6 +95,7 @@ struct Pancake: ReducerProtocol, Sendable {
 }
 
 struct AppTheme {
+    static let backgroundColor = Color(uiColor: UIKit.backgroundColor)
     static let headerColor = Color(uiColor: UIKit.headerColor)
     static let textColor = Color(uiColor: UIKit.textColor)
     static let notAvailableColor = Color(uiColor: UIKit.notAvailableColor)
@@ -122,6 +107,7 @@ struct AppTheme {
     static let cornerRadius: CGFloat = 8
 
     struct UIKit {
+        static let backgroundColor = UIColor(red: 0.109, green: 0.109, blue: 0.117, alpha: 1.0)
         static let headerColor = UIColor.white
         static let textColor = UIColor.white
         static let notAvailableColor = UIColor.clear
@@ -133,44 +119,46 @@ struct PancakeView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            VStack {
-                HStack(alignment: .top) {
-                    VStack {
-                        Spacer(minLength: 24)
-                        HeaderView(store: store.scope(state: \.header, action: Pancake.Action.header))
-                        Spacer()
+            HStack(spacing: AppTheme.screenPadding) {
+                VStack(spacing: AppTheme.screenPadding) {
+                    HeaderView(store: store.scope(state: \.header, action: Pancake.Action.header))
+                        .background {
+                            AppTheme.backgroundColor
+                                .cornerRadius(8)
+                        }
+                    ZStack {
+                        HomeView(store: store.scope(state: \.home, action: Pancake.Action.home))
+                        Grid(horizontalSpacing: AppTheme.screenPadding, verticalSpacing: AppTheme.screenPadding) {
+                            GridRow {
+                                Color.clear
+                                Color.clear
+                            }
+                            GridRow {
+                                Color.clear
+                                MapView(store: store.scope(state: \.map, action: Pancake.Action.map))
+                            }
+                        }
                     }
-                    Spacer()
+                }
+                VStack(spacing: AppTheme.screenPadding) {
                     CalendarView(selectedDate: viewStore.date, events: viewStore.eventList.events)
-                        .padding([.leading, .trailing, .top], 24)
-                        .frame(width: 360)
+                        .padding(.top, 4)
+                        .frame(width: 240, height: 288)
+                        .background {
+                            AppTheme.backgroundColor
+                                .cornerRadius(8)
+                        }
+                    EventView(store: store.scope(state: \.eventList, action: Pancake.Action.eventList), maxEventCount: 12)
+                        .padding(8)
+                        .background {
+                            AppTheme.backgroundColor
+                                .cornerRadius(8)
+                        }
                 }
-                .frame(height: 360)
-
-                HStack(alignment: .top) {
-                    HomeView(store: store.scope(state: \.home, action: Pancake.Action.home))
-                        .frame(width: 500)
-                    VStack {
-                        EventView(store: store.scope(state: \.eventList, action: Pancake.Action.eventList))
-                        MapView(store: store.scope(state: \.map, action: Pancake.Action.map))
-                            .padding([.trailing], AppTheme.screenPadding)
-                    }
-                }
+                .frame(width: 240)
             }
-                 .shadow(color: AppTheme.shadowColor, radius: 8, x: 2, y: 4)
                  .padding(AppTheme.screenPadding)
-                 .background {
-                     AsyncImage(url: viewStore.wallpaper?.urls.full, transaction: Transaction(animation: .easeIn(duration: 1.0))) { phase in
-                         switch phase {
-                         case let .success(image):
-                             image
-                                 .resizable()
-                                 .aspectRatio(contentMode: .fill)
-                         default:
-                             Color.black
-                         }
-                     }
-                 }
+                 .background { Color.black }
                  .onAppear { viewStore.send(.onAppear) }
                  .onDisappear { viewStore.send(.onDisappear) }
         }

@@ -25,6 +25,16 @@ extension Event {
         Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1657989718), title: "散歩8", tag: nil),
         Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1658201017), title: "散歩9", tag: nil),
         Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1659043194), title: "散歩10", tag: nil),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1666979947), title: "散歩11", tag: Tag(name:"Bob", colorCode: "#6699ff")),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1667151510), title: "散歩12", tag: Tag(name: "Alice", colorCode: "#ff9966")),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1667422530), title: "散歩13", tag: nil),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1667453591), title: "散歩14", tag: nil),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1667455861), title: "散歩15", tag: nil),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1667680762), title: "散歩16", tag: nil),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1667894558), title: "散歩17", tag: nil),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1667989718), title: "散歩18", tag: nil),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1668201017), title: "散歩19", tag: nil),
+        Event(id: UUID().uuidString, date: Date(timeIntervalSince1970: 1669043194), title: "散歩110", tag: nil),
     ]
 }
 

@@ -52,7 +52,7 @@ struct CalendarView: UIViewRepresentable {
         .monthHeaderItemProvider { month in
             let firstDateInMonth = calendar.firstDate(of: month)
             let monthText = Self.monthHeaderDateFormatter.string(from: firstDateInMonth)
-            return MonthHeaderView2(monthText: monthText).calendarItemModel
+            return MonthHeaderView(monthText: monthText).calendarItemModel
         }
         .dayOfWeekItemProvider { _, dayOfWeek in
             let dayOfWeekText = Self.monthHeaderDateFormatter.veryShortStandaloneWeekdaySymbols[dayOfWeek]
@@ -60,13 +60,19 @@ struct CalendarView: UIViewRepresentable {
         }
         .dayItemProvider { day in
             let isSelected = calendar.date(selectedDate, matchesComponents: day.components)
+            let isContainedInWeek = calendar.date(from: day.components).flatMap { calendar.dateInterval(of: .weekOfYear, for: selectedDate)?.contains($0.addingTimeInterval(1)) } ?? false
             let dayEvents = events.filter { calendar.date($0.date, matchesComponents: day.components) }
-            return DayView(dayNumber: day.day, isSelected: isSelected, events: dayEvents).calendarItemModel
+            return DayView(
+                dayNumber: day.day,
+                isSelected: isSelected,
+                isContainedInWeek: isContainedInWeek,
+                events: dayEvents
+            ).calendarItemModel
         }
     }
 }
 
-struct MonthHeaderView2: View {
+struct MonthHeaderView: View {
     let monthText: String
 
     var body: some View {
@@ -96,7 +102,7 @@ struct DayOfWeekView: View {
 
     var body: some View {
         Text(dayOfWeekText)
-            .font(.system(size: 16, weight: .bold))
+            .font(.system(size: 12, weight: .bold))
             .foregroundColor(textColor)
     }
 }
@@ -104,6 +110,7 @@ struct DayOfWeekView: View {
 struct DayView: View {
     let dayNumber: Int
     let isSelected: Bool
+    let isContainedInWeek: Bool
     let events: [Event]
 
     var markEvents: [Event] {
@@ -112,28 +119,32 @@ struct DayView: View {
 
     var body: some View {
         ZStack(alignment: .center) {
-            RoundedRectangle(cornerRadius: 8)
-                .strokeBorder(isSelected ? AppTheme.textColor.opacity(0.5) : .clear, lineWidth: 2)
-                .background {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundColor(isSelected ? AppTheme.textColor.opacity(0.2) : .clear)
-                }
-            VStack(spacing: 4) {
+            if isContainedInWeek {
+                Rectangle()
+                    .fill(AppTheme.textColor.opacity(0.15))
+            }
+
+            if isSelected {
+                Circle()
+                    .fill(AppTheme.textColor.opacity(0.5))
+            }
+
+            VStack(spacing: 0) {
                 Text("\(dayNumber)")
                     .foregroundColor(AppTheme.textColor)
 
-                HStack(spacing: 4) {
+                HStack(spacing: 2) {
                     if events.isEmpty {
                         ForEach(0..<3) { event in
                             Circle()
-                                .frame(width: 6)
+                                .frame(width: 4)
                                 .foregroundColor(Color.clear)
                         }
                     } else {
                         ForEach(markEvents) { event in
                             let color = event.tag.flatMap { Color(hexString: $0.colorCode) } ?? AppTheme.textColor
                             Circle()
-                                .frame(width: 6)
+                                .frame(width: 4)
                                 .foregroundColor(color)
                         }
                     }
@@ -146,20 +157,11 @@ struct DayView: View {
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
         CalendarView(
-            selectedDate: Date(timeIntervalSince1970: 1_659_193_200),
+            selectedDate: Date(timeIntervalSince1970: 1_657_378_800),
             events: Event.mockEvents
         )
-            .padding([.leading, .trailing, .top], 24)
-            .previewLayout(PreviewLayout.fixed(width: 360, height: 360))
+            .previewLayout(PreviewLayout.fixed(width: 240, height: 260))
             .previewDisplayName("CalendarView")
             .background { Color.black }
-
-        ZStack {
-            Color.black
-            DayView(dayNumber: 31, isSelected: true, events: Event.mockEvents)
-                .frame(width: 48, height: 48)
-        }
-            .previewDisplayName("DayView")
-            .previewLayout(PreviewLayout.fixed(width: 360, height: 360))
     }
 }

@@ -123,35 +123,45 @@ struct Home: ReducerProtocol {
 struct HomeView: View {
     let store: StoreOf<Home>
 
+    private func roomView(_ section: HomeSection) -> some View {
+        VStack {
+            ForEach(section.roomStatuses) { status in
+                switch status {
+                case let .summary(history):
+                    RoomSummaryView(history: history)
+                case let .temperatureAndHumidity(history):
+                    RoomStatusView(history: history, content: .temperatureAndHumidity)
+                case let .co2(history):
+                    RoomStatusView(history: history, content: .co2)
+                case .blank:
+                    RoomBlankView()
+                }
+            }
+        }
+        .background {
+            AppTheme.backgroundColor
+                .cornerRadius(8)
+        }
+    }
+
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
-            VStack {
-                LazyVGrid(
-                    columns: Array(
-                        repeating: GridItem(.flexible(), spacing: AppTheme.screenPadding),
-                        count: 2
-                    ),
-                    spacing: AppTheme.screenPadding
-                ) {
-                    ForEach(viewStore.sections) { section in
-                        Section {
-                            ForEach(section.roomStatuses) { status in
-                                switch status {
-                                case let .summary(history):
-                                    RoomSummaryView(history: history)
-                                case let .temperatureAndHumidity(history):
-                                    RoomStatusView(history: history, content: .temperatureAndHumidity)
-                                case let .co2(history):
-                                    RoomStatusView(history: history, content: .co2)
-                                case .blank:
-                                    RoomBlankView()
-                                }
-                            }
-                            .aspectRatio(1.6, contentMode: .fit)
-                        }
+            if viewStore.sections.count >= 3 {
+                let living = viewStore.sections[0]
+                let bedroom = viewStore.sections[1]
+                let study = viewStore.sections[2]
+                Grid(horizontalSpacing: AppTheme.screenPadding, verticalSpacing: AppTheme.screenPadding) {
+                    GridRow {
+                        roomView(living)
+                        roomView(bedroom)
+                    }
+                    GridRow {
+                        roomView(study)
+                        Color.clear
                     }
                 }
-                .frame(maxWidth: .infinity)
+            } else {
+                EmptyView()
             }
         }
     }

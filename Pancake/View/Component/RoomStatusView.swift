@@ -212,7 +212,7 @@ struct RoomSummaryView: View {
             .font(.headline)
 
             if let current = history.records.last {
-                VStack(spacing: 16) {
+                HStack(spacing: 16) {
                     VStack(spacing: 8) {
                         HStack(alignment: .top) {
                             HStack(alignment: .firstTextBaseline, spacing: 2) {
@@ -242,7 +242,6 @@ struct RoomSummaryView: View {
                     }
                 }
             }
-            Spacer()
         }
         .padding(AppTheme.panelPadding)
     }
@@ -382,7 +381,7 @@ struct RoomStatusView_Previews: PreviewProvider {
             )
             RoomBlankView()
         }
-        .previewLayout(PreviewLayout.fixed(width: 270, height: 168))
+        .previewLayout(PreviewLayout.fixed(width: 480, height: 168))
         .background { Color.black }
     }
 }

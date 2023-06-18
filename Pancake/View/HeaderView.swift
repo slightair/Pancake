@@ -63,8 +63,8 @@ struct HeaderView: View {
                         .monospacedDigit()
                         .bold()
                     Spacer()
-                        .frame(width: 16)
                     WeatherView(weather: viewStore.dashboard.weather)
+                    Spacer()
                     TrainServiceView(statuses: viewStore.dashboard.trainStatuses)
                 }
                 HStack(spacing: 2) {
