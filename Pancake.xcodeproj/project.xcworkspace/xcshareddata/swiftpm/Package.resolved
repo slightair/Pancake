@@ -96,8 +96,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/airbnb/HorizonCalendar",
       "state" : {
-        "revision" : "3b8e98233634591bbf6fbdd6654f79455e02288b",
-        "version" : "1.16.0"
+        "revision" : "a360d71a1255f0b24e378f2ee31a7a7d674a49b6",
+        "version" : "2.0.0"
       }
     },
     {

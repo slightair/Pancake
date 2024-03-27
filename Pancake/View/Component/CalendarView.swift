@@ -2,7 +2,7 @@ import HorizonCalendar
 import SwiftUI
 
 extension Calendar {
-    func firstDate(of month: Month) -> Date {
+    func firstDate(of month: MonthComponents) -> Date {
         let firstDateComponents = DateComponents(era: month.era, year: month.year, month: month.month)
         guard let firstDate = date(from: firstDateComponents) else {
             preconditionFailure("Failed to create a `Date` representing the first day of \(month).")
@@ -12,7 +12,7 @@ extension Calendar {
     }
 }
 
-struct CalendarView: UIViewRepresentable {
+struct CalendarView: View {
     static let calendar = Calendar.current
     static let locale = Locale(identifier: "ja_JP")
 
@@ -31,24 +31,16 @@ struct CalendarView: UIViewRepresentable {
     var selectedDate: Date
     var events: [Event]
 
-    func makeUIView(context _: Context) -> HorizonCalendar.CalendarView {
-        let calendarView = HorizonCalendar.CalendarView(initialContent: makeContent())
-        calendarView.backgroundColor = .clear
-        return calendarView
-    }
-
-    func updateUIView(_ uiView: HorizonCalendar.CalendarView, context _: Context) {
-        uiView.setContent(makeContent())
-    }
-
-    private func makeContent() -> CalendarViewContent {
+    var body: some View {
         let calendar = Self.calendar
-        return CalendarViewContent(
+
+        CalendarViewRepresentable(
             calendar: calendar,
             visibleDateRange: selectedDate ... selectedDate,
-            monthsLayout: .horizontal(options: .init())
+            monthsLayout: .horizontal(options: .init()),
+            dataDependency: nil
         )
-        .interMonthSpacing(24)
+        .backgroundColor(.clear)
         .monthHeaderItemProvider { month in
             let firstDateInMonth = calendar.firstDate(of: month)
             let monthText = Self.monthHeaderDateFormatter.string(from: firstDateInMonth)
@@ -67,7 +59,8 @@ struct CalendarView: UIViewRepresentable {
                 isSelected: isSelected,
                 isContainedInWeek: isContainedInWeek,
                 events: dayEvents
-            ).calendarItemModel
+            )
+            .calendarItemModel
         }
     }
 }
@@ -156,12 +149,15 @@ struct DayView: View {
 
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        CalendarView(
-            selectedDate: Date(timeIntervalSince1970: 1_657_378_800),
-            events: Event.mockEvents
-        )
-            .previewLayout(PreviewLayout.fixed(width: 240, height: 260))
-            .previewDisplayName("CalendarView")
-            .background { Color.black }
+        VStack {
+            CalendarView(
+                selectedDate: Date(timeIntervalSince1970: 1_657_378_800),
+                events: Event.mockEvents
+            )
+            Spacer()
+        }
+        .previewLayout(PreviewLayout.fixed(width: 240, height: 320))
+        .previewDisplayName("CalendarView")
+        .background { Color.black }
     }
 }

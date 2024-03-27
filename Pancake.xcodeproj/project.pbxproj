@@ -532,7 +532,7 @@
 			repositoryURL = "https://github.com/airbnb/HorizonCalendar";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.13.4;
+				minimumVersion = 2.0.0;
 			};
 		};
 		57F5BC6F280D96D100191F64 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {

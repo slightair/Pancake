@@ -142,7 +142,8 @@ struct PancakeView: View {
                 }
                 VStack(spacing: AppTheme.screenPadding) {
                     CalendarView(selectedDate: viewStore.date, events: viewStore.eventList.events)
-                        .padding(.top, 4)
+                        .padding(.vertical, 4)
+                        .padding(.horizontal, 8)
                         .frame(width: 240, height: 288)
                         .background {
                             AppTheme.backgroundColor
