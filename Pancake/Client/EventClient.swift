@@ -51,11 +51,10 @@ extension EventClient {
     static let live = EventClient(
         events: { decorateTags in
             let eventStore = EKEventStore()
-            let type: EKEntityType = .reminder
             let accessToEvent: Bool
 
-            if EKEventStore.authorizationStatus(for: type) != .authorized {
-                accessToEvent = try await eventStore.requestAccess(to: type)
+            if EKEventStore.authorizationStatus(for: .reminder) != .fullAccess {
+                accessToEvent = try await eventStore.requestFullAccessToReminders()
             } else {
                 accessToEvent = true
             }
