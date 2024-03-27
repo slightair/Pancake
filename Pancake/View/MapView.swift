@@ -46,8 +46,8 @@ struct Map: ReducerProtocol {
         case .mapUpdate:
             let now = date.now
             state.date = now
-            return .task {
-                await .mapOverlayResponse(TaskResult { try await mapOverlayClient.overlayImage(settings.overlayImageProviderURLTemplate, now) })
+            return .run { send in
+                await send(.mapOverlayResponse(TaskResult { try await mapOverlayClient.overlayImage(settings.overlayImageProviderURLTemplate, now) }))
             }
         case let .regionChanged(region):
             state.region = region
@@ -88,10 +88,9 @@ struct MapView: View {
 struct MapView_Previews: PreviewProvider {
     static var previews: some View {
         MapView(
-            store: Store(
-                initialState: Map.State(),
-                reducer: Map()
-            )
+            store: Store(initialState: Map.State()) {
+                Map()
+            }
         )
         .previewDevice(PreviewDevice(rawValue: "iPad Pro (10.5-inch)"))
     }

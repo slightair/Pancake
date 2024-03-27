@@ -18,8 +18,8 @@ struct EventList: ReducerProtocol {
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .eventListUpdate:
-            return .task {
-                await .eventListResponse(TaskResult { try await eventClient.events(decorateTags) })
+            return .run { send in
+                await send(.eventListResponse(TaskResult { try await eventClient.events(decorateTags) }))
             }
         case let .eventListResponse(.success(eventList)):
             state.events = eventList
@@ -128,12 +128,11 @@ struct EventView: View {
 struct EventView_Previews: PreviewProvider {
     static var previews: some View {
         EventView(
-            store: Store(
-                initialState: EventList.State(
-                    events: Event.mockEvents
-                ),
-                reducer: EventList()
-            ),
+            store: Store(initialState: EventList.State(
+                events: Event.mockEvents
+            )) {
+                EventList()
+            },
             maxEventCount: 4
         )
         .previewLayout(PreviewLayout.fixed(width: 360, height: 360))

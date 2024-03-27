@@ -23,18 +23,17 @@ struct PancakeApp: App {
     private func makeStore(mode: Mode) -> StoreOf<Pancake> {
         switch mode {
         case .development:
-            return Store(
-                initialState: Pancake.State(),
-                reducer: Pancake()
-                    .dependency(\.bleAdvertisementScanner, MockBLEAdvertisementScanner())
-                    .dependency(\.bleAdvertisementClient, .mock)
-                    .dependency(\.metricsClient, .saveDryRun)
-            )
+            Store(initialState: Pancake.State()) {
+                Pancake()
+            } withDependencies: {
+                $0.bleAdvertisementScanner = MockBLEAdvertisementScanner()
+                $0.bleAdvertisementClient = .mock
+                $0.metricsClient = .saveDryRun
+            }
         case .production:
-            return Store(
-                initialState: Pancake.State(),
-                reducer: Pancake()
-            )
+            Store(initialState: Pancake.State()) {
+                Pancake()
+            }
         }
     }
 

@@ -1,5 +1,5 @@
 import ComposableArchitecture
-import FirebaseFirestore
+@preconcurrency import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 struct MetricsClient {

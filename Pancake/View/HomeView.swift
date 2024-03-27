@@ -91,12 +91,12 @@ struct Home: ReducerProtocol {
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .metricsHistoriesUpdate:
-            return .task {
-                await .roomMetricsHistoriesResponse(TaskResult { try await metricsClient.roomSensorsHistories() })
+            return .run { send in
+                await send(.roomMetricsHistoriesResponse(TaskResult { try await metricsClient.roomSensorsHistories() }))
             }
         case .recordMetrics:
-            return .task {
-                await .bleAdvertisementResponse(TaskResult { try await bleAdvertisementClient.sensors(bleAdvertisementScanner, settings.sensor) })
+            return .run { send in
+                await send(.bleAdvertisementResponse(TaskResult { try await bleAdvertisementClient.sensors(bleAdvertisementScanner, settings.sensor) }))
             }
         case let .roomMetricsHistoriesResponse(.success(roomMetricsHistories)):
             state.roomMetricsHistories = roomMetricsHistories
@@ -105,8 +105,8 @@ struct Home: ReducerProtocol {
             print(error)
             return .none
         case let .bleAdvertisementResponse(.success(sensorsRecord)):
-            return .task {
-                await .saveRoomMetricsResponse(TaskResult { try await metricsClient.saveRoomSensorRecords(sensorsRecord) })
+            return .run { send in
+                await send(.saveRoomMetricsResponse(TaskResult { try await metricsClient.saveRoomSensorRecords(sensorsRecord) }))
             }
         case let .bleAdvertisementResponse(.failure(error)):
             print(error)
@@ -170,12 +170,11 @@ struct HomeView: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView(
-            store: Store(
-                initialState: Home.State(
-                    roomMetricsHistories: mockHistories
-                ),
-                reducer: Home()
-            )
+            store: Store(initialState: Home.State(
+                roomMetricsHistories: mockHistories
+            )) {
+                Home()
+            }
         )
         .previewLayout(PreviewLayout.fixed(width: 540, height: 504))
         .background { Color.black }

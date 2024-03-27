@@ -35,8 +35,8 @@ struct Header: ReducerProtocol {
             state.date = date.now
             return .none
         case .dashboardUpdate:
-            return .task {
-                await .dashboardResponse(TaskResult { try await dashboardClient.dashboard(settings.dashboardAPIURL) })
+            return .run { send in
+                await send(.dashboardResponse(TaskResult { try await dashboardClient.dashboard(settings.dashboardAPIURL) }))
             }
         case let .dashboardResponse(.success(dashboard)):
             state.dashboard = dashboard
@@ -81,12 +81,11 @@ struct HeaderView: View {
 struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
         HeaderView(
-            store: Store(
-                initialState: Header.State(
-                    dashboard: .mock
-                ),
-                reducer: Header()
-            )
+            store: Store(initialState: Header.State(
+                dashboard: .mock
+            )) {
+                Header()
+            }
         )
         .previewLayout(PreviewLayout.sizeThatFits)
         .background { Color.black }
