@@ -2,7 +2,9 @@ import ComposableArchitecture
 import Foundation
 import SwiftUI
 
-struct EventList: ReducerProtocol {
+@Reducer
+struct EventListFeature {
+    @ObservableState
     struct State: Equatable {
         var events: [Event] = []
     }
@@ -15,18 +17,20 @@ struct EventList: ReducerProtocol {
     @Dependency(\.eventClient) var eventClient
     @Dependency(\.settings.tags) var decorateTags
 
-    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-        switch action {
-        case .eventListUpdate:
-            return .run { send in
-                await send(.eventListResponse(TaskResult { try await eventClient.events(decorateTags) }))
+    var body: some ReducerOf<Self> {
+        Reduce { state, action in
+            switch action {
+            case .eventListUpdate:
+                return .run { send in
+                    await send(.eventListResponse(TaskResult { try await eventClient.events(decorateTags) }))
+                }
+            case let .eventListResponse(.success(eventList)):
+                state.events = eventList
+                return .none
+            case let .eventListResponse(.failure(error)):
+                print(error)
+                return .none
             }
-        case let .eventListResponse(.success(eventList)):
-            state.events = eventList
-            return .none
-        case let .eventListResponse(.failure(error)):
-            print(error)
-            return .none
         }
     }
 }
@@ -75,19 +79,19 @@ struct EventListItemView: View {
 }
 
 struct EventListView: View {
-    let events: [Event]
+    let store: StoreOf<EventListFeature>
     let maxEventCount: Int
 
     var body: some View {
         VStack(spacing: AppTheme.screenPadding) {
             VStack(spacing: 8) {
-                ForEach(events.sorted { $0.date < $1.date }.prefix(maxEventCount)) { event in
+                ForEach(store.events.sorted { $0.date < $1.date }.prefix(maxEventCount)) { event in
                     EventListItemView(event: event)
                 }
             }
 
-            if events.count < maxEventCount {
-                let numPadding = maxEventCount - events.count
+            if store.events.count < maxEventCount {
+                let numPadding = maxEventCount - store.events.count
                 ForEach(0 ..< numPadding, id: \.self) { index in
                     EventListItemView(event: nil)
                 }
@@ -95,12 +99,12 @@ struct EventListView: View {
 
             Spacer()
 
-            if events.isEmpty {
+            if store.events.isEmpty {
                 Text("no events")
                     .foregroundColor(AppTheme.headerColor)
                     .font(AppTheme.headerFont)
-            } else if events.count > maxEventCount {
-                let moreEventCounts = events.count - maxEventCount
+            } else if store.events.count > maxEventCount {
+                let moreEventCounts = store.events.count - maxEventCount
                 Text("+\(moreEventCounts) event\(moreEventCounts > 1 ? "s" : "")")
                     .foregroundColor(AppTheme.headerColor)
                     .font(AppTheme.headerFont)
@@ -114,28 +118,15 @@ struct EventListView: View {
     }
 }
 
-struct EventView: View {
-    let store: StoreOf<EventList>
-    let maxEventCount: Int
-
-    var body: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
-            EventListView(events: viewStore.events, maxEventCount: maxEventCount)
-        }
-    }
-}
-
-struct EventView_Previews: PreviewProvider {
-    static var previews: some View {
-        EventView(
-            store: Store(initialState: EventList.State(
-                events: Event.mockEvents
-            )) {
-                EventList()
-            },
-            maxEventCount: 4
-        )
-        .previewLayout(PreviewLayout.fixed(width: 360, height: 360))
-        .background { Color.black }
-    }
+#Preview {
+    EventListView(
+        store: Store(initialState: EventListFeature.State(
+            events: Event.mockEvents
+        )) {
+            EventListFeature()
+        },
+        maxEventCount: 4
+    )
+    .previewLayout(PreviewLayout.fixed(width: 360, height: 360))
+    .background { Color.black }
 }

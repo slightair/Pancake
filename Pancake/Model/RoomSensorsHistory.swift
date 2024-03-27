@@ -10,6 +10,12 @@ extension RoomSensorsHistory {
     static let mockLiving = RoomSensorsHistory(room: .living, records: mockRecords)
     static let mockBedroom = RoomSensorsHistory(room: .bedroom, records: mockRecords)
     static let mockStudy = RoomSensorsHistory(room: .study, records: mockRecords)
+
+    static let mockHistories : [RoomSensorsHistory] = [
+        .mockLiving,
+        .mockBedroom,
+        .mockStudy,
+    ]
 }
 
 private let mockRecords = [

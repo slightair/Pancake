@@ -20,26 +20,26 @@ struct PancakeApp: App {
         case production
     }
 
-    private func makeStore(mode: Mode) -> StoreOf<Pancake> {
+    private func makeStore(mode: Mode) -> StoreOf<AppFeature> {
         switch mode {
         case .development:
-            Store(initialState: Pancake.State()) {
-                Pancake()
+            Store(initialState: AppFeature.State()) {
+                AppFeature()
             } withDependencies: {
                 $0.bleAdvertisementScanner = MockBLEAdvertisementScanner()
                 $0.bleAdvertisementClient = .mock
                 $0.metricsClient = .saveDryRun
             }
         case .production:
-            Store(initialState: Pancake.State()) {
-                Pancake()
+            Store(initialState: AppFeature.State()) {
+                AppFeature()
             }
         }
     }
 
     var body: some Scene {
         WindowGroup {
-            PancakeView(store: makeStore(mode: .development))
+            AppView(store: makeStore(mode: .development))
         }
     }
 }
