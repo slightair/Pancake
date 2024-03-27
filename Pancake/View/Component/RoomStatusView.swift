@@ -1,4 +1,4 @@
-import Charts
+import DGCharts
 import SwiftUI
 
 struct TemperatureAndHumidityChartView: UIViewRepresentable {

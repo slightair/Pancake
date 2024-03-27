@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		571F2F9E2BB40A3900957A42 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 571F2F9D2BB40A3900957A42 /* Algorithms */; };
 		5728CDF12813DB2900BBC308 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF02813DB2900BBC308 /* HeaderView.swift */; };
 		5728CDF32814306A00BBC308 /* EventListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF22814306A00BBC308 /* EventListView.swift */; };
 		5728CDF52815926200BBC308 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5728CDF42815926200BBC308 /* HomeView.swift */; };
@@ -27,7 +28,7 @@
 		579F5957284CE4D7003D8F6D /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 579F5956284CE4D7003D8F6D /* FirebaseFirestore */; };
 		579F5959284CE4D7003D8F6D /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 579F5958284CE4D7003D8F6D /* FirebaseFirestoreCombine-Community */; };
 		579F595B284CE4D7003D8F6D /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 579F595A284CE4D7003D8F6D /* FirebaseFirestoreSwift */; };
-		57AAA7E228E341A4008CE2E9 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 57AAA7E128E341A4008CE2E9 /* Charts */; };
+		57ABBC362BB40944003FBED4 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 57ABBC352BB40944003FBED4 /* DGCharts */; };
 		57B5D5D729C5AE99001544C1 /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B5D5D629C5AE99001544C1 /* Color+Extension.swift */; };
 		57B8AC1F28A76953001CE330 /* HourlyForecastRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B8AC1E28A76953001CE330 /* HourlyForecastRecordView.swift */; };
 		57B8AC2128ACBAE6001CE330 /* EventClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B8AC2028ACBAE6001CE330 /* EventClient.swift */; };
@@ -80,10 +81,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				579F5957284CE4D7003D8F6D /* FirebaseFirestore in Frameworks */,
+				571F2F9E2BB40A3900957A42 /* Algorithms in Frameworks */,
 				57DD4EB6280156FF00D0F249 /* HorizonCalendar in Frameworks */,
-				57AAA7E228E341A4008CE2E9 /* Charts in Frameworks */,
 				579F5959284CE4D7003D8F6D /* FirebaseFirestoreCombine-Community in Frameworks */,
 				57F5BC71280D96D100191F64 /* ComposableArchitecture in Frameworks */,
+				57ABBC362BB40944003FBED4 /* DGCharts in Frameworks */,
 				579F595B284CE4D7003D8F6D /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -117,6 +119,13 @@
 			path = Client;
 			sourceTree = "<group>";
 		};
+		57ABBC342BB40944003FBED4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		57B5D5D529C5AE7B001544C1 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -130,6 +139,7 @@
 			children = (
 				57FFECC927F966CE00B03EE1 /* Pancake */,
 				57FFECC827F966CE00B03EE1 /* Products */,
+				57ABBC342BB40944003FBED4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -212,7 +222,8 @@
 				579F5956284CE4D7003D8F6D /* FirebaseFirestore */,
 				579F5958284CE4D7003D8F6D /* FirebaseFirestoreCombine-Community */,
 				579F595A284CE4D7003D8F6D /* FirebaseFirestoreSwift */,
-				57AAA7E128E341A4008CE2E9 /* Charts */,
+				57ABBC352BB40944003FBED4 /* DGCharts */,
+				571F2F9D2BB40A3900957A42 /* Algorithms */,
 			);
 			productName = Pancake;
 			productReference = 57FFECC727F966CE00B03EE1 /* Pancake.app */;
@@ -247,6 +258,7 @@
 				57F5BC6F280D96D100191F64 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				579F5955284CE4D7003D8F6D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				57AAA7E028E341A4008CE2E9 /* XCRemoteSwiftPackageReference "Charts" */,
+				571F2F9C2BB40A3900957A42 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 			);
 			productRefGroup = 57FFECC827F966CE00B03EE1 /* Products */;
 			projectDirPath = "";
@@ -511,6 +523,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		571F2F9C2BB40A3900957A42 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
+			};
+		};
 		579F5955284CE4D7003D8F6D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -524,7 +544,7 @@
 			repositoryURL = "https://github.com/danielgindi/Charts";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 4.1.0;
+				minimumVersion = 5.1.0;
 			};
 		};
 		57DD4EB4280156FF00D0F249 /* XCRemoteSwiftPackageReference "HorizonCalendar" */ = {
@@ -546,6 +566,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		571F2F9D2BB40A3900957A42 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 571F2F9C2BB40A3900957A42 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
+		};
 		579F5956284CE4D7003D8F6D /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 579F5955284CE4D7003D8F6D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
@@ -561,10 +586,10 @@
 			package = 579F5955284CE4D7003D8F6D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestoreSwift;
 		};
-		57AAA7E128E341A4008CE2E9 /* Charts */ = {
+		57ABBC352BB40944003FBED4 /* DGCharts */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 57AAA7E028E341A4008CE2E9 /* XCRemoteSwiftPackageReference "Charts" */;
-			productName = Charts;
+			productName = DGCharts;
 		};
 		57DD4EB5280156FF00D0F249 /* HorizonCalendar */ = {
 			isa = XCSwiftPackageProductDependency;
