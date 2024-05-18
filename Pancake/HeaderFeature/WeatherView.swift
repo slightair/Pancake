@@ -24,10 +24,10 @@ struct WeatherView: View {
         }
 
         return [
-            Text("\(weather.tempMax)").foregroundColor(tempMaxColor),
+            Text("\(weather.tempMax)℃").foregroundColor(tempMaxColor),
             Text("[\(tempMaxDiff)]").foregroundColor(tempMaxColor).font(miniFont),
             Text(" / "),
-            Text("\(weather.tempMin)").foregroundColor(tempMinColor),
+            Text("\(weather.tempMin)℃").foregroundColor(tempMinColor),
             Text("[\(tempMinDiff)]").foregroundColor(tempMinColor).font(miniFont),
         ].reduce(Text("")) { $0 + $1 }
             .foregroundColor(AppTheme.textColor)

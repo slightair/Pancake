@@ -63,14 +63,18 @@ struct HourlyForecastRecord: Equatable, Identifiable, Decodable {
     let temp: Int
     let weather: String
     let chanceOfRain: Int
-    let iconURL: URL?
+    let weatherIconURL: URL?
+    let pressure: Float
+    let pressureIconURL: URL?
 
     enum CodingKeys: String, CodingKey {
         case time
         case temp
         case weather
         case chanceOfRain = "rain"
-        case iconURL = "icon"
+        case weatherIconURL = "icon"
+        case pressure
+        case pressureIconURL = "pressureIcon"
     }
 }
 
@@ -106,14 +110,18 @@ extension Dashboard {
             iconURL: nil
         ),
         hourlyForecast: [
-            HourlyForecastRecord(time: 10, temp: 18, weather: "晴れ", chanceOfRain: 0, iconURL: nil),
-            HourlyForecastRecord(time: 11, temp: 20, weather: "晴れ", chanceOfRain: 10, iconURL: nil),
-            HourlyForecastRecord(time: 12, temp: 21, weather: "晴れ", chanceOfRain: 0, iconURL: nil),
-            HourlyForecastRecord(time: 13, temp: 22, weather: "晴れ", chanceOfRain: 10, iconURL: nil),
-            HourlyForecastRecord(time: 14, temp: 21, weather: "晴れ", chanceOfRain: 20, iconURL: nil),
-            HourlyForecastRecord(time: 15, temp: 19, weather: "晴れ", chanceOfRain: 0, iconURL: nil),
-            HourlyForecastRecord(time: 16, temp: 21, weather: "晴れ", chanceOfRain: 20, iconURL: nil),
-            HourlyForecastRecord(time: 17, temp: 19, weather: "晴れ", chanceOfRain: 0, iconURL: nil),
+            HourlyForecastRecord(time: 10, temp: 18, weather: "晴れ", chanceOfRain: 0, weatherIconURL: nil, pressure: 1000, pressureIconURL: nil),
+            HourlyForecastRecord(time: 11, temp: 20, weather: "晴れ", chanceOfRain: 10, weatherIconURL: nil, pressure: 1000, pressureIconURL: nil),
+            HourlyForecastRecord(time: 12, temp: 21, weather: "晴れ", chanceOfRain: 0, weatherIconURL: nil, pressure: 1000, pressureIconURL: nil),
+            HourlyForecastRecord(time: 13, temp: 22, weather: "晴れ", chanceOfRain: 10, weatherIconURL: nil, pressure: 1000, pressureIconURL: nil),
+            HourlyForecastRecord(time: 14, temp: 21, weather: "晴れ", chanceOfRain: 20, weatherIconURL: nil, pressure: 1000, pressureIconURL: nil),
+            HourlyForecastRecord(time: 15, temp: 19, weather: "晴れ", chanceOfRain: 0, weatherIconURL: nil, pressure: 1000, pressureIconURL: nil),
+            HourlyForecastRecord(time: 16, temp: 21, weather: "晴れ", chanceOfRain: 20, weatherIconURL: nil, pressure: 1000, pressureIconURL: nil),
+            HourlyForecastRecord(time: 17, temp: 19, weather: "晴れ", chanceOfRain: 0, weatherIconURL: nil, pressure: 1000, pressureIconURL: nil),
+            HourlyForecastRecord(time: 18, temp: 21, weather: "晴れ", chanceOfRain: 20, weatherIconURL: nil, pressure: 1000, pressureIconURL: nil),
+            HourlyForecastRecord(time: 19, temp: 19, weather: "晴れ", chanceOfRain: 0, weatherIconURL: nil, pressure: 1000, pressureIconURL: nil),
+            HourlyForecastRecord(time: 20, temp: 21, weather: "晴れ", chanceOfRain: 20, weatherIconURL: nil, pressure: 1000, pressureIconURL: nil),
+            HourlyForecastRecord(time: 21, temp: 19, weather: "晴れ", chanceOfRain: 0, weatherIconURL: nil, pressure: 1000, pressureIconURL: nil),
         ]
     )
 }
